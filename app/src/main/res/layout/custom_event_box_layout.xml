@@ -4,22 +4,20 @@
     android:id="@+id/custom_event_box_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="20dp"
-    android:layout_marginEnd="20dp"
-    android:layout_marginBottom="20dp"
-    android:height="0dp"
-    android:width="360dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:height="300dp"
+    android:width="380dp"
     android:textSize="20sp"
-    android:background="@android:color/black"
+    android:background="@android:color/white"
     android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/custom_event_box_img_view"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_row="0"
-        android:layout_column="0"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="2dp"
@@ -34,12 +32,12 @@
         android:layout_marginStart="120dp"
         android:layout_marginTop="-105dp"
         android:layout_marginEnd="2dp"
-
         android:width="300dp"
         android:height="20dp"
-        android:text="Sat, Oct 22 - 6:00 PM"
+        android:textStyle="bold"
         android:textColor="@color/orange"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:text="Sat, Oct 22 - 6:00 PM"/>
 
     <TextView
         android:id="@+id/custom_event_title"
@@ -51,7 +49,7 @@
         android:height="40dp"
         android:width="260dp"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:text="Banda Los Recoditos, Hijos De Barron y Tapy Quintero" />
 
@@ -63,8 +61,8 @@
         android:layout_marginStart="120dp"
         android:width="200dp"
         android:height="20dp"
-        android:textColor="@color/white"
         android:textSize="14sp"
+        android:textColor="@color/grey"
         android:text="Santa Fe Springs Swap Me..."/>
 
     <TextView
@@ -75,9 +73,10 @@
         android:layout_marginStart="120dp"
         android:width="30dp"
         android:height="20dp"
-        android:text="$40"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="$40" />
 
     <TextView
         android:id="@+id/custom_event_register_status"

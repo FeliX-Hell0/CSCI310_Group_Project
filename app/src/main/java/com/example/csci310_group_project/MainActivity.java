@@ -43,6 +43,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        TextView exploreButton = findViewById(R.id.explore_button);
+        exploreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRedirectToExplore();
+            }
+        });
+    }
+
+    public void onRedirectToExplore(){
+        Intent intent = new Intent(this, ExploreActivity.class);
+        startActivity(intent);
+
 
     }
 }

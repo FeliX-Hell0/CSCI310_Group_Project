@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">CSCI310_Group_Project</string>
-    <string name="title_activity_maps">MapsActivity</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="app_name">EventMe</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_explore">Explore Events</string>
+    <string name="title_activity_maps">Event Map</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
