@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
         <entry key="app/src/main/res/layout/custom_event_box_layout.xml" value="0.33493882331295294" />
+=======
+        <entry key="..\:/Users/felix/AndroidStudioProjects/CSCI310_Group_Project/app/src/main/res/layout/activity_main.xml" value="0.1" />
+>>>>>>> e5cf86f3ad97e8e686875c3d521974e11ca1e50c
       </map>
     </option>
   </component>
