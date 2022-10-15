@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/custom_event_box_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="20dp"
+    android:height="0dp"
+    android:width="360dp"
+    android:textSize="20sp"
+    android:background="@android:color/black"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/custom_event_box_img_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="2dp"
+        android:width="300dp"
+        android:height="25dp"
+        tools:srcCompat="@tools:sample/avatars[8]" />
+
+    <TextView
+        android:id="@+id/custom_event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="-105dp"
+        android:layout_marginEnd="2dp"
+
+        android:width="300dp"
+        android:height="20dp"
+        android:text="Sat, Oct 22 - 6:00 PM"
+        android:textColor="@color/orange"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/custom_event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_event_date"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="10dp"
+        android:height="40dp"
+        android:width="260dp"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="Banda Los Recoditos, Hijos De Barron y Tapy Quintero" />
+
+    <TextView
+        android:id="@+id/custom_event_organizer"
+        android:layout_width="241dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_event_title"
+        android:layout_marginStart="120dp"
+        android:width="200dp"
+        android:height="20dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:text="Santa Fe Springs Swap Me..."/>
+
+    <TextView
+        android:id="@+id/custom_event_cost"
+        android:layout_width="42dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_event_organizer"
+        android:layout_marginStart="120dp"
+        android:width="30dp"
+        android:height="20dp"
+        android:text="$40"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/custom_event_register_status"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="-20dp"
+        android:width="30dp"
+        android:height="20dp"
+        android:text="Registered"
+        android:textColor="@color/purple_200"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/custom_event_detail_button"
+        android:layout_width="75dp"
+        android:layout_height="34dp"
+        android:layout_below="@+id/custom_event_title"
+        android:layout_marginTop="-25dp"
+        android:layout_marginStart="290dp"
+        android:layout_marginEnd="20dp"
+        android:width="30dp"
+        android:height="10dp"
+        android:text="Detail"
+        android:textSize="11sp" />
+
+</GridLayout>
