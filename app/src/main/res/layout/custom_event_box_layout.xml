@@ -11,7 +11,7 @@
     android:height="300dp"
     android:width="380dp"
     android:textSize="20sp"
-    android:background="@android:color/black"
+    android:background="@android:color/white"
     android:orientation="vertical" >
 
     <ImageView
@@ -32,12 +32,12 @@
         android:layout_marginStart="120dp"
         android:layout_marginTop="-105dp"
         android:layout_marginEnd="2dp"
-
         android:width="300dp"
         android:height="20dp"
-        android:text="Sat, Oct 22 - 6:00 PM"
+        android:textStyle="bold"
         android:textColor="@color/orange"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:text="Sat, Oct 22 - 6:00 PM"/>
 
     <TextView
         android:id="@+id/custom_event_title"
@@ -49,7 +49,7 @@
         android:height="40dp"
         android:width="260dp"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:text="Banda Los Recoditos, Hijos De Barron y Tapy Quintero" />
 
@@ -61,8 +61,8 @@
         android:layout_marginStart="120dp"
         android:width="200dp"
         android:height="20dp"
-        android:textColor="@color/white"
         android:textSize="14sp"
+        android:textColor="@color/grey"
         android:text="Santa Fe Springs Swap Me..."/>
 
     <TextView
@@ -73,9 +73,10 @@
         android:layout_marginStart="120dp"
         android:width="30dp"
         android:height="20dp"
-        android:text="$40"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="$40" />
 
     <TextView
         android:id="@+id/custom_event_register_status"

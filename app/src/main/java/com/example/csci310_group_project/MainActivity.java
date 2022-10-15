@@ -9,6 +9,11 @@ import android.widget.TextView;
 
 import com.example.csci310_group_project.ui.login.LoginActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
