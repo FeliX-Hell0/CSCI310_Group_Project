@@ -25,7 +25,7 @@ public class ExploreActivity extends AppCompatActivity {
         context = this;
 
         // create cells via Inflate
-        GridLayout layout = findViewById(R.id.gridLayoutEventList);
+        GridLayout layout = findViewById(R.id.grid_layout_event_list);
 
         LayoutInflater li = LayoutInflater.from(this);
         for (int i = 0; i < Event_COUNT; i++) {
