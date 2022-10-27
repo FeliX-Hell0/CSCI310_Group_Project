@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/main_background">
+    android:background="@drawable/party">
 
     <Button
         android:id="@+id/login_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="120dp"
         android:layout_marginStart="110dp"
         android:text="Login"
         app:layout_constraintHorizontal_bias="0.497"
@@ -26,7 +26,7 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="275dp"
+        android:layout_marginTop="180dp"
         android:layout_marginStart="110dp"
         android:text="Register"
         app:layout_constraintHorizontal_bias="0.497"
@@ -40,7 +40,7 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="240dp"
         android:layout_marginStart="110dp"
         android:text="continue as guest"
         app:layout_constraintHorizontal_bias="0.497"
