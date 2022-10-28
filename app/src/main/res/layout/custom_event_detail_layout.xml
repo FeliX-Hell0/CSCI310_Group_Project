@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/custom_event_info_view"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="50dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:height="400dp"
+    android:width="300dp"
+    android:textSize="20sp"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/custom_event_info_img_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="2dp"
+        android:width="300dp"
+        android:height="25dp"
+        tools:srcCompat="@tools:sample/avatars[8]" />
+
+    <TextView
+        android:id="@+id/custom_event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="2dp"
+        android:width="150dp"
+        android:height="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/orange"
+        android:textSize="16sp"
+        android:text="Sat, Oct 22 - 6:00 PM"/>
+
+    <TextView
+        android:id="@+id/custom_event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_event_date"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:height="40dp"
+        android:width="260dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="Banda Los Recoditos, Hijos De Barron y Tapy Quintero" />
+
+    <TextView
+        android:id="@+id/custom_event_organizer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_event_title"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="14sp"
+        android:textColor="@color/grey"
+        android:text="Santa Fe Springs Swap Me Organization"/>
+
+    <TextView
+        android:id="@+id/custom_event_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_event_title"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:width="200dp"
+        android:text="This is where we display description of the event."
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+
+
+    <TextView
+        android:id="@+id/custom_event_cost"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_event_organizer"
+        android:layout_marginStart="100dp"
+        android:width="80dp"
+        android:height="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:text="COST: $40" />
+
+    <Button
+        android:id="@+id/custom_event_favorite_button"
+        android:layout_width="150dp"
+        android:layout_height="34dp"
+        android:layout_below="@+id/custom_event_title"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:width="170dp"
+        android:height="10dp"
+        android:backgroundTint="@color/light_purple"
+        android:text="Add to Favorite"
+        android:textSize="11sp" />
+
+    <Button
+        android:id="@+id/custom_event_register_button"
+        android:layout_width="95dp"
+        android:layout_height="34dp"
+        android:layout_below="@+id/custom_event_title"
+        android:layout_marginTop="-35dp"
+        android:layout_marginStart="185dp"
+        android:layout_marginEnd="20dp"
+        android:width="70dp"
+        android:height="10dp"
+        android:text="Register"
+        android:textSize="11sp" />
+
+</GridLayout>

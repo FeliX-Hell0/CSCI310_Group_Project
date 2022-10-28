@@ -55,7 +55,5 @@ public class MainActivity extends AppCompatActivity {
     public void onRedirectToExplore(){
         Intent intent = new Intent(this, ExploreActivity.class);
         startActivity(intent);
-
-
     }
 }
