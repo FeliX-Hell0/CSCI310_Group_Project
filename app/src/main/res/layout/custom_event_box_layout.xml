@@ -12,7 +12,9 @@
     android:width="380dp"
     android:textSize="20sp"
     android:background="@android:color/white"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:columnCount="1"
+    android:rowCount="10">
 
     <ImageView
         android:id="@+id/custom_event_box_img_view"
@@ -23,6 +25,8 @@
         android:layout_marginBottom="2dp"
         android:width="300dp"
         android:height="25dp"
+        android:layout_row="0"
+        android:layout_column="0"
         tools:srcCompat="@tools:sample/avatars[8]" />
 
     <TextView
@@ -37,7 +41,9 @@
         android:textStyle="bold"
         android:textColor="@color/orange"
         android:textSize="14sp"
-        android:text="Sat, Oct 22 - 6:00 PM"/>
+        android:text="Sat, Oct 22 - 6:00 PM"
+        android:layout_row="1"
+        android:layout_column="0"/>
 
     <TextView
         android:id="@+id/custom_event_title"

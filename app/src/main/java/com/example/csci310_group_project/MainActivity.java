@@ -33,19 +33,7 @@ public class MainActivity extends AppCompatActivity {
         Map<String, Object> user = new HashMap<>();
         user.put("username", "test");
         user.put("password", "123456");
-
-        db.collection("test4").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //Log.w(TAG, "Error adding document", e);
-                    }
-                });
+        db.collection("test3").add(user);
 
         TextView text = findViewById(R.id.button);
         text.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +58,5 @@ public class MainActivity extends AppCompatActivity {
     public void onRedirectToExplore(){
         Intent intent = new Intent(this, ExploreActivity.class);
         startActivity(intent);
-
-
     }
 }
