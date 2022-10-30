@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "DocSnippets";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +33,19 @@ public class MainActivity extends AppCompatActivity {
         Map<String, Object> user = new HashMap<>();
         user.put("username", "test");
         user.put("password", "123456");
-        db.collection("test").add(user);
+
+        db.collection("test4").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Log.w(TAG, "Error adding document", e);
+                    }
+                });
 
         TextView text = findViewById(R.id.button);
         text.setOnClickListener(new View.OnClickListener() {
