@@ -29,13 +29,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> user = new HashMap<>();
         user.put("username", "test");
         user.put("password", "123456");
         db.collection("test3").add(user);
+        */
 
-        TextView text = findViewById(R.id.button);
+
+        TextView text = findViewById(R.id.login_button);
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

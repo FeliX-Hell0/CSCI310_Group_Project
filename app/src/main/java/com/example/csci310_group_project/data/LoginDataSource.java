@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.csci310_group_project.data.model.LoggedInUser;
+import com.example.csci310_group_project.data.model.db;
 import com.example.csci310_group_project.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -78,47 +79,19 @@ public class LoginDataSource {
         try {
             // TODO: handle loggedInUser authentication
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-            Map<String, Object> user = new HashMap<>();
-            user.put("username", username);
-            user.put("password", password);
+            db myDb = new db();
+            myDb.addUser(username, password);
             /*
-            db.collection("users")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()){
-                                    Log.d(TAG, document.getId() + " => " + document.getData());
-                                }
-                            } else {
-                                Log.w(TAG, "Error getting documents.", task.getException());
-                            }
-                        }
-                    });*/
-
-            db.collection("users")
-                    .add(user)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            //Log.w(TAG, "Error adding document", e);
-                        }
-                    });
-
             LoggedInUser fakeUser =
                     new LoggedInUser(
                             java.util.UUID.randomUUID().toString(),
                             username);
-            return new Result.Success<>(fakeUser);
+             */
+            LoggedInUser User =
+                    new LoggedInUser(
+                            java.util.UUID.randomUUID().toString(),
+                            username);
+            return new Result.Success<>(User);
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
         }
