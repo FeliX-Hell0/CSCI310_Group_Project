@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onRedirectToExplore(){
-        Intent intent = new Intent(this, ExploreActivity.class);
+//        Intent intent = new Intent(this, ExploreActivity.class);
+        Intent intent = new Intent(this, ContentActivity.class);
         startActivity(intent);
     }
 }

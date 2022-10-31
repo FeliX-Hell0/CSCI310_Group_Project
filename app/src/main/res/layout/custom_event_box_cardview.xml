@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/custom_event_box_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/custom_event_box_img_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars[8]"/>
+
+        <TextView
+            android:id="@+id/custom_event_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="140dp"
+            android:height="20dp"
+            android:text="Sat, Oct 22 - 6:00 PM"
+            android:textColor="@color/orange"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/custom_event_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/custom_event_date"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:width="260dp"
+            android:text="Banda Los Recoditos, Hijos De Barron y Tapy Quintero"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/custom_event_location"
+            android:layout_width="241dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/custom_event_title"
+            android:layout_marginTop="58dp"
+            android:layout_marginEnd="32dp"
+            android:width="200dp"
+            android:height="20dp"
+            android:text="Santa Monica Beach"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/custom_event_cost"
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/custom_event_location"
+            android:layout_marginTop="76dp"
+            android:layout_marginEnd="232dp"
+            android:width="30dp"
+            android:height="20dp"
+            android:text="$40"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/custom_event_register_status"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
+            android:layout_marginEnd="140dp"
+            android:width="30dp"
+            android:height="20dp"
+            android:text="Registered"
+            android:textColor="@color/purple_200"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/custom_event_detail_button"
+            android:layout_width="75dp"
+            android:layout_height="34dp"
+            android:layout_below="@+id/custom_event_title"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="4dp"
+            android:width="30dp"
+            android:height="10dp"
+            android:text="Detail"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

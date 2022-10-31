@@ -20,6 +20,9 @@ public class EventDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_event_detail_layout);
 
+        // parse event index from extra
+
+        
         // init
         context = this;
     }

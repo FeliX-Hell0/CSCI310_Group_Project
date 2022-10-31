@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CSCI310_Group_Project"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ContentActivity"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -37,10 +39,6 @@
             android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".ExploreActivity"
-            android:exported="false"
-            android:label="@string/title_activity_explore" />
         <activity
             android:name=".EventDetailActivity"
             android:exported="false"
