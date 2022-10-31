@@ -13,12 +13,14 @@ import java.util.ArrayList;
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyViewHolder> {
 
     private ArrayList<Event> eventsList;
+    private RecyclerViewClickListener listener;
 
-    public recyclerAdapter(ArrayList<Event> eventsList) {
+    public recyclerAdapter(ArrayList<Event> eventsList, RecyclerViewClickListener listener) {
         this.eventsList = eventsList;
+        this.listener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 //        private ImageView img;
 
         private TextView dateText;
@@ -31,13 +33,19 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             super(view);
 
 //            img = view.findViewById(R.id.custom_event_box_img_view);
-//            organizorText = view.findViewById(R.id.custom_event_organizer);
 
             dateText = view.findViewById(R.id.custom_event_date);
             nameText = view.findViewById(R.id.custom_event_title);
             locationText = view.findViewById(R.id.custom_event_location);
             costText = view.findViewById(R.id.custom_event_cost);
             organizorText = view.findViewById(R.id.custom_event_organizer);
+
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            listener.onClick(view, getAdapterPosition());
         }
     }
 
@@ -61,10 +69,15 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         holder.dateText.setText(date);
         holder.locationText.setText(location);
         holder.costText.setText("$" + String.valueOf(cost));
+
     }
 
     @Override
     public int getItemCount() {
         return eventsList.size();
+    }
+
+    public interface RecyclerViewClickListener {
+        void onClick(View v, int position);
     }
 }

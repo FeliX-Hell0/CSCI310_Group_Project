@@ -3,71 +3,12 @@
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 tools:context=".fragment.ExploreFragment"
-android:background="@color/yellow"
+android:background="@color/light_pink"
 android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-<!--    <GridLayout-->
-<!--        android:id="@+id/grid_layout_event_search"-->
-<!--        android:layout_width="360dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        android:layout_gravity="center_vertical"-->
-<!--        android:layout_marginStart="22dp"-->
-<!--        android:layout_marginTop="2dp"-->
-<!--        android:columnCount="1"-->
-<!--        android:rowCount="2"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/search_bar"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:layout_width="400dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:textSize="20dp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:hint="@string/prompt_search"-->
-<!--            android:selectAllOnFocus="true"-->
-<!--            />-->
-<!--    </GridLayout>-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/search_bar"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:layout_width="400dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_gravity="center_vertical"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:textSize="20dp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:hint="@string/prompt_search"-->
-<!--        android:selectAllOnFocus="true"-->
-<!--        />-->
-
-<!--    <GridLayout-->
-<!--        android:id="@+id/grid_layout_event_list"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/search_bar"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center_vertical"-->
-<!--        android:rowCount="20"-->
-<!--        android:columnCount="1">-->
-
-<!--        <TextView-->
-<!--            android:text="hello"-->
-<!--            android:backgroundTint="@color/yellow"/>-->
-<!--    </GridLayout>-->
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

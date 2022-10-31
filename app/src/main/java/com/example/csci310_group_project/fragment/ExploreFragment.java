@@ -1,6 +1,7 @@
 package com.example.csci310_group_project.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.csci310_group_project.Event;
+import com.example.csci310_group_project.EventDetailActivity;
 import com.example.csci310_group_project.R;
 import com.example.csci310_group_project.recyclerAdapter;
 
@@ -27,6 +29,7 @@ public class ExploreFragment extends Fragment {
     private static final int Event_COUNT = 20;
     private ArrayList<Event> eventsList;
     private RecyclerView recyclerView;
+    private recyclerAdapter.RecyclerViewClickListener listener;
 
 
     private Context context;
@@ -72,11 +75,23 @@ public class ExploreFragment extends Fragment {
     }
 
     private void setAdapter() {
-        recyclerAdapter adapter = new recyclerAdapter(eventsList);
+        setOnClickListener();
+        recyclerAdapter adapter = new recyclerAdapter(eventsList, listener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context.getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+    }
+
+    private void setOnClickListener() {
+        listener = new recyclerAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(context.getApplicationContext(), EventDetailActivity.class);
+                intent.putExtra("EVENT_INDEX", String.valueOf(position));
+                startActivity(intent);
+            }
+        };
     }
 
     @Override
@@ -119,6 +134,24 @@ public class ExploreFragment extends Fragment {
     }
 
     private void setEventInfo(){
+        eventsList.add(new Event(
+                "Banda Los Recoditos, Hijos De Barron ", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
+        ));
+        eventsList.add(new Event(
+                "Fall Festival AVANA", "Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
+        ));
+        eventsList.add(new Event(
+                "Sunset Vibes Silect Disco Special Party", "Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
+        ));
+        eventsList.add(new Event(
+                "Banda Los Recoditos, Hijos De Barron ", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
+        ));
+        eventsList.add(new Event(
+                "Fall Festival AVANA", "Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
+        ));
+        eventsList.add(new Event(
+                "Sunset Vibes Silect Disco Special Party", "Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
+        ));
         eventsList.add(new Event(
                 "Banda Los Recoditos, Hijos De Barron ", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
         ));
