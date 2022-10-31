@@ -33,6 +33,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         private TextView locationText;
         private TextView organizorText;
         private TextView costText;
+        private TextView typeText;
 
         public MyViewHolder(final View view) {
             super(view);
@@ -44,6 +45,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             locationText = view.findViewById(R.id.custom_event_location);
             costText = view.findViewById(R.id.custom_event_cost);
             organizorText = view.findViewById(R.id.custom_event_organizer);
+            typeText = view.findViewById(R.id.custom_event_type);
 
             view.setOnClickListener(this);
         }

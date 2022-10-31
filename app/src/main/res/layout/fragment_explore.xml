@@ -23,6 +23,8 @@ android:layout_width="fill_parent" android:layout_height="fill_parent">
         android:background="@drawable/search_view_background"
         app:iconifiedByDefault="false"/>
 
+    <!--    TODO: add sort type spinner-->
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

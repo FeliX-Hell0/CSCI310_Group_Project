@@ -20,10 +20,7 @@ import com.example.csci310_group_project.EventDetailActivity;
 import com.example.csci310_group_project.R;
 import com.example.csci310_group_project.recyclerAdapter;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +28,6 @@ import java.util.Locale;
  * create an instance of this fragment.
  */
 public class ExploreFragment extends Fragment {
-    private static final int Event_COUNT = 20;
     private ArrayList<Event> eventsList;
     private RecyclerView recyclerView;
     private recyclerAdapter.RecyclerViewClickListener listener;
@@ -126,6 +122,8 @@ public class ExploreFragment extends Fragment {
             }
         });
 
+        // TODO: spinner onChange
+
         recyclerView = view.findViewById(R.id.recyclerView);
         eventsList = new ArrayList<>();
 
@@ -135,6 +133,7 @@ public class ExploreFragment extends Fragment {
         return view;
     }
 
+    // TODO: check if date and sort types are set
     private void filterList(String text) {
         ArrayList<Event> filteredEventsList = new ArrayList<>();
 
@@ -154,31 +153,31 @@ public class ExploreFragment extends Fragment {
     // TODO: read from DAO
     private void setEventInfo(){
         eventsList.add(new Event(
-                "Banda Los Recoditos, Hijos De Barron ", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
+                "Banda Los Recoditos, Hijos De Barron ", "party", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
         ));
         eventsList.add(new Event(
-                "Fall Festival AVANA", "Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
+                "Fall Festival AVANA", "party","Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
         ));
         eventsList.add(new Event(
-                "Sunset Vibes Silect Disco Special Party", "Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
+                "Sunset Vibes Silect Disco Special Party", "party","Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
         ));
         eventsList.add(new Event(
-                "Banda Los Recoditos, Hijos De Barron ", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
+                "Banda Los Recoditos, Hijos De Barron ", "party","Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
         ));
         eventsList.add(new Event(
-                "Fall Festival AVANA", "Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
+                "Fall Festival AVANA", "Dec 20, 2022 3:00 PM", "party","UCLA", "gonna be interesting", "UCLA Campus", 20, 0
         ));
         eventsList.add(new Event(
-                "Sunset Vibes Silect Disco Special Party", "Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
+                "Sunset Vibes Silect Disco Special Party", "party","Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
         ));
         eventsList.add(new Event(
-                "Banda Los Recoditos, Hijos De Barron ", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
+                "Banda Los Recoditos, Hijos De Barron ", "party","Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
         ));
         eventsList.add(new Event(
-                "Fall Festival AVANA", "Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
+                "Fall Festival AVANA", "party","Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
         ));
         eventsList.add(new Event(
-                "Sunset Vibes Silect Disco Special Party", "Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
+                "Sunset Vibes Silect Disco Special Party","party", "Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
         ));
     }
 }

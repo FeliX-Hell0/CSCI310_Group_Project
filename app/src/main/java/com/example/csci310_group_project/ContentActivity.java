@@ -10,7 +10,7 @@ import android.os.Bundle;
 import com.example.csci310_group_project.databinding.ActivityContentBinding;
 import com.example.csci310_group_project.fragment.ExploreFragment;
 import com.example.csci310_group_project.fragment.ProfileFragment;
-import com.example.csci310_group_project.fragment.RegistrationFragment;
+import com.example.csci310_group_project.fragment.MapFragment;
 
 public class ContentActivity extends AppCompatActivity {
 
@@ -28,8 +28,8 @@ public class ContentActivity extends AppCompatActivity {
                 case R.id.nav_explore:
                     replaceFragment(new ExploreFragment());
                     break;
-                case R.id.nav_registered:
-                    replaceFragment(new RegistrationFragment());
+                case R.id.nav_map:
+                    replaceFragment(new MapFragment());
                     break;
                 case R.id.nav_profile:
                     replaceFragment(new ProfileFragment());

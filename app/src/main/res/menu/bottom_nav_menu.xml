@@ -7,9 +7,9 @@
         android:title="Explore" />
 
     <item
-        android:id="@+id/nav_registered"
-        android:icon="@drawable/ic_baseline_event_available_24"
-        android:title="Registration" />
+        android:id="@+id/nav_map"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="Map" />
 
     <item
         android:id="@+id/nav_profile"

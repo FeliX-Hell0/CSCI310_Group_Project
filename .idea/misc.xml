@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/activity_main_content.xml" value="0.2078804347826087" />
+        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_main_content.xml" value="0.2078804347826087" />
         <entry key="app/src/main/res/layout/custom_event_box_cardview.xml" value="0.2276923076923077" />
         <entry key="app/src/main/res/layout/custom_event_box_layout.xml" value="0.131890869140625" />
