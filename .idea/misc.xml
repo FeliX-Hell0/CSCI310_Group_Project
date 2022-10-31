@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/search_view_background.xml" value="0.125" />
         <entry key="app/src/main/res/layout-w1240dp/activity_explore.xml" value="0.12449799196787148" />
         <entry key="app/src/main/res/layout/activity_content.xml" value="0.19612579345703127" />
         <entry key="app/src/main/res/layout/activity_content_draft.xml" value="0.2078804347826087" />
@@ -14,7 +15,7 @@
         <entry key="app/src/main/res/layout/custom_event_box_cardview.xml" value="0.2276923076923077" />
         <entry key="app/src/main/res/layout/custom_event_box_layout.xml" value="0.131890869140625" />
         <entry key="app/src/main/res/layout/custom_event_detail_layout.xml" value="0.2" />
-        <entry key="app/src/main/res/layout/fragment_explore.xml" value="0.25013885498046873" />
+        <entry key="app/src/main/res/layout/fragment_explore.xml" value="0.20275573730468752" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.2078804347826087" />
         <entry key="app/src/main/res/layout/fragment_registration.xml" value="0.2078804347826087" />
         <entry key="app/src/main/res/layout/nav_bar.xml" value="0.22291666666666668" />

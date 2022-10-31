@@ -15,6 +15,11 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
     private ArrayList<Event> eventsList;
     private RecyclerViewClickListener listener;
 
+    public void SetFilteredList(ArrayList<Event> filteredList) {
+        this.eventsList = filteredList;
+        notifyDataSetChanged();
+    }
+
     public recyclerAdapter(ArrayList<Event> eventsList, RecyclerViewClickListener listener) {
         this.eventsList = eventsList;
         this.listener = listener;

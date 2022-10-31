@@ -12,13 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.appcompat.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.csci310_group_project.Event;
 import com.example.csci310_group_project.EventDetailActivity;
 import com.example.csci310_group_project.R;
 import com.example.csci310_group_project.recyclerAdapter;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +35,8 @@ public class ExploreFragment extends Fragment {
     private ArrayList<Event> eventsList;
     private RecyclerView recyclerView;
     private recyclerAdapter.RecyclerViewClickListener listener;
+    private SearchView searchView;
+    private recyclerAdapter mAdapter;
 
 
     private Context context;
@@ -81,6 +88,8 @@ public class ExploreFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+        mAdapter = adapter;
     }
 
     private void setOnClickListener() {
@@ -98,41 +107,51 @@ public class ExploreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getContext();
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
+
+        searchView = view.findViewById(R.id.searchView);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filterList(s);
+                return true;
+            }
+        });
+
         recyclerView = view.findViewById(R.id.recyclerView);
         eventsList = new ArrayList<>();
 
         setEventInfo();
         setAdapter();
 
-//        View view = inflater.inflate(R.layout.fragment_explore, container, false);
-//        GridLayout layout = view.findViewById(R.id.grid_layout_event_list);
-//
-//        for (int i = 0; i < Event_COUNT; i++) {
-//            GridLayout eventBox = (GridLayout) inflater.inflate(R.layout.custom_event_box_layout, layout, false);
-//            Button button = eventBox.findViewById(R.id.custom_event_detail_button);
-//
-//            int finalI = i;
-//            button.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View view) {
-//                    Log.i("event clicked", "button click");
-//                    // sent intent to event detail page
-//                    Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-//                    intent.putExtra("event_index", finalI);
-//                    startActivity(intent);
-//                }
-//            });
-//
-//            GridLayout.LayoutParams lp = (GridLayout.LayoutParams) eventBox.getLayoutParams();
-//            lp.rowSpec = GridLayout.spec(i);
-//            lp.columnSpec = GridLayout.spec(0);
-//            layout.addView(eventBox, lp);
-//        }
-
         return view;
     }
 
+    private void filterList(String text) {
+        ArrayList<Event> filteredEventsList = new ArrayList<>();
+
+        for (Event event : eventsList) {
+            if (event.getEventName().toLowerCase().contains(text.toLowerCase())) {
+                filteredEventsList.add(event);
+            }
+        }
+
+        if (filteredEventsList.isEmpty()) {
+            Toast.makeText(context, "no data found", Toast.LENGTH_SHORT).show();
+        } else {
+            mAdapter.SetFilteredList(filteredEventsList);
+        }
+    }
+
+    // TODO: read from DAO
     private void setEventInfo(){
         eventsList.add(new Event(
                 "Banda Los Recoditos, Hijos De Barron ", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
