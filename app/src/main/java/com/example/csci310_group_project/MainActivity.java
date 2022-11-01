@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.csci310_group_project.ui.login.LoginActivity;
+import com.example.csci310_group_project.ui.register.RegisterActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +34,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Toast.makeText(getApplicationContext(),"restart", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            }
+        });
+
+        TextView reg = findViewById(R.id.register_button);
+        reg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(getApplicationContext(),"restart", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, RegisterActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }

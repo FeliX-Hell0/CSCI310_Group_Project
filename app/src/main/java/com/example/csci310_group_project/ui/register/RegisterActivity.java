@@ -1,4 +1,4 @@
-package com.example.csci310_group_project.ui.login;
+package com.example.csci310_group_project.ui.register;
 
 import android.app.Activity;
 
@@ -29,25 +29,39 @@ import com.example.csci310_group_project.ContentActivity;
 import com.example.csci310_group_project.Event;
 import com.example.csci310_group_project.MainActivity;
 import com.example.csci310_group_project.R;
-import com.example.csci310_group_project.ui.login.LoginViewModel;
-import com.example.csci310_group_project.ui.login.LoginViewModelFactory;
+import com.example.csci310_group_project.databinding.ActivityRegisterBinding;
+import com.example.csci310_group_project.ui.login.LoginActivity;
+import com.example.csci310_group_project.ui.register.LoggedInUserView;
+import com.example.csci310_group_project.ui.register.RegisterActivity;
+import com.example.csci310_group_project.ui.register.LoginFormState;
+import com.example.csci310_group_project.ui.register.LoginResult;
+import com.example.csci310_group_project.ui.register.LoginViewModel;
+import com.example.csci310_group_project.ui.register.LoginViewModelFactory;
 import com.example.csci310_group_project.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class RegisterActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
-    private ActivityLoginBinding binding;
+    private ActivityRegisterBinding binding;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
 
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
@@ -55,12 +69,13 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
+        final EditText repasswordEditText = binding.repassword;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+        loginViewModel.getLoginFormState().observe(this, new Observer<com.example.csci310_group_project.ui.register.LoginFormState>() {
             @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
+            public void onChanged(@Nullable com.example.csci310_group_project.ui.register.LoginFormState loginFormState) {
                 if (loginFormState == null) {
                     return;
                 }
@@ -71,12 +86,15 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginFormState.getPasswordError() != null) {
                     passwordEditText.setError(getString(loginFormState.getPasswordError()));
                 }
+                if (loginFormState.getRepasswordError() != null) {
+                    repasswordEditText.setError(getString(loginFormState.getRepasswordError()));
+                }
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+        loginViewModel.getLoginResult().observe(this, new Observer<com.example.csci310_group_project.ui.register.LoginResult>() {
             @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
+            public void onChanged(@Nullable com.example.csci310_group_project.ui.register.LoginResult loginResult) {
                 if (loginResult == null) {
                     return;
                 }
@@ -108,35 +126,34 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                        passwordEditText.getText().toString(), repasswordEditText.getText().toString());
             }
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        repasswordEditText.addTextChangedListener(afterTextChangedListener);
+        repasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                            passwordEditText.getText().toString(), repasswordEditText.getText().toString());
                 }
                 return false;
             }
         });
 
+
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
 
-                 */
 
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
+                //String repassword = repasswordEditText.getText().toString();
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -148,29 +165,47 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_LONG).show();
-                                if (document.getString("password").equals(password)) {
-                                    Toast.makeText(getApplicationContext(), "Login Success!", Toast.LENGTH_LONG).show();
-                                    Intent i = new Intent(LoginActivity.this, ContentActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(i);
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Password error", Toast.LENGTH_LONG).show();
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(), "No such user", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Username already used!", Toast.LENGTH_LONG).show();
+                            }else {
+                                Map<String, Object> user = new HashMap<>();
+                                user.put("username", username);
+                                user.put("password", password);
+                                //Log.d("Register", "Hi");
+                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                                //Log.d("Register1", "Here");
+                                //Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_LONG).show();
+                                db2.collection("users").document(username)
+                                        .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getApplicationContext(), "Registration Success! Please login", Toast.LENGTH_LONG).show();
+                                                Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(i);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getApplicationContext(), "Oops something is off...", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
                             }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Connection error", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Oops something is off...", Toast.LENGTH_LONG).show();
                         }
 
                     }
                 });
             }
         });
+
+
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
+    private void updateUiWithUser(com.example.csci310_group_project.ui.register.LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();

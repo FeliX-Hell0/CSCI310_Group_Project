@@ -14,7 +14,7 @@
         android:theme="@style/Theme.CSCI310_Group_Project"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ui.register.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".ContentActivity"
