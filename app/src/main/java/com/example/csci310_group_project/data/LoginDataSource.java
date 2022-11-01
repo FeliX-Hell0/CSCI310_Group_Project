@@ -5,9 +5,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.csci310_group_project.MainActivity;
 import com.example.csci310_group_project.data.model.LoggedInUser;
 import com.example.csci310_group_project.data.model.db;
 import com.example.csci310_group_project.ui.login.LoginActivity;
+import com.example.csci310_group_project.ui.login.LoginViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -78,22 +80,25 @@ public class LoginDataSource {
 
         try {
             // TODO: handle loggedInUser authentication
+            //System.out.println(username);
 
             db myDb = new db();
-            myDb.addUser(username, password);
+            myDb.loginUser(username, password);
             /*
             LoggedInUser fakeUser =
                     new LoggedInUser(
                             java.util.UUID.randomUUID().toString(),
                             username);
              */
+
             LoggedInUser User =
                     new LoggedInUser(
                             java.util.UUID.randomUUID().toString(),
                             username);
             return new Result.Success<>(User);
         } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
+            Log.d("LoginExcept", "login fail");
+            return new Result.Error(e);
         }
     }
 

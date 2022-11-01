@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
+import android.widget.Toast;
 
 import com.example.csci310_group_project.data.LoginRepository;
 import com.example.csci310_group_project.data.Result;
@@ -37,7 +38,8 @@ public class LoginViewModel extends ViewModel {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
+            Exception error = ((Result.Error)result).getError();
+            loginResult.setValue(new LoginResult(R.string.login_failed, error));
         }
     }
 
@@ -59,7 +61,7 @@ public class LoginViewModel extends ViewModel {
         if (username.contains("@")) {
             return Patterns.EMAIL_ADDRESS.matcher(username).matches();
         } else {
-            return !username.trim().isEmpty();
+            return false;
         }
     }
 
