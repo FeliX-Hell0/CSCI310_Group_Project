@@ -34,7 +34,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +52,7 @@ public class ExploreFragment extends Fragment {
     private SearchView searchView;
     private recyclerAdapter mAdapter;
     private Spinner spinner;
+    private String searchText;
 
 
     private Context context;
@@ -121,6 +126,7 @@ public class ExploreFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
+        spinner = view.findViewById(R.id.sort_spinner);
 
         searchView = view.findViewById(R.id.searchView);
         searchView.clearFocus();
@@ -132,16 +138,31 @@ public class ExploreFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                filterList(s);
+                searchText = s;
+                filterList(s, spinner.getSelectedItem().toString());
                 return true;
             }
         });
 
-        // TODO: spinner onChange
-        spinner = view.findViewById(R.id.sort_spinner);
+        // spinner onChange
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(context, R.array.Sorts, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
+
+        // call filterList when onSelect
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String spinnerVal = spinner.getSelectedItem().toString();
+                filterList(searchText, spinnerVal);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
 
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -154,20 +175,40 @@ public class ExploreFragment extends Fragment {
     }
 
     // TODO: check if date and sort types are set
-    private void filterList(String text) {
+    private void filterList(String text, String spinnerValue) {
         ArrayList<Event> filteredEventsList = new ArrayList<>();
 
         for (Event event : eventsList) {
-            if (event.getEventName().toLowerCase().contains(text.toLowerCase())) {
+            if (text == null || text.isEmpty()) {
+                filteredEventsList.add(event);
+            } else if (event.getEventName().toLowerCase().contains(text.toLowerCase())) {
                 filteredEventsList.add(event);
             }
         }
 
-        if (filteredEventsList.isEmpty()) {
-            Toast.makeText(context, "no data found", Toast.LENGTH_SHORT).show();
-        } else {
-            mAdapter.SetFilteredList(filteredEventsList);
+
+        // TODO: sort via spinnerValue
+        if (spinnerValue.toLowerCase().contains("cost")) {
+            Toast.makeText(getActivity(), "sort via cost", Toast.LENGTH_LONG).show();
+            // sort via cost
+            filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
+
+        } else if (spinnerValue.toLowerCase().contains("distance")){
+            // sort via distance
+            // TODO: get user address
+            // TODO: longitude & latitude
+
+        } else if (spinnerValue.toLowerCase().contains("time")){
+            // sort via time
+            // TODO: compare time
+
+        } else if (spinnerValue.toLowerCase().contains("alphabetic")){
+            // sort via alphabetical order
+            Toast.makeText(getActivity(), "sort via alphabetic", Toast.LENGTH_LONG).show();
+            filteredEventsList.sort(Comparator.comparing(Event::getEventName));
         }
+
+        mAdapter.SetFilteredList(filteredEventsList);
     }
 
     // TODO: read from DAO
@@ -186,8 +227,9 @@ public class ExploreFragment extends Fragment {
                                 Log.d("EventName", String.valueOf(document.getLong("cost")));
                                 eventsList.add(new Event(document.getString("name"), document.getString("type"),
                                         document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
-                                        document.getString("location"), Math.toIntExact(document.getLong("cost")),0));
+                                        document.getString("location"), (int) (long) (document.getLong("cost")),0));
                             }
+                            eventsList.sort(Comparator.comparing(Event::getEventCost));
                             Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
                             setAdapter();
 
@@ -197,6 +239,8 @@ public class ExploreFragment extends Fragment {
                         }
                     }
                 });
+
+
 
         /*
         eventsList.add(new Event(

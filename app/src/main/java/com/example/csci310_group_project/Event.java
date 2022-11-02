@@ -7,7 +7,7 @@ public class Event {
     private String eventDescription;
     private String eventLocation;
     private String eventType;
-    private int eventCost;
+    private Integer eventCost;
     private int img;
 
     public String getEventType() {
@@ -58,11 +58,11 @@ public class Event {
         this.eventLocation = eventLocation;
     }
 
-    public int getEventCost() {
+    public Integer getEventCost() {
         return eventCost;
     }
 
-    public void setEventCost(int eventCost) {
+    public void setEventCost(Integer eventCost) {
         this.eventCost = eventCost;
     }
 
@@ -74,7 +74,7 @@ public class Event {
         this.img = img;
     }
 
-    public Event(String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, int eventCost, int img) {
+    public Event(String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, Integer eventCost, int img) {
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDate = eventDate;
