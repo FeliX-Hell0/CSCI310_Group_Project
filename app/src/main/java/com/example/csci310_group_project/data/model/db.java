@@ -19,10 +19,14 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.Semaphore;
 
 public class db {
-    final int[] exist;
+    static int exist = 0;
 
     public db(){
-        exist = new int[]{0};
+
+    }
+
+    public void clear(){
+        exist = 0;
     }
 
 
@@ -47,7 +51,7 @@ public class db {
             if(choice == 1) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 sem.acquire();
-                Log.d("LoginCheck", String.valueOf(exist[0]));
+                Log.d("LoginCheck", String.valueOf(exist));
                 DocumentReference docRef = db.collection("users").document(username);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -56,17 +60,17 @@ public class db {
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     if (document.getString("password").equals(password)) {
-                                        exist[0] = 1;
+                                        exist = 1;
                                     } else {
-                                        exist[0] = 4;
+                                        exist = 4;
                                     }
                                 } else {
-                                    exist[0] = 2;
+                                    exist = 2;
                                 }
                             } else {
-                                exist[0] = 3;
+                                exist = 3;
                             }
-                            Log.d("LoginCheck2", String.valueOf(exist[0]));
+                            Log.d("LoginCheck2", String.valueOf(exist));
                             sem.release();
                     }
                 });
@@ -79,12 +83,12 @@ public class db {
             }
             else if(choice == 3){
                     sem.acquire();
-                    Log.d("LoginCheck5", String.valueOf(exist[0]));
-                    int existResult = exist[0];
+                    Log.d("LoginCheck5", String.valueOf(exist));
+                    int existResult = exist;
                     sem.release();
 
                     for(long i = 0; i < 1000; i++){
-                        existResult = exist[0];
+                        existResult = exist;
                     }
 
                     if (existResult == 2) {
@@ -106,8 +110,10 @@ public class db {
 
     }
 
-    public boolean loginUser(String username, String password)throws Exception{
+    public int loginUser(String username, String password)throws Exception{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        /*
         Semaphore sem = new Semaphore(1);
         Map<String, Object> user = new HashMap<>();
         user.put("username", "abc@abc.com");
@@ -139,7 +145,7 @@ public class db {
             }
         } catch (ExecutionException e) {
             throw new Exception(e.getMessage());
-        }
+        } */
 
         //checkLoginUser(username, password);
         //TimeUnit.SECONDS.sleep(3);
@@ -163,7 +169,7 @@ public class db {
             return true;
         }*/
 
-        return false;
+        return 0;
 
     }
 

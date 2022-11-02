@@ -5,7 +5,10 @@
       <map>
         <entry key="..\:/Users/felix/AndroidStudioProjects/CSCI310_Group_Project/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.2359437751004016" />
         <entry key="..\:/Users/felix/AndroidStudioProjects/CSCI310_Group_Project/app/src/main/res/layout/activity_login.xml" value="0.11322188449848024" />
+        <entry key="..\:/Users/felix/AndroidStudioProjects/CSCI310_Group_Project/app/src/main/res/layout/activity_maps.xml" value="0.25407608695652173" />
         <entry key="..\:/Users/felix/AndroidStudioProjects/CSCI310_Group_Project/app/src/main/res/layout/activity_register.xml" value="0.1" />
+        <entry key="..\:/Users/felix/AndroidStudioProjects/CSCI310_Group_Project/app/src/main/res/layout/fragment_explore.xml" value="0.1" />
+        <entry key="..\:/Users/felix/AndroidStudioProjects/CSCI310_Group_Project/app/src/main/res/layout/fragment_map.xml" value="0.25407608695652173" />
         <entry key="app/src/main/res/layout-w1240dp/activity_explore.xml" value="0.12449799196787148" />
         <entry key="app/src/main/res/layout/activity_explore.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />

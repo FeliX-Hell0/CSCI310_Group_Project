@@ -2,13 +2,17 @@ package com.example.csci310_group_project.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,12 @@ import com.example.csci310_group_project.Event;
 import com.example.csci310_group_project.EventDetailActivity;
 import com.example.csci310_group_project.R;
 import com.example.csci310_group_project.recyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -152,6 +162,33 @@ public class ExploreFragment extends Fragment {
 
     // TODO: read from DAO
     private void setEventInfo(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("allEvent")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            eventsList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("Event", document.getId() + " => " + document.getData());
+                                Log.d("EventName", String.valueOf(document.getLong("cost")));
+                                eventsList.add(new Event(document.getString("name"), document.getString("type"),
+                                        document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
+                                        document.getString("location"), Math.toIntExact(document.getLong("cost")),0));
+                            }
+                            Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
+                            setAdapter();
+
+                        } else {
+                            Log.d("EventError", "Error getting documents: ", task.getException());
+                            Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+        /*
         eventsList.add(new Event(
                 "Banda Los Recoditos, Hijos De Barron ", "party", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
         ));
@@ -179,5 +216,7 @@ public class ExploreFragment extends Fragment {
         eventsList.add(new Event(
                 "Sunset Vibes Silect Disco Special Party","party", "Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
         ));
+
+         */
     }
 }
