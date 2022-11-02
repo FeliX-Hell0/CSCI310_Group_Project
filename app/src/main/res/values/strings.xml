@@ -34,6 +34,16 @@
         <item>Alphabetic</item>
     </string-array>
 
+    <!-- type spinner values  -->
+    <string-array name="Types" >
+        <item>All</item>
+        <item>Party</item>
+        <item>Concert</item>
+        <item>Exhibition</item>
+        <item>Sport</item>
+        <item>Comedy</item>
+    </string-array>
+
 
 
 </resources>

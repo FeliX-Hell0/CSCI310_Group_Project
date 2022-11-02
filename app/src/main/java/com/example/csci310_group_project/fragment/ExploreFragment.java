@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +52,8 @@ public class ExploreFragment extends Fragment {
     private recyclerAdapter.RecyclerViewClickListener listener;
     private SearchView searchView;
     private recyclerAdapter mAdapter;
-    private Spinner spinner;
+    private Spinner sortSpinner;
+    private Spinner typeSpinner;
     private String searchText;
 
 
@@ -126,44 +128,10 @@ public class ExploreFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
-        spinner = view.findViewById(R.id.sort_spinner);
 
-        searchView = view.findViewById(R.id.searchView);
-        searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                searchText = s;
-                filterList(s, spinner.getSelectedItem().toString());
-                return true;
-            }
-        });
-
-        // spinner onChange
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(context, R.array.Sorts, android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-
-        // call filterList when onSelect
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String spinnerVal = spinner.getSelectedItem().toString();
-                filterList(searchText, spinnerVal);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });
-
+        setSearchView(view);
+        setSortSpinner(view);
+        setTypeSpinner(view);
 
         recyclerView = view.findViewById(R.id.recyclerView);
         eventsList = new ArrayList<>();
@@ -174,37 +142,43 @@ public class ExploreFragment extends Fragment {
         return view;
     }
 
-    // TODO: check if date and sort types are set
-    private void filterList(String text, String spinnerValue) {
+    private void filterList(String text, String type, String sorting) {
         ArrayList<Event> filteredEventsList = new ArrayList<>();
+        String selectedType = type.toLowerCase();
 
         for (Event event : eventsList) {
-            if (text == null || text.isEmpty()) {
-                filteredEventsList.add(event);
-            } else if (event.getEventName().toLowerCase().contains(text.toLowerCase())) {
-                filteredEventsList.add(event);
+
+            String eventName = event.getEventName().toLowerCase();
+            String eventType = event.getEventType().toLowerCase();
+
+            if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase())) {
+                if (selectedType.contains("all") || eventType.contains(selectedType)) {
+                    filteredEventsList.add(event);
+                }
             }
         }
 
 
         // TODO: sort via spinnerValue
-        if (spinnerValue.toLowerCase().contains("cost")) {
-            Toast.makeText(getActivity(), "sort via cost", Toast.LENGTH_LONG).show();
+        if (sorting.toLowerCase().contains("cost")) {
+//            Toast.makeText(getActivity(), "sort via cost", Toast.LENGTH_LONG).show();
             // sort via cost
             filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
 
-        } else if (spinnerValue.toLowerCase().contains("distance")){
+        } else if (sorting.toLowerCase().contains("distance")){
             // sort via distance
             // TODO: get user address
             // TODO: longitude & latitude
 
-        } else if (spinnerValue.toLowerCase().contains("time")){
+        } else if (sorting.toLowerCase().contains("time")){
             // sort via time
             // TODO: compare time
 
-        } else if (spinnerValue.toLowerCase().contains("alphabetic")){
-            // sort via alphabetical order
-            Toast.makeText(getActivity(), "sort via alphabetic", Toast.LENGTH_LONG).show();
+
+
+
+        } else if (sorting.toLowerCase().contains("alphabetic")){
+//            Toast.makeText(getActivity(), "sort via alphabetic", Toast.LENGTH_LONG).show();
             filteredEventsList.sort(Comparator.comparing(Event::getEventName));
         }
 
@@ -216,61 +190,90 @@ public class ExploreFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("allEvent")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            eventsList.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("Event", document.getId() + " => " + document.getData());
-                                Log.d("EventName", String.valueOf(document.getLong("cost")));
-                                eventsList.add(new Event(document.getString("name"), document.getString("type"),
-                                        document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
-                                        document.getString("location"), (int) (long) (document.getLong("cost")),0));
-                            }
-                            eventsList.sort(Comparator.comparing(Event::getEventCost));
-                            Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
-                            setAdapter();
-
-                        } else {
-                            Log.d("EventError", "Error getting documents: ", task.getException());
-                            Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_LONG).show();
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        eventsList.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("Event", document.getId() + " => " + document.getData());
+                            Log.d("EventName", String.valueOf(document.getLong("cost")));
+                            eventsList.add(new Event(document.getString("name"), document.getString("type"),
+                                    document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
+                                    document.getString("location"), (int) (long) (document.getLong("cost")),0));
                         }
+                        eventsList.sort(Comparator.comparing(Event::getEventCost));
+                        Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
+                        setAdapter();
+
+                    } else {
+                        Log.d("EventError", "Error getting documents: ", task.getException());
+                        Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_LONG).show();
                     }
-                });
+                }
+            });
+    }
 
+    private void setSearchView(View view) {
+        searchView = view.findViewById(R.id.searchView);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String s) {
+                searchText = s;
+                String sorting = sortSpinner.getSelectedItem().toString();
+                String type = "all";
+                filterList(s, type, sorting);
+                return true;
+            }
+        });
+    }
 
-        /*
-        eventsList.add(new Event(
-                "Banda Los Recoditos, Hijos De Barron ", "party", "Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
-        ));
-        eventsList.add(new Event(
-                "Fall Festival AVANA", "party","Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
-        ));
-        eventsList.add(new Event(
-                "Sunset Vibes Silect Disco Special Party", "party","Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
-        ));
-        eventsList.add(new Event(
-                "Banda Los Recoditos, Hijos De Barron ", "party","Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
-        ));
-        eventsList.add(new Event(
-                "Fall Festival AVANA", "Dec 20, 2022 3:00 PM", "party","UCLA", "gonna be interesting", "UCLA Campus", 20, 0
-        ));
-        eventsList.add(new Event(
-                "Sunset Vibes Silect Disco Special Party", "party","Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
-        ));
-        eventsList.add(new Event(
-                "Banda Los Recoditos, Hijos De Barron ", "party","Oct 10, 2022 8:00 PM", "UUUUSC", "gonna be fun", "Viterbi RRB", 30, 0
-        ));
-        eventsList.add(new Event(
-                "Fall Festival AVANA", "party","Dec 20, 2022 3:00 PM", "UCLA", "gonna be interesting", "UCLA Campus", 20, 0
-        ));
-        eventsList.add(new Event(
-                "Sunset Vibes Silect Disco Special Party","party", "Nov 06, 2022 5:30 PM", "UCLA", "gonna be interesting", "@Vista / Hermosa Beach", 20, 0
-        ));
+    private void setSortSpinner(View view) {
+        sortSpinner = view.findViewById(R.id.sort_spinner);
 
-         */
+        ArrayAdapter<CharSequence> sortArrayAdapter = ArrayAdapter.createFromResource(context, R.array.Sorts, android.R.layout.simple_spinner_item);
+        sortArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(sortArrayAdapter);
+
+        // call filterList when onSelect
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String sorting = sortSpinner.getSelectedItem().toString();
+                String type = "all";
+                filterList(searchText, type, sorting);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {}
+        });
+    }
+
+    private void setTypeSpinner(View view) {
+        typeSpinner = view.findViewById(R.id.type_spinner);
+
+        ArrayAdapter<CharSequence> TypeArrayAdapter = ArrayAdapter.createFromResource(context, R.array.Types, android.R.layout.simple_spinner_item);
+        TypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(TypeArrayAdapter);
+
+        // call filterList when onSelect
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String sorting = sortSpinner.getSelectedItem().toString();
+                String type = typeSpinner.getSelectedItem().toString();
+                filterList(searchText, type, sorting);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {}
+        });
     }
 }
