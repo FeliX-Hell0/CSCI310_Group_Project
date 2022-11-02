@@ -70,13 +70,14 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         String date = eventsList.get(position).getEventDate();
         String location = eventsList.get(position).getEventLocation();
 //        String organizer = eventsList.get(position).getEventOrganizor();
+        String type = eventsList.get(position).getEventType();
         int cost = eventsList.get(position).getEventCost();
 
         holder.nameText.setText(name);
         holder.dateText.setText(date);
         holder.locationText.setText(location);
+        holder.typeText.setText(type);
         holder.costText.setText("$" + String.valueOf(cost));
-
     }
 
     @Override

@@ -161,7 +161,6 @@ public class ExploreFragment extends Fragment {
 
         // TODO: sort via spinnerValue
         if (sorting.toLowerCase().contains("cost")) {
-//            Toast.makeText(getActivity(), "sort via cost", Toast.LENGTH_LONG).show();
             // sort via cost
             filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
 
@@ -203,6 +202,8 @@ public class ExploreFragment extends Fragment {
                                     document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
                                     document.getString("location"), (int) (long) (document.getLong("cost")),0));
                         }
+
+                        // by default sort by cost
                         eventsList.sort(Comparator.comparing(Event::getEventCost));
                         Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
                         setAdapter();
