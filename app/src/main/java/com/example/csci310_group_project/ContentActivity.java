@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.example.csci310_group_project.databinding.ActivityContentBinding;
 import com.example.csci310_group_project.fragment.ExploreFragment;
+import com.example.csci310_group_project.fragment.FavFragment;
 import com.example.csci310_group_project.fragment.ProfileFragment;
 import com.example.csci310_group_project.fragment.MapFragment;
 
@@ -30,6 +31,9 @@ public class ContentActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_map:
                     replaceFragment(new MapFragment());
+                    break;
+                case R.id.nav_fav:
+                    replaceFragment(new FavFragment());
                     break;
                 case R.id.nav_profile:
                     replaceFragment(new ProfileFragment());

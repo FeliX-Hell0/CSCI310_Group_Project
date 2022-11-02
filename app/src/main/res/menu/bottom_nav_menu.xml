@@ -12,6 +12,11 @@
         android:title="Map" />
 
     <item
+        android:id="@+id/nav_fav"
+        android:icon="@drawable/ic_baseline_star_border_24"
+        android:title="Fav" />
+
+    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_baseline_person_outline_24"
         android:title="Profile" />

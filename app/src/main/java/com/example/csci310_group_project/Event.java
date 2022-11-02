@@ -1,5 +1,8 @@
 package com.example.csci310_group_project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Event {
     private String eventName;
     private String eventDate;
@@ -29,6 +32,30 @@ public class Event {
     public String getEventDate() {
         return eventDate;
     }
+
+    public String[] getEventDateParts(){
+        // TODO: divide date via '/'
+        String[] parts = eventDate.split("/");
+        return parts;
+    }
+
+    public Integer getEventYear(){
+        String[] components = getEventDateParts();
+        return Integer.valueOf(components[2]);
+    }
+
+    public Integer getEventMonth(){
+        String[] components = getEventDateParts();
+        return Integer.valueOf(components[1]);
+    }
+
+    public Integer getEventDay(){
+        String[] components = getEventDateParts();
+        return Integer.valueOf(components[0]);
+    }
+
+
+
 
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;

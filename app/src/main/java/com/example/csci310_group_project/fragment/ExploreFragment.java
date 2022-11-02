@@ -159,25 +159,23 @@ public class ExploreFragment extends Fragment {
         }
 
 
-        // TODO: sort via spinnerValue
-        if (sorting.toLowerCase().contains("cost")) {
-            // sort via cost
+        // sort via the selected value of the sort spinner
+        if (sorting.toLowerCase().contains("cost")) { // sort via cost
             filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
 
-        } else if (sorting.toLowerCase().contains("distance")){
-            // sort via distance
+        } else if (sorting.toLowerCase().contains("distance")){ // sort via distance
             // TODO: get user address
             // TODO: longitude & latitude
 
-        } else if (sorting.toLowerCase().contains("time")){
-            // sort via time
-            // TODO: compare time
+        } else if (sorting.toLowerCase().contains("time")){ // sort via time
+            filteredEventsList.sort(Comparator.comparing(Event::getEventYear)
+                    .thenComparing((Event::getEventMonth))
+                    .thenComparing((Event::getEventDay)));
 
-
+            // TODO: compare specific time slot?
 
 
         } else if (sorting.toLowerCase().contains("alphabetic")){
-//            Toast.makeText(getActivity(), "sort via alphabetic", Toast.LENGTH_LONG).show();
             filteredEventsList.sort(Comparator.comparing(Event::getEventName));
         }
 
@@ -205,7 +203,7 @@ public class ExploreFragment extends Fragment {
 
                         // by default sort by cost
                         eventsList.sort(Comparator.comparing(Event::getEventCost));
-                        Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
+                        // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
                         setAdapter();
 
                     } else {
@@ -248,7 +246,7 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String sorting = sortSpinner.getSelectedItem().toString();
-                String type = "all";
+                String type = typeSpinner.getSelectedItem().toString();
                 filterList(searchText, type, sorting);
             }
 

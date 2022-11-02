@@ -23,29 +23,54 @@ android:layout_width="fill_parent" android:layout_height="fill_parent">
             app:layout_constraintTop_toTopOf="parent"
             app:queryHint="Search Here ..." />
 
-        <!--    TODO: add sort type spinner-->
-
-        <Spinner
-            android:id="@+id/sort_spinner"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/searchView"
-            android:layout_marginTop="56dp"
+        <!--   type display    -->
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:text="Type: "
+            android:layout_marginTop="63dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.938"
+            app:layout_constraintHorizontal_bias="0.606"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
 
         <Spinner
             android:id="@+id/type_spinner"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_width="135dp"
+            android:layout_height="25dp"
             android:layout_below="@id/searchView"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="60dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.338"
+            app:layout_constraintHorizontal_bias="0.974"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!--   sort display    -->
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:text="Sort by: "
+            android:layout_marginTop="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.606"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/type_spinner"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+        <Spinner
+            android:id="@+id/sort_spinner"
+            android:layout_width="135dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/searchView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.974"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/type_spinner" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
