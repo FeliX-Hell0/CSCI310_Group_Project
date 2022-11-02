@@ -17,6 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.appcompat.widget.SearchView;
+
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.csci310_group_project.Event;
@@ -43,6 +47,7 @@ public class ExploreFragment extends Fragment {
     private recyclerAdapter.RecyclerViewClickListener listener;
     private SearchView searchView;
     private recyclerAdapter mAdapter;
+    private Spinner spinner;
 
 
     private Context context;
@@ -133,6 +138,11 @@ public class ExploreFragment extends Fragment {
         });
 
         // TODO: spinner onChange
+        spinner = view.findViewById(R.id.sort_spinner);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(context, R.array.Sorts, android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+
 
         recyclerView = view.findViewById(R.id.recyclerView);
         eventsList = new ArrayList<>();

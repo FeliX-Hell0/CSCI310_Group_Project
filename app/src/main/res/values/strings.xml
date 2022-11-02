@@ -26,4 +26,14 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
+    <!-- sort spinner values  -->
+    <string-array name="Sorts" >
+        <item>Cost</item>
+        <item>Distance</item>
+        <item>Time</item>
+        <item>Alphabetic</item>
+    </string-array>
+
+
+
 </resources>
