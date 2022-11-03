@@ -23,6 +23,60 @@ android:layout_width="fill_parent" android:layout_height="fill_parent">
             app:layout_constraintTop_toTopOf="parent"
             app:queryHint="Search Here ..." />
 
+        <!--   date picker     -->
+        <TextView
+            android:id="@+id/date_from"
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:text="Date from: "
+            android:layout_marginTop="63dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.026"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+        <Button
+            android:id="@+id/dateFromPickerButton"
+            style="?android:spinnerStyle"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="1/1/2020"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginEnd="225dp"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="332dp"
+            android:text="Date to: "
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_from" />
+
+        <Button
+            android:id="@+id/dateToPickerButton"
+            style="?android:spinnerStyle"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:onClick="openDatePicker"
+            android:text="12/31/2024"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginEnd="225dp"
+            android:layout_marginTop="74dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
         <!--   type display    -->
         <TextView
             android:layout_width="50dp"

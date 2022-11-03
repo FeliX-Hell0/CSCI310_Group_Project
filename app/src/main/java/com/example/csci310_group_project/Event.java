@@ -34,10 +34,17 @@ public class Event {
     }
 
     public String[] getEventDateParts(){
-        // TODO: divide date via '/'
-        String[] parts = eventDate.split("/");
-        return parts;
+        String[] parts = eventDate.split(",");
+        String[] dateParts = parts[0].split("/");
+        return dateParts;
     }
+
+    public String[] getEventTimeParts(){
+        String[] parts = eventDate.split(", ");
+        String[] timeParts = parts[1].split(":");
+        return timeParts;
+    }
+
 
     public Integer getEventYear(){
         String[] components = getEventDateParts();
@@ -46,15 +53,23 @@ public class Event {
 
     public Integer getEventMonth(){
         String[] components = getEventDateParts();
-        return Integer.valueOf(components[1]);
+        return Integer.valueOf(components[0]);
     }
 
     public Integer getEventDay(){
         String[] components = getEventDateParts();
-        return Integer.valueOf(components[0]);
+        return Integer.valueOf(components[1]);
     }
 
+    public Integer getEventHour(){
+        String[] timeParts = getEventTimeParts();
+        return Integer.valueOf(timeParts[0]);
+    }
 
+    public Integer getEventMinute(){
+        String[] timeParts = getEventTimeParts();
+        return Integer.valueOf(timeParts[1]);
+    }
 
 
     public void setEventDate(String eventDate) {

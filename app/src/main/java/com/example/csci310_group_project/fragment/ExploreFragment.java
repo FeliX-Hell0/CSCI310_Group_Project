@@ -1,5 +1,8 @@
 package com.example.csci310_group_project.fragment;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -20,6 +23,8 @@ import androidx.appcompat.widget.SearchView;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -37,6 +42,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
@@ -48,6 +54,9 @@ import java.util.Locale;
  */
 public class ExploreFragment extends Fragment {
     private ArrayList<Event> eventsList;
+    private Context context;
+
+    // for filtering
     private RecyclerView recyclerView;
     private recyclerAdapter.RecyclerViewClickListener listener;
     private SearchView searchView;
@@ -56,8 +65,12 @@ public class ExploreFragment extends Fragment {
     private Spinner typeSpinner;
     private String searchText;
 
+    // for date picker
+    private DatePickerDialog dateFromPickerDialog;
+    private DatePickerDialog dateToPickerDialog;
+    private Button dateFromButton;
+    private Button dateToButton;
 
-    private Context context;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -139,25 +152,99 @@ public class ExploreFragment extends Fragment {
         setEventInfo();
         setAdapter();
 
+        initDateFromPicker(view);
+        initDateToPicker(view);
+
         return view;
     }
 
-    private void filterList(String text, String type, String sorting) {
+    private void initDateFromPicker(View view)
+    {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = makeDateString(day, month, year);
+                dateFromButton.setText(date);
+
+                // TODO: call filter
+                String sorting = sortSpinner.getSelectedItem().toString();
+                String type = typeSpinner.getSelectedItem().toString();
+                String startDate = date;
+                String endDate = dateToButton.getText().toString();
+                filterList(searchText, type, sorting, startDate, endDate);
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
+
+        dateFromPickerDialog = new DatePickerDialog(context, style, dateSetListener, year, month, day);
+        dateFromButton = view.findViewById(R.id.dateFromPickerButton);
+        dateFromButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dateFromPickerDialog.show();
+            }
+        });
+    }
+
+    private void initDateToPicker(View view)
+    {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = makeDateString(day, month, year);
+                dateToButton.setText(date);
+
+                // TODO: call filter
+                String sorting = sortSpinner.getSelectedItem().toString();
+                String type = typeSpinner.getSelectedItem().toString();
+                String startDate = dateFromButton.getText().toString();
+                String endDate = date;
+                filterList(searchText, type, sorting, startDate, endDate);
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
+
+        dateToPickerDialog = new DatePickerDialog(context, style, dateSetListener, year, month, day);
+        dateToButton = view.findViewById(R.id.dateToPickerButton);
+        dateToButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dateToPickerDialog.show();
+            }
+        });
+    }
+
+    private String makeDateString(int day, int month, int year)
+    {
+        return month + "/" + day + "/" + year;
+    }
+
+    private void filterList(String text, String type, String sorting, String startDate, String endDate) {
         ArrayList<Event> filteredEventsList = new ArrayList<>();
         String selectedType = type.toLowerCase();
 
         for (Event event : eventsList) {
-
             String eventName = event.getEventName().toLowerCase();
             String eventType = event.getEventType().toLowerCase();
 
             if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase())) {
                 if (selectedType.contains("all") || eventType.contains(selectedType)) {
-                    filteredEventsList.add(event);
+                    if (isInDateRange(startDate, endDate, event)) {
+                        filteredEventsList.add(event);
+                    }
                 }
             }
         }
-
 
         // sort via the selected value of the sort spinner
         if (sorting.toLowerCase().contains("cost")) { // sort via cost
@@ -170,16 +257,37 @@ public class ExploreFragment extends Fragment {
         } else if (sorting.toLowerCase().contains("time")){ // sort via time
             filteredEventsList.sort(Comparator.comparing(Event::getEventYear)
                     .thenComparing((Event::getEventMonth))
-                    .thenComparing((Event::getEventDay)));
-
-            // TODO: compare specific time slot?
-
+                    .thenComparing((Event::getEventDay))
+                    .thenComparing(Event::getEventHour)
+                    .thenComparing(Event::getEventMinute));
 
         } else if (sorting.toLowerCase().contains("alphabetic")){
             filteredEventsList.sort(Comparator.comparing(Event::getEventName));
         }
 
         mAdapter.SetFilteredList(filteredEventsList);
+    }
+
+    private Boolean isInDateRange(String startDate, String endDate, Event event) {
+        String[] startDateParts = startDate.split("/");
+        Integer startDateYear = Integer.valueOf(startDateParts[2]);
+        Integer startDateMonth = Integer.valueOf(startDateParts[0]);
+        Integer startDateDay = Integer.valueOf(startDateParts[1]);
+
+        String[] endDateParts = endDate.split("/");
+        Integer endDateYear = Integer.valueOf(endDateParts[2]);
+        Integer endDateMonth = Integer.valueOf(endDateParts[0]);
+        Integer endDateDay = Integer.valueOf(endDateParts[1]);
+
+        Integer startDateInteger = startDateYear * 10000 + startDateMonth * 100 + startDateDay;
+        Integer endDateInteger = endDateYear * 10000 + endDateMonth * 100 + endDateDay;
+        Integer eventDateInteger = event.getEventYear() * 10000 + event.getEventMonth() * 100 + event.getEventDay();
+
+        if (eventDateInteger >= startDateInteger && eventDateInteger <= endDateInteger) {
+            return true;
+        }
+
+        return false;
     }
 
     // TODO: read from DAO
@@ -194,8 +302,8 @@ public class ExploreFragment extends Fragment {
                     if (task.isSuccessful()) {
                         eventsList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d("Event", document.getId() + " => " + document.getData());
-                            Log.d("EventName", String.valueOf(document.getLong("cost")));
+//                            Log.d("Event", document.getId() + " => " + document.getData());
+//                            Log.d("EventName", String.valueOf(document.getLong("cost")));
                             eventsList.add(new Event(document.getString("name"), document.getString("type"),
                                     document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
                                     document.getString("location"), (int) (long) (document.getLong("cost")),0));
@@ -228,7 +336,9 @@ public class ExploreFragment extends Fragment {
                 searchText = s;
                 String sorting = sortSpinner.getSelectedItem().toString();
                 String type = "all";
-                filterList(s, type, sorting);
+                String startDate = dateFromButton.getText().toString();
+                String endDate = dateToButton.getText().toString();
+                filterList(s, type, sorting, startDate, endDate);
                 return true;
             }
         });
@@ -247,7 +357,9 @@ public class ExploreFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String sorting = sortSpinner.getSelectedItem().toString();
                 String type = typeSpinner.getSelectedItem().toString();
-                filterList(searchText, type, sorting);
+                String startDate = dateFromButton.getText().toString();
+                String endDate = dateToButton.getText().toString();
+                filterList(searchText, type, sorting, startDate, endDate);
             }
 
             @Override
@@ -268,7 +380,9 @@ public class ExploreFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String sorting = sortSpinner.getSelectedItem().toString();
                 String type = typeSpinner.getSelectedItem().toString();
-                filterList(searchText, type, sorting);
+                String startDate = dateFromButton.getText().toString();
+                String endDate = dateToButton.getText().toString();
+                filterList(searchText, type, sorting, startDate, endDate);
             }
 
             @Override
