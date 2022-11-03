@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyViewHolder> {
@@ -34,6 +36,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         private TextView organizorText;
         private TextView costText;
         private TextView typeText;
+        private TextView registerText;
 
         public MyViewHolder(final View view) {
             super(view);
@@ -46,6 +49,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             costText = view.findViewById(R.id.custom_event_cost);
             organizorText = view.findViewById(R.id.custom_event_organizer);
             typeText = view.findViewById(R.id.custom_event_type);
+            registerText = view.findViewById(R.id.custom_event_register_status);
 
             view.setOnClickListener(this);
         }
@@ -72,12 +76,19 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
 //        String organizer = eventsList.get(position).getEventOrganizor();
         String type = eventsList.get(position).getEventType();
         int cost = eventsList.get(position).getEventCost();
+        boolean registered = eventsList.get(position).getRegistered();
 
         holder.nameText.setText(name);
         holder.dateText.setText(date);
         holder.locationText.setText(location);
         holder.typeText.setText(type);
         holder.costText.setText("$" + String.valueOf(cost));
+        if(registered){
+            holder.registerText.setText("Registered");
+        }
+        else{
+            holder.registerText.setText("Unregistered");
+        }
     }
 
     @Override

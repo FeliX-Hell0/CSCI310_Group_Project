@@ -12,6 +12,7 @@ public class Event {
     private String eventType;
     private Integer eventCost;
     private int img;
+    private boolean registered;
 
     public String getEventType() {
         return eventType;
@@ -71,6 +72,14 @@ public class Event {
         return Integer.valueOf(timeParts[1]);
     }
 
+    public Boolean getRegistered(){
+        return registered;
+    }
+
+    public void setRegistered(Boolean b){
+        this.registered = b;
+    }
+
 
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
@@ -116,7 +125,7 @@ public class Event {
         this.img = img;
     }
 
-    public Event(String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, Integer eventCost, int img) {
+    public Event(String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, Integer eventCost, int img, boolean registered) {
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDate = eventDate;
@@ -125,5 +134,6 @@ public class Event {
         this.eventLocation = eventLocation;
         this.eventCost = eventCost;
         this.img = img;
+        this.registered = registered;
     }
 }

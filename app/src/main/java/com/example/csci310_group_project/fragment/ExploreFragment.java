@@ -30,11 +30,14 @@ import android.widget.Toast;
 
 import com.example.csci310_group_project.Event;
 import com.example.csci310_group_project.EventDetailActivity;
+import com.example.csci310_group_project.MainActivity;
 import com.example.csci310_group_project.R;
 import com.example.csci310_group_project.recyclerAdapter;
+import com.example.csci310_group_project.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -45,6 +48,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -55,6 +59,7 @@ import java.util.Locale;
 public class ExploreFragment extends Fragment {
     private ArrayList<Event> eventsList;
     private Context context;
+    private String user = "";
 
     // for filtering
     private RecyclerView recyclerView;
@@ -80,6 +85,10 @@ public class ExploreFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -306,12 +315,14 @@ public class ExploreFragment extends Fragment {
 //                            Log.d("EventName", String.valueOf(document.getLong("cost")));
                             eventsList.add(new Event(document.getString("name"), document.getString("type"),
                                     document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
-                                    document.getString("location"), (int) (long) (document.getLong("cost")),0));
+                                    document.getString("location"), (int) (long) (document.getLong("cost")),0, false));
                         }
 
                         // by default sort by cost
                         eventsList.sort(Comparator.comparing(Event::getEventCost));
                         // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
+
+                        setRegisteredEvents();
                         setAdapter();
 
                     } else {
@@ -320,6 +331,54 @@ public class ExploreFragment extends Fragment {
                     }
                 }
             });
+    }
+
+    private void setRegisteredEvents(){
+        if(user.equals("")){
+            Toast.makeText(getActivity(), "Guest mode", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //Toast.makeText(getActivity(), "Please wait", Toast.LENGTH_LONG).show();
+                        if (!document.getString("registeredEvents").equals("")) {
+                            String collection = document.getString("registeredEvents");
+                            String[] registeredEvents = collection.split(";");
+                            List<String> regEvents = new ArrayList<>(Arrays.asList(registeredEvents));
+
+                            for(String event: regEvents){
+                                for(Event myEvent: eventsList){
+                                    if(myEvent.getEventName().equals(event)){
+                                        myEvent.setRegistered(true);
+                                    }
+                                }
+                            }
+                            Toast.makeText(getActivity(), "Registered events loading success", Toast.LENGTH_LONG).show();
+                        } else {
+                            //Toast.makeText(getActivity(), "Processing error", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_LONG).show();
+                    }
+
+                    setAdapter();
+
+                } else {
+                    Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        });
     }
 
     private void setSearchView(View view) {

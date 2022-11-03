@@ -151,9 +151,11 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_LONG).show();
                                 if (document.getString("password").equals(password)) {
                                     Toast.makeText(getApplicationContext(), "Login Success!", Toast.LENGTH_LONG).show();
-                                    Intent i = new Intent(LoginActivity.this, ContentActivity.class);
+                                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    i.putExtra("user", username);
                                     startActivity(i);
+
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Password error", Toast.LENGTH_LONG).show();
                                 }
