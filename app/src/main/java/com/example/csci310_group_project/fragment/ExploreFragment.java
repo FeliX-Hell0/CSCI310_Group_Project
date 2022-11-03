@@ -58,6 +58,7 @@ import java.util.Locale;
  */
 public class ExploreFragment extends Fragment {
     private ArrayList<Event> eventsList;
+    private ArrayList<Event> filteredEventList = eventsList;
     private Context context;
     private String user = "";
 
@@ -137,7 +138,9 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(context.getApplicationContext(), EventDetailActivity.class);
-                intent.putExtra("EVENT_INDEX", String.valueOf(position));
+                Log.d("EventName", filteredEventList.get(position).getEventName());
+                intent.putExtra("EVENT_INDEX", filteredEventList.get(position).getEventName());
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
         };
@@ -273,7 +276,7 @@ public class ExploreFragment extends Fragment {
         } else if (sorting.toLowerCase().contains("alphabetic")){
             filteredEventsList.sort(Comparator.comparing(Event::getEventName));
         }
-
+        filteredEventList = filteredEventsList;
         mAdapter.SetFilteredList(filteredEventsList);
     }
 
@@ -321,7 +324,7 @@ public class ExploreFragment extends Fragment {
                         // by default sort by cost
                         eventsList.sort(Comparator.comparing(Event::getEventCost));
                         // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
-
+                        filteredEventList = eventsList;
                         setRegisteredEvents();
                         setAdapter();
 
@@ -349,7 +352,7 @@ public class ExploreFragment extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        //Toast.makeText(getActivity(), "Please wait", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_LONG).show();
                         if (!document.getString("registeredEvents").equals("")) {
                             String collection = document.getString("registeredEvents");
                             String[] registeredEvents = collection.split(";");
@@ -364,7 +367,7 @@ public class ExploreFragment extends Fragment {
                             }
                             Toast.makeText(getActivity(), "Registered events loading success", Toast.LENGTH_LONG).show();
                         } else {
-                            //Toast.makeText(getActivity(), "Processing error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "No registered events", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_LONG).show();
