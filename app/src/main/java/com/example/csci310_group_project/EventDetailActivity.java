@@ -102,7 +102,7 @@ public class EventDetailActivity extends AppCompatActivity {
                     if (document.exists()) {
                         //Toast.makeText(getActivity(), "Please wait", Toast.LENGTH_LONG).show();
                         String collection = document.getString("registeredEvents") + ";" + eventName;
-                        addEvent(collection);
+                        updateEvent(collection);
                     } else {
                         //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
@@ -116,7 +116,53 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void addEvent(String collection){
+    private void unRegisterEvents(){
+        // check if user logged in, not sure if needed
+        if(user.equals("")){
+            Toast.makeText(this, "Please register to sign up for events", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            return;
+        }
+
+        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String temp = document.getString("registeredEvents");
+                        if(temp.contains(eventName)){
+                            int firstIdx = temp.indexOf(eventName) - 1;
+                            int lastIdx = temp.lastIndexOf(eventName);
+                            String collection1 = "";
+                            if (firstIdx > 0){
+                                collection1 = temp.substring(0,firstIdx);
+                            }
+                            String collection2 = "";
+                            if (lastIdx < temp.length() - 1) {
+                                collection2 = temp.substring(lastIdx + 1);
+                            }
+                            updateEvent(collection1 + collection2);
+                        }
+                    } else {
+                        //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        });
+    }
+
+    private void updateEvent(String collection){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user).update("registeredEvents", collection).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -127,4 +173,6 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
