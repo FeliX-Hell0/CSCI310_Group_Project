@@ -21,9 +21,6 @@ public class ContentActivity extends AppCompatActivity {
     ActivityContentBinding binding;
     private String user = "";
 
-    private ExploreFragment explore;
-    private MapFragment map;
-    private FavFragment fav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,22 +37,23 @@ public class ContentActivity extends AppCompatActivity {
         fragment.setUser(user);
         replaceFragment(fragment); // init
 
-        explore = fragment;
-        map = new MapFragment();
-        map.setUser(user);
-        fav = new FavFragment();
-        fav.setUser(user);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_explore:
-                    replaceFragment(explore);
+                    ExploreFragment fragment2 = new ExploreFragment();
+                    fragment2.setUser(user);
+                    replaceFragment(fragment2);
                     break;
                 case R.id.nav_map:
-                    replaceFragment(map);
+                    MapFragment frag = new MapFragment();
+                    frag.setUser(user);
+                    replaceFragment(frag);
                     break;
                 case R.id.nav_fav:
-                    replaceFragment(fav);
+                    FavFragment favFragment = new FavFragment();
+                    favFragment.setUser(user);
+                    replaceFragment(favFragment);
                     break;
                 case R.id.nav_profile:
                     replaceFragment(new ProfileFragment());
@@ -69,6 +67,8 @@ public class ContentActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.frameLayout, fragment);
+        transaction.setReorderingAllowed(true);
+        transaction.addToBackStack("");
         transaction.commit();
     }
 }

@@ -341,8 +341,8 @@ public class FavFragment extends Fragment {
                             // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_SHORT).show();
                             filteredEventList = eventsList;
                             setRegisteredEvents();
-
-                            setAdapter();
+                            setFavoriteEvents();
+                            //setAdapter();
 
                         } else {
                             Log.d("EventError", "Error getting documents: ", task.getException());
@@ -388,7 +388,9 @@ public class FavFragment extends Fragment {
                     } else {
                         //Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
                     }
-                    setFavoriteEvents();
+                    //setFavoriteEvents();
+                    filteredEventList = eventsList;
+                    setAdapter();
 
                 } else {
                     Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_SHORT).show();
