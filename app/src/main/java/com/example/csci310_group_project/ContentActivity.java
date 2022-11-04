@@ -44,7 +44,9 @@ public class ContentActivity extends AppCompatActivity {
                     replaceFragment(fragment2);
                     break;
                 case R.id.nav_map:
-                    replaceFragment(new MapFragment());
+                    MapFragment frag = new MapFragment();
+                    frag.setUser(user);
+                    replaceFragment(frag);
                     break;
                 case R.id.nav_fav:
                     replaceFragment(new FavFragment());
