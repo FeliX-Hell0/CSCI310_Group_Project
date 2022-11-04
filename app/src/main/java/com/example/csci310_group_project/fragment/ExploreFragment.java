@@ -402,7 +402,7 @@ public class ExploreFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         //Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_SHORT).show();
-                        if (!document.getString("favorites").equals("")) {
+                        if (document.getString("favorites") != null && !document.getString("favorites").equals("")) {
                             String collection = document.getString("favorites");
                             String[] favoriteEvents = collection.split(";");
                             List<String> favEvents = new ArrayList<>(Arrays.asList(favoriteEvents));
