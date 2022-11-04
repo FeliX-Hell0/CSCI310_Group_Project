@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_SHORT).show();
                                 if (document.getString("password").equals(password)) {
                                     Toast.makeText(getApplicationContext(), "Login Success!", Toast.LENGTH_LONG).show();
                                     Intent i = new Intent(LoginActivity.this, MainActivity.class);

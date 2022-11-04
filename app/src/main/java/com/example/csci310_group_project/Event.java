@@ -13,6 +13,7 @@ public class Event {
     private Integer eventCost;
     private int img;
     private boolean registered;
+    private boolean favorite;
 
     public String getEventType() {
         return eventType;
@@ -80,6 +81,9 @@ public class Event {
         this.registered = b;
     }
 
+    public boolean getFavorite(){return favorite;}
+    public void setFavorite(Boolean favorite){this.favorite = favorite;}
+
 
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
@@ -125,7 +129,8 @@ public class Event {
         this.img = img;
     }
 
-    public Event(String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, Integer eventCost, int img, boolean registered) {
+    public Event(String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, Integer eventCost, int img, boolean registered,
+                 Boolean favorite) {
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDate = eventDate;
@@ -135,5 +140,6 @@ public class Event {
         this.eventCost = eventCost;
         this.img = img;
         this.registered = registered;
+        this.favorite = favorite;
     }
 }

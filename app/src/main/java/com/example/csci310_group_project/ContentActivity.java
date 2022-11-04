@@ -21,6 +21,10 @@ public class ContentActivity extends AppCompatActivity {
     ActivityContentBinding binding;
     private String user = "";
 
+    private ExploreFragment explore;
+    private MapFragment map;
+    private FavFragment fav;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,20 +40,22 @@ public class ContentActivity extends AppCompatActivity {
         fragment.setUser(user);
         replaceFragment(fragment); // init
 
+        explore = fragment;
+        map = new MapFragment();
+        map.setUser(user);
+        fav = new FavFragment();
+        fav.setUser(user);
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_explore:
-                    ExploreFragment fragment2 = new ExploreFragment();
-                    fragment2.setUser(user);
-                    replaceFragment(fragment2);
+                    replaceFragment(explore);
                     break;
                 case R.id.nav_map:
-                    MapFragment frag = new MapFragment();
-                    frag.setUser(user);
-                    replaceFragment(frag);
+                    replaceFragment(map);
                     break;
                 case R.id.nav_fav:
-                    replaceFragment(new FavFragment());
+                    replaceFragment(fav);
                     break;
                 case R.id.nav_profile:
                     replaceFragment(new ProfileFragment());

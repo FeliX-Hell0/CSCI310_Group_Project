@@ -318,19 +318,20 @@ public class ExploreFragment extends Fragment {
 //                            Log.d("EventName", String.valueOf(document.getLong("cost")));
                             eventsList.add(new Event(document.getString("name"), document.getString("type"),
                                     document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
-                                    document.getString("location"), (int) (long) (document.getLong("cost")),0, false));
+                                    document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false));
                         }
 
                         // by default sort by cost
                         eventsList.sort(Comparator.comparing(Event::getEventCost));
-                        // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_LONG).show();
+                        // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_SHORT).show();
                         filteredEventList = eventsList;
                         setRegisteredEvents();
+                        setFavoriteEvents();
                         setAdapter();
 
                     } else {
                         Log.d("EventError", "Error getting documents: ", task.getException());
-                        Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -338,11 +339,11 @@ public class ExploreFragment extends Fragment {
 
     private void setRegisteredEvents(){
         if(user.equals("")){
-            Toast.makeText(getActivity(), "Guest mode", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Guest mode", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), user, Toast.LENGTH_SHORT).show();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
@@ -352,7 +353,7 @@ public class ExploreFragment extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_SHORT).show();
                         if (!document.getString("registeredEvents").equals("")) {
                             String collection = document.getString("registeredEvents");
                             String[] registeredEvents = collection.split(";");
@@ -365,18 +366,66 @@ public class ExploreFragment extends Fragment {
                                     }
                                 }
                             }
-                            Toast.makeText(getActivity(), "Registered events loading success", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getActivity(), "Registered events loading success", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getActivity(), "No registered events", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getActivity(), "No registered events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
                     }
 
                     setAdapter();
 
                 } else {
-                    Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+    }
+
+    private void setFavoriteEvents(){
+        if(user.equals("")){
+            Toast.makeText(getActivity(), "Guest mode", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //Toast.makeText(getActivity(), user, Toast.LENGTH_SHORT).show();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_SHORT).show();
+                        if (!document.getString("favorites").equals("")) {
+                            String collection = document.getString("favorites");
+                            String[] favoriteEvents = collection.split(";");
+                            List<String> favEvents = new ArrayList<>(Arrays.asList(favoriteEvents));
+
+                            for(String event: favEvents){
+                                for(Event myEvent: eventsList){
+                                    if(myEvent.getEventName().equals(event)){
+                                        myEvent.setFavorite(true);
+                                    }
+                                }
+                            }
+                            //Toast.makeText(getActivity(), "Favorite events loading success", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //Toast.makeText(getActivity(), "No favorite events", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "No user favorites info", Toast.LENGTH_SHORT).show();
+                    }
+
+                    setAdapter();
+
+                } else {
+                    Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_SHORT).show();
                 }
 
 

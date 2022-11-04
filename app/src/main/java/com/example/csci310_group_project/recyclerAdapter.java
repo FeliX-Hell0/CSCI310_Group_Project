@@ -37,6 +37,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         private TextView costText;
         private TextView typeText;
         private TextView registerText;
+        private TextView favoriteText;
 
         public MyViewHolder(final View view) {
             super(view);
@@ -50,6 +51,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             organizorText = view.findViewById(R.id.custom_event_organizer);
             typeText = view.findViewById(R.id.custom_event_type);
             registerText = view.findViewById(R.id.custom_event_register_status);
+            favoriteText = view.findViewById(R.id.custom_event_favorite_status);
 
             view.setOnClickListener(this);
         }
@@ -77,6 +79,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         String type = eventsList.get(position).getEventType();
         int cost = eventsList.get(position).getEventCost();
         boolean registered = eventsList.get(position).getRegistered();
+        boolean favorite = eventsList.get(position).getFavorite();
 
         holder.nameText.setText(name);
         holder.dateText.setText(date);
@@ -88,6 +91,12 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         }
         else{
             holder.registerText.setText("Unregistered");
+        }
+        if(favorite){
+            holder.favoriteText.setText("★");
+        }
+        else{
+            holder.favoriteText.setText("");
         }
     }
 

@@ -171,6 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.put("username", username);
                                 user.put("password", password);
                                 user.put("registeredEvents", "");
+                                user.put("favorites", "");
                                 //Log.d("Register", "Hi");
                                 FirebaseFirestore db2 = FirebaseFirestore.getInstance();
                                 //Log.d("Register1", "Here");

@@ -1,17 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.MapFragment"
-    android:background="@color/light_pink">
+    tools:context=".fragment.FavFragment"
+    android:background="@color/light_pink"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:text="favorites"
-        android:layout_gravity="center"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/search_view_background"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryHint="Search Here ..." />
+
+        <!--   date picker     -->
+        <TextView
+            android:id="@+id/date_from"
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:text="Date from: "
+            android:layout_marginTop="63dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.026"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+        <Button
+            android:id="@+id/dateFromPickerButton"
+            style="?android:spinnerStyle"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="1/1/2020"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginEnd="225dp"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="332dp"
+            android:text="Date to: "
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_from" />
+
+        <Button
+            android:id="@+id/dateToPickerButton"
+            style="?android:spinnerStyle"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:onClick="openDatePicker"
+            android:text="12/31/2024"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginEnd="225dp"
+            android:layout_marginTop="74dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <!--   type display    -->
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:text="Type: "
+            android:layout_marginTop="63dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.606"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="135dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/searchView"
+            android:layout_marginTop="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.974"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--   sort display    -->
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:text="Sort by: "
+            android:layout_marginTop="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.606"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/type_spinner"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+        <Spinner
+            android:id="@+id/sort_spinner"
+            android:layout_width="135dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/searchView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.974"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/type_spinner" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sort_spinner"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

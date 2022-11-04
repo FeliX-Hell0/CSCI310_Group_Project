@@ -13,6 +13,8 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.csci310_group_project.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -38,6 +41,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.security.Permission;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -146,20 +151,59 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        Log.d("MapPermission", "Here");
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
+            }else{
+                Log.d("MapPermission2", "Here");
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
         else {
+            Log.d("MapPermission1", "Here");
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
 
     }
+
+    @SuppressLint("MissingPermission")
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                Log.d("MapPermission5", "Here");
+                if (isGranted) {
+                    Log.d("MapPermission4", "Here");
+                    buildGoogleApiClient();
+                    mMap.setMyLocationEnabled(true);
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // features requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+                }
+            });
+ /*
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("MapPermission3", "Here");
+        if(requestCode == 44){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.d("MapPermission4", "Here");
+                buildGoogleApiClient();
+                mMap.setMyLocationEnabled(true);
+            }
+        }
+    }
+
+  */
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)

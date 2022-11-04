@@ -80,6 +80,50 @@ public class EventDetailActivity extends AppCompatActivity {
                 registerEvents();
             }
         });
+
+        TextView text2 = findViewById(R.id.custom_event_favorite_button);
+        text2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(getApplicationContext(),"restart", Toast.LENGTH_SHORT).show();
+                favEvents();
+            }
+        });
+    }
+
+    private void favEvents(){
+        if(user.equals("")){
+            Toast.makeText(this, "Please register to add events to favorites", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            return;
+        }
+
+        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //Toast.makeText(getActivity(), "Please wait", Toast.LENGTH_LONG).show();
+                        String collection = document.getString("favorites") + ";" + eventName;
+                        Log.d("FavCollection", collection);
+                        addFavEvent(collection);
+                    } else {
+                        //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        });
     }
 
     private void registerEvents(){
@@ -174,5 +218,15 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
-
+    private void addFavEvent(String collection){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user).update("favorites", collection).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Intent intent = new Intent(EventDetailActivity.this, ContentActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+        });
+    }
 }
