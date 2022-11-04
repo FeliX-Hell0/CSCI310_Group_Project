@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,21 +22,23 @@ public class ContentActivity extends AppCompatActivity {
     ActivityContentBinding binding;
     private String user = "";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityContentBinding.inflate(getLayoutInflater());
 
+        String fav = "";
         Intent intent = getIntent();
         if(intent.getStringExtra("user") != null && !intent.getStringExtra("user").equals("")){
             user = intent.getStringExtra("user");
+            fav = intent.getStringExtra("toFav");
         }
 
-        setContentView(binding.getRoot());
-        ExploreFragment fragment = new ExploreFragment();
-        fragment.setUser(user);
-        replaceFragment(fragment); // init
+            setContentView(binding.getRoot());
+            FavFragment fragment = new FavFragment();
+            fragment.setUser(user);
+            replaceFragment(fragment); // init
+
 
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {

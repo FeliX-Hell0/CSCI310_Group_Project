@@ -32,6 +32,8 @@ public class EventDetailActivity extends AppCompatActivity {
     private Context context;
     private String user = "";
     private String eventName = "";
+    private boolean regStatus = false;
+    private boolean favStatus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class EventDetailActivity extends AppCompatActivity {
         TextView descriptionText = findViewById(R.id.custom_event_description);
         TextView costText = findViewById(R.id.custom_event_cost);
         Button favButton = findViewById(R.id.custom_event_favorite_button);
-        Button regButton = findViewById(R.id.register_button);
+        Button regButton = findViewById(R.id.custom_event_register_button);
 
         // check if in favorite list
 
@@ -70,6 +72,15 @@ public class EventDetailActivity extends AppCompatActivity {
             titleText.setText("The event index is " + (eventIdx));
 
             // TODO: update display accordingly
+            favStatus = extras.getBoolean("favorite");
+            regStatus = extras.getBoolean("register");
+            Log.d("detailIntent", "here");
+            if(favStatus){
+                favButton.setText("Remove from favorites");
+            }
+            if(regStatus){
+                regButton.setText("Unregister");
+            }
         }
 
         TextView text = findViewById(R.id.custom_event_register_button);
@@ -77,7 +88,12 @@ public class EventDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(getApplicationContext(),"restart", Toast.LENGTH_SHORT).show();
-                registerEvents();
+                if(!regStatus) {
+                    registerEvents();
+                }
+                else{
+                    unRegisterEvents();
+                }
             }
         });
 
@@ -86,7 +102,11 @@ public class EventDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(getApplicationContext(),"restart", Toast.LENGTH_SHORT).show();
-                favEvents();
+                if(!favStatus) {
+                    favEvents();
+                }else{
+                    unFavEvents();
+                }
             }
         });
     }
@@ -206,6 +226,52 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void unFavEvents(){
+        // check if user logged in, not sure if needed
+        if(user.equals("")){
+            Toast.makeText(this, "Please register to add events to favorites", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            return;
+        }
+
+        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String temp = document.getString("favorites");
+                        if(temp.contains(eventName)){
+                            int firstIdx = temp.indexOf(eventName) - 1;
+                            int lastIdx = temp.lastIndexOf(eventName);
+                            String collection1 = "";
+                            if (firstIdx > 0){
+                                collection1 = temp.substring(0,firstIdx);
+                            }
+                            String collection2 = "";
+                            if (lastIdx < temp.length() - 1) {
+                                collection2 = temp.substring(lastIdx + 1);
+                            }
+                            addFavEvent(collection1 + collection2);
+                        }
+                    } else {
+                        //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        });
+    }
+
     private void updateEvent(String collection){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user).update("registeredEvents", collection).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -225,6 +291,7 @@ public class EventDetailActivity extends AppCompatActivity {
             public void onSuccess(Void unused) {
                 Intent intent = new Intent(EventDetailActivity.this, ContentActivity.class);
                 intent.putExtra("user", user);
+                intent.putExtra("toFav", "true");
                 startActivity(intent);
             }
         });

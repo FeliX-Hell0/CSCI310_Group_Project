@@ -155,6 +155,8 @@ public class FavFragment extends Fragment {
                 Log.d("EventName", filteredEventList.get(position).getEventName());
                 intent.putExtra("EVENT_INDEX", filteredEventList.get(position).getEventName());
                 intent.putExtra("user", user);
+                intent.putExtra("register", filteredEventList.get(position).getRegistered());
+                intent.putExtra("favorite", filteredEventList.get(position).getFavorite());
                 startActivity(intent);
             }
         };
@@ -342,7 +344,7 @@ public class FavFragment extends Fragment {
                             filteredEventList = eventsList;
                             setRegisteredEvents();
                             setFavoriteEvents();
-                            //setAdapter();
+                            setAdapter();
 
                         } else {
                             Log.d("EventError", "Error getting documents: ", task.getException());
@@ -386,9 +388,8 @@ public class FavFragment extends Fragment {
                             //Toast.makeText(getActivity(), "No registered events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        //Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
                     }
-                    //setFavoriteEvents();
                     filteredEventList = eventsList;
                     setAdapter();
 
@@ -431,22 +432,15 @@ public class FavFragment extends Fragment {
                                     }
                                 }
                             }
+
+                            filterUnfav();
                             //Toast.makeText(getActivity(), "Favorite events loading success", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getActivity(), "No favorite events", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "No favorite events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        //Toast.makeText(getActivity(), "No user favorites info", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "No user favorites info", Toast.LENGTH_SHORT).show();
                     }
-                    setRegisteredEvents();
-                    setFavoriteEvents();
-                    ArrayList<Event> temp = new ArrayList<>();
-                    for(Event e : eventsList){
-                        if(e.getFavorite()){
-                            temp.add(e);
-                        }
-                    }
-                    eventsList = temp;
                     filteredEventList = eventsList;
                     setAdapter();
 
@@ -457,6 +451,20 @@ public class FavFragment extends Fragment {
 
             }
         });
+    }
+
+    private void filterUnfav(){
+        ArrayList<Event> temp = new ArrayList<>();
+        for(Event e : eventsList){
+            if(e.getFavorite()){
+                temp.add(e);
+            }
+        }
+
+        eventsList.clear();
+        for(Event e : temp){
+            eventsList.add(e);
+        }
     }
 
     private void setSearchView(View view) {

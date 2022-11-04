@@ -141,6 +141,8 @@ public class ExploreFragment extends Fragment {
                 Log.d("EventName", filteredEventList.get(position).getEventName());
                 intent.putExtra("EVENT_INDEX", filteredEventList.get(position).getEventName());
                 intent.putExtra("user", user);
+                intent.putExtra("register", filteredEventList.get(position).getRegistered());
+                intent.putExtra("favorite", filteredEventList.get(position).getFavorite());
                 startActivity(intent);
             }
         };
@@ -373,7 +375,7 @@ public class ExploreFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
                     }
-
+                    filteredEventList = eventsList;
                     setAdapter();
 
                 } else {
@@ -421,7 +423,7 @@ public class ExploreFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity(), "No user favorites info", Toast.LENGTH_SHORT).show();
                     }
-
+                    filteredEventList = eventsList;
                     setAdapter();
 
                 } else {
