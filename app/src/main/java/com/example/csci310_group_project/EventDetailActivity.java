@@ -35,6 +35,8 @@ public class EventDetailActivity extends AppCompatActivity {
     private boolean regStatus = false;
     private boolean favStatus = false;
 
+    FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
         // init
         context = this;
+        db = FirebaseFirestore.getInstance();
 
         // parse event index from extra
 
@@ -107,7 +110,6 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -137,7 +139,6 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -166,9 +167,6 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -210,7 +208,6 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -244,7 +241,6 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void updateEvent(String collection){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user).update("registeredEvents", collection).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -256,7 +252,6 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void addFavEvent(String collection){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user).update("favorites", collection).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
