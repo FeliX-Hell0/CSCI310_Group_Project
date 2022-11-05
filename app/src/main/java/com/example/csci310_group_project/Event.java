@@ -90,7 +90,7 @@ public class Event {
     }
 
     public long GetEventTimeCompleteExpr() {
-        return (long) getEventYear() * 100000000 + getEventMonth() * 1000000 + getEventDay() * 10000 + getEventHour() * 100 + getEventMinute();
+        return (long) getEventYear() * 1296000 + getEventMonth() * 108000 + getEventDay() * 3600 + getEventHour() * 60 + getEventMinute();
     }
 
     public Boolean getRegistered(){
