@@ -63,6 +63,7 @@ public class EventDetailActivity extends AppCompatActivity {
         Button favButton = findViewById(R.id.custom_event_favorite_button);
         Button regButton = findViewById(R.id.custom_event_register_button);
 
+        TextView durationText = findViewById(R.id.custom_event_duration);
 
         // parse event name from extra
         Bundle extras = getIntent().getExtras();
@@ -96,6 +97,12 @@ public class EventDetailActivity extends AppCompatActivity {
                             locationText.setText(event.getEventLocation());
                             organizerText.setText(event.getEventOrganizor());
                             descriptionText.setText(event.getEventDescription());
+
+                            Integer durationMinute = Math.toIntExact(documentSnapshot.getLong("duration"));
+                            // convert durationMinute to hour and minute
+                            Integer numHours = durationMinute / 60;
+                            Integer numMins = durationMinute % 60;
+                            durationText.setText("Duration: " + String.valueOf(numHours) + " hr " + String.valueOf(numMins) + " min");
 
                             costText.setText("Cost: $" + String.valueOf(event.getEventCost()));
                         }
