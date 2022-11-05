@@ -293,50 +293,49 @@ public class ExploreFragment extends Fragment {
         Integer endDateMonth = Integer.valueOf(endDateParts[0]);
         Integer endDateDay = Integer.valueOf(endDateParts[1]);
 
-        Integer startDateInteger = startDateYear * 10000 + startDateMonth * 100 + startDateDay;
-        Integer endDateInteger = endDateYear * 10000 + endDateMonth * 100 + endDateDay;
-        Integer eventDateInteger = event.getEventYear() * 10000 + event.getEventMonth() * 100 + event.getEventDay();
+        Integer startDateInteger = calcDateInteger(startDateYear, startDateMonth, startDateDay);
+        Integer endDateInteger = calcDateInteger(endDateYear, endDateMonth, endDateDay);
+        Integer eventDateInteger = calcDateInteger(event.getEventYear(), event.getEventMonth(), event.getEventDay());
 
-        if (eventDateInteger >= startDateInteger && eventDateInteger <= endDateInteger) {
-            return true;
-        }
+        return eventDateInteger >= startDateInteger && eventDateInteger <= endDateInteger;
+    }
 
-        return false;
+    private Integer calcDateInteger(Integer year, Integer month, Integer day) {
+        return year * 10000 + month * 100 + day;
     }
 
     // TODO: read from DAO
-    private void setEventInfo(){
+    private void setEventInfo() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("allEvent")
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        eventsList.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-//                            Log.d("Event", document.getId() + " => " + document.getData());
-//                            Log.d("EventName", String.valueOf(document.getLong("cost")));
-                            eventsList.add(new Event(document.getString("name"), document.getString("type"),
-                                    document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
-                                    document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false));
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            eventsList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                eventsList.add(new Event(document.getString("name"), document.getString("type"),
+                                        document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
+                                        document.getString("location"), (int) (long) (document.getLong("cost")), 0, false, false));
+                            }
+
+                            // by default sort by cost
+                            eventsList.sort(Comparator.comparing(Event::getEventCost));
+
+                            filteredEventList = eventsList;
+                            setRegisteredEvents();
+                            setFavoriteEvents();
+                            setAdapter();
+
+                        } else {
+                            Log.d("EventError", "Error getting documents: ", task.getException());
+                            Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_SHORT).show();
                         }
-
-                        // by default sort by cost
-                        eventsList.sort(Comparator.comparing(Event::getEventCost));
-                        // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_SHORT).show();
-                        filteredEventList = eventsList;
-                        setRegisteredEvents();
-                        setFavoriteEvents();
-                        setAdapter();
-
-                    } else {
-                        Log.d("EventError", "Error getting documents: ", task.getException());
-                        Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_SHORT).show();
                     }
-                }
-            });
+                });
+
     }
 
     private void setRegisteredEvents(){

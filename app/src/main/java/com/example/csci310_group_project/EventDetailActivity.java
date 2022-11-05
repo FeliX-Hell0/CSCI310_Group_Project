@@ -22,9 +22,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class EventDetailActivity extends AppCompatActivity {
@@ -46,37 +51,54 @@ public class EventDetailActivity extends AppCompatActivity {
         context = this;
         db = FirebaseFirestore.getInstance();
 
-        // parse event index from extra
-
-        String eventIdx = "";
-
         ImageView imgView = findViewById(R.id.custom_event_info_img_view);
         TextView dateText = findViewById(R.id.custom_event_date);
         TextView titleText = findViewById(R.id.custom_event_title);
         TextView organizerText = findViewById(R.id.custom_event_organizer);
         TextView descriptionText = findViewById(R.id.custom_event_description);
+        TextView typeText = findViewById(R.id.custom_event_type);
         TextView costText = findViewById(R.id.custom_event_cost);
         Button favButton = findViewById(R.id.custom_event_favorite_button);
         Button regButton = findViewById(R.id.custom_event_register_button);
 
+
+        // parse event name from extra
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            eventName = extras.getString("event_name");
-            user = extras.getString("user");
+            getIntentExtras(extras);
 
-            // TODO: call service to get event info via index
-
-
-            // TODO: update display accordingly
             titleText.setText(eventName);
-            favStatus = extras.getBoolean("favorite");
-            regStatus = extras.getBoolean("register");
             if(favStatus){
                 favButton.setText("Remove from favorites");
             }
             if(regStatus){
                 regButton.setText("Unregister");
             }
+
+            // TODO: call db to get event info event name
+            DocumentReference docRef = db.collection("allEvent").document(eventName);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if(documentSnapshot !=null){
+
+                            Event event = new Event(documentSnapshot.getString("name"), documentSnapshot.getString("type"),
+                                    documentSnapshot.getString("date"), documentSnapshot.getString("sponsoring_org"), documentSnapshot.getString("description"),
+                                    documentSnapshot.getString("location"), 0,0, false, false);
+
+                            // TODO: update display accordingly
+                            dateText.setText(event.getEventDate());
+                            typeText.setText(event.getEventType());
+                            descriptionText.setText(event.getEventDescription());
+                            organizerText.setText(event.getEventOrganizor());
+
+                            costText.setText("Cost: $" + String.valueOf(event.getEventCost()));
+                        }
+                    }
+                }
+            });
         }
 
         regButton.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +124,14 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void getIntentExtras(Bundle extras) {
+        eventName = extras.getString("event_name");
+        user = extras.getString("user");
+        favStatus = extras.getBoolean("favorite");
+        regStatus = extras.getBoolean("register");
+    }
+
+
     private void favEvents(){
         if(user.equals("")){
             Toast.makeText(this, "Please register to add events to favorites", Toast.LENGTH_LONG).show();
@@ -125,8 +155,6 @@ public class EventDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
     }
