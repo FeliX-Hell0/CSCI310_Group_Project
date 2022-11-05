@@ -29,15 +29,25 @@
         android:id="@+id/custom_event_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="80dp"
+        android:layout_gravity="center"
         android:layout_marginEnd="2dp"
-        android:width="150dp"
         android:height="20dp"
         android:textStyle="bold"
         android:textColor="@color/orange"
         android:textSize="16sp"
         android:text="Sat, Oct 22 - 6:00 PM"/>
+
+    <TextView
+        android:id="@+id/custom_event_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:height="20dp"
+        android:layout_gravity="center"
+        android:text="Party"
+        android:textColor="@color/purple_500"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
 
     <TextView
         android:id="@+id/custom_event_title"
@@ -80,11 +90,10 @@
 
     <TextView
         android:id="@+id/custom_event_cost"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_below="@+id/custom_event_organizer"
-        android:layout_marginStart="100dp"
-        android:width="80dp"
         android:height="20dp"
         android:textStyle="bold"
         android:textColor="@color/black"

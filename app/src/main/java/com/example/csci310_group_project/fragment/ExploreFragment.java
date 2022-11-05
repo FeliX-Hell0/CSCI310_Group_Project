@@ -358,19 +358,19 @@ public class ExploreFragment extends Fragment implements OnMapReadyCallback,
         Integer endDateMonth = Integer.valueOf(endDateParts[0]);
         Integer endDateDay = Integer.valueOf(endDateParts[1]);
 
-        Integer startDateInteger = startDateYear * 10000 + startDateMonth * 100 + startDateDay;
-        Integer endDateInteger = endDateYear * 10000 + endDateMonth * 100 + endDateDay;
-        Integer eventDateInteger = event.getEventYear() * 10000 + event.getEventMonth() * 100 + event.getEventDay();
+        Integer startDateInteger = calcDateInteger(startDateYear, startDateMonth, startDateDay);
+        Integer endDateInteger = calcDateInteger(endDateYear, endDateMonth, endDateDay);
+        Integer eventDateInteger = calcDateInteger(event.getEventYear(), event.getEventMonth(), event.getEventDay());
 
-        if (eventDateInteger >= startDateInteger && eventDateInteger <= endDateInteger) {
-            return true;
-        }
+        return eventDateInteger >= startDateInteger && eventDateInteger <= endDateInteger;
+    }
 
-        return false;
+    private Integer calcDateInteger(Integer year, Integer month, Integer day) {
+        return year * 10000 + month * 100 + day;
     }
 
     // TODO: read from DAO
-    private void setEventInfo(){
+    private void setEventInfo() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("allEvent")
@@ -410,12 +410,13 @@ public class ExploreFragment extends Fragment implements OnMapReadyCallback,
                         //Log.d("EventLat", String.valueOf(eventsList.get(0).getLat()));
 
 
-                    } else {
-                        Log.d("EventError", "Error getting documents: ", task.getException());
-                        Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d("EventError", "Error getting documents: ", task.getException());
+                            Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+                });
+
     }
 
     private void setRegisteredEvents(){
