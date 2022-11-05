@@ -128,6 +128,70 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/type_spinner" />
 
+        <!--   user image     -->
+        <GridLayout
+            android:id="@+id/custom_event_info_view"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateToPickerButton"
+            android:layout_marginBottom="5dp"
+            android:textSize="20sp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/user_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                android:width="300dp"
+                android:height="25dp"
+                tools:srcCompat="@tools:sample/avatars[8]" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="2dp"
+                android:height="20dp"
+                android:fontFamily="serif"
+                android:text="Tommy Trojan"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/user_birthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="2dp"
+                android:height="20dp"
+                android:fontFamily="serif"
+                android:text="B-Day: Dec 25, 2000"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/login_button"
+                android:layout_width="135dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_below="@+id/user_birthday"
+                android:width="70dp"
+                android:height="10dp"
+                android:fontFamily="serif"
+                android:text="Register"
+                android:textSize="11sp" />
+        </GridLayout>
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -136,7 +200,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sort_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/custom_event_info_view"
             app:layout_constraintVertical_bias="1.0" />
 
         <RelativeLayout
