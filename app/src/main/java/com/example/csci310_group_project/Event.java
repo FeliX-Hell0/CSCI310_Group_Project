@@ -11,6 +11,25 @@ public class Event {
     private int img;
     private boolean registered;
     private boolean favorite;
+    private double distanceToUser = 0;
+    private double lat;
+    private double lng;
+
+    public double getLat(){
+        return lat;
+    }
+
+    public void setLat(double lat){
+        this.lat = lat;
+    }
+
+    public double getLng(){
+        return lat;
+    }
+
+    public void setLng(double lat){
+        this.lat = lat;
+    }
 
     public String getEventType() {
         return eventType;
@@ -81,6 +100,14 @@ public class Event {
     public boolean getFavorite(){return favorite;}
     public void setFavorite(Boolean favorite){this.favorite = favorite;}
 
+    public void setDistanceToUser(double distanceToUser){
+        this.distanceToUser = distanceToUser;
+    }
+
+    public double getDistanceToUser(){
+        return this.distanceToUser;
+    }
+
 
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
@@ -127,7 +154,7 @@ public class Event {
     }
 
     public Event(String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, Integer eventCost, int img, boolean registered,
-                 Boolean favorite) {
+                 Boolean favorite, double lat, double lng) {
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDate = eventDate;
@@ -138,5 +165,7 @@ public class Event {
         this.img = img;
         this.registered = registered;
         this.favorite = favorite;
+        this.lat = lat;
+        this.lng = lng;
     }
 }

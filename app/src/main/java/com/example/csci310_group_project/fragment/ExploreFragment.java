@@ -1,14 +1,22 @@
 package com.example.csci310_group_project.fragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -34,6 +42,9 @@ import com.example.csci310_group_project.MainActivity;
 import com.example.csci310_group_project.R;
 import com.example.csci310_group_project.recyclerAdapter;
 import com.example.csci310_group_project.ui.login.LoginActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -51,12 +62,26 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ExploreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ExploreFragment extends Fragment {
+public class ExploreFragment extends Fragment implements OnMapReadyCallback,
+        LocationListener,GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener{
     private ArrayList<Event> eventsList;
     private ArrayList<Event> filteredEventList = eventsList;
     private Context context;
@@ -76,6 +101,21 @@ public class ExploreFragment extends Fragment {
     private DatePickerDialog dateToPickerDialog;
     private Button dateFromButton;
     private Button dateToButton;
+
+    private GoogleMap mMap;
+    Location mLastLocation;
+    Marker mCurrLocationMarker;
+    GoogleApiClient mGoogleApiClient;
+    LocationRequest mLocationRequest;
+
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 999;
+    GoogleApiAvailability googleAPI;
+    SupportMapFragment mapFragment;
+
+    Boolean initialized = false;
+
+    private double currLat = 0.;
+    private double currLong = 0.;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -120,6 +160,23 @@ public class ExploreFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        checkPlayServices();
+    }
+
+    private boolean checkPlayServices() {
+        googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(getActivity());
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleAPI.isUserResolvableError(result)) {
+                googleAPI.getErrorDialog(this, result,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     private void setAdapter() {
@@ -169,8 +226,15 @@ public class ExploreFragment extends Fragment {
         initDateFromPicker(view);
         initDateToPicker(view);
 
+        mapFragment = (SupportMapFragment)
+                getChildFragmentManager().findFragmentById(R.id.google_map);
+
+        mapFragment.getMapAsync(this);
+
         return view;
     }
+
+
 
     private void initDateFromPicker(View view)
     {
@@ -267,6 +331,7 @@ public class ExploreFragment extends Fragment {
         } else if (sorting.toLowerCase().contains("distance")){ // sort via distance
             // TODO: get user address
             // TODO: longitude & latitude
+            filteredEventsList.sort(Comparator.comparing(Event::getDistanceToUser));
 
         } else if (sorting.toLowerCase().contains("time")){ // sort via time
             filteredEventsList.sort(Comparator.comparing(Event::getEventYear)
@@ -317,19 +382,33 @@ public class ExploreFragment extends Fragment {
                         eventsList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
 //                            Log.d("Event", document.getId() + " => " + document.getData());
-//                            Log.d("EventName", String.valueOf(document.getLong("cost")));
+                            Log.d("EventName", document.getString("name"));
+                            Log.d("EventLat", String.valueOf(document.getDouble("lng")));
                             eventsList.add(new Event(document.getString("name"), document.getString("type"),
                                     document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
-                                    document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false));
+                                    document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false,
+                                    document.getDouble("lat"), document.getDouble("lng")));
                         }
 
                         // by default sort by cost
+
+                        for(Event e : eventsList){
+                            e.setDistanceToUser(distance(currLat, e.getLat(), currLong, e.getLng(), 'K'));
+                            Log.d("distanceCurr2", String.valueOf(e.getLng()));
+                        }
+
+                        for(Event e : eventsList){
+                            e.setDistanceToUser(distance(currLat, e.getLat(), currLong, e.getLng(), 'K'));
+                        }
+                        setAdapter();
+
                         eventsList.sort(Comparator.comparing(Event::getEventCost));
                         // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_SHORT).show();
                         filteredEventList = eventsList;
                         setRegisteredEvents();
                         setFavoriteEvents();
-                        setAdapter();
+                        //Log.d("EventLat", String.valueOf(eventsList.get(0).getLat()));
+
 
                     } else {
                         Log.d("EventError", "Error getting documents: ", task.getException());
@@ -505,5 +584,138 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
         });
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        mLastLocation = location;
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
+        //move map camera
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        Log.d("CurrentLat", String.valueOf(eventsList.size()));
+
+        currLat = location.getLatitude();
+        currLong = location.getLongitude();
+
+        for(Event e : eventsList){
+            e.setDistanceToUser(distance(currLat, e.getLat(), currLong, e.getLng(), 'K'));
+
+        }
+
+        for(Event e : eventsList){
+            e.setDistanceToUser(distance(currLat, e.getLat(), currLong, e.getLng(), 'K'));
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
+        //stop location updates
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+
+        Log.d("MapPermission", "Here");
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+                mMap.setMyLocationEnabled(true);
+            }else{
+                Log.d("MapPermission2", "Here");
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+        }
+        else {
+            Log.d("MapPermission1", "Here");
+            buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+        mGoogleApiClient.connect();
+    }
+
+    @SuppressLint("MissingPermission")
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                Log.d("MapPermission5", "Here");
+                if (isGranted) {
+                    Log.d("MapPermission4", "Here");
+                    buildGoogleApiClient();
+                    mMap.setMyLocationEnabled(true);
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // features requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+                }
+            });
+
+    private double distance(double lat1, double lat2, double lon1, double lon2, char unit) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        if (unit == 'K') {
+            dist = dist * 1.609344;
+        } else if (unit == 'N') {
+            dist = dist * 0.8684;
+        }
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::  This function converts radians to decimal degrees             :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 }

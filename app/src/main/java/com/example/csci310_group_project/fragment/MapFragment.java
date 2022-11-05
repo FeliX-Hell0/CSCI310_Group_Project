@@ -270,7 +270,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             mMap.addMarker(new MarkerOptions().position(TOTT_DREAM_All_American_Bowl).title("2022 DREAM All American Bowl"));
             mMap.addMarker(new MarkerOptions().position(Atheon_Race).title("Atheon Race"));
             mMap.addMarker(new MarkerOptions().position(Chocolate_Sundaes_Comedy).title("Chocolate Sundaes Comedy"));
-            mMap.addMarker(new MarkerOptions().position(Faded_Comedy_22).title("Faded Comedy 22"));
+            mMap.addMarker(new MarkerOptions().position(Faded_Comedy_22).title("Faded Comedy"));
             mMap.addMarker(new MarkerOptions().position(Abbot_Kidding_A_Comedy_Show_in_Venice).title("Abbot Kidding: A Comedy Show in Venice"));
             mMap.addMarker(new MarkerOptions().position(Chocolate_and_Art_Show).title("Chocolate and Art Show"));
             mMap.addMarker(new MarkerOptions().position(The_Setup_Comedy).title("The Setup Comedy"));
