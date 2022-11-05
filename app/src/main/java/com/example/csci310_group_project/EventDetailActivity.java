@@ -54,6 +54,7 @@ public class EventDetailActivity extends AppCompatActivity {
         ImageView imgView = findViewById(R.id.custom_event_info_img_view);
         TextView dateText = findViewById(R.id.custom_event_date);
         TextView titleText = findViewById(R.id.custom_event_title);
+        TextView locationText = findViewById(R.id.custom_event_location);
         TextView organizerText = findViewById(R.id.custom_event_organizer);
         TextView descriptionText = findViewById(R.id.custom_event_description);
         TextView typeText = findViewById(R.id.custom_event_type);
@@ -86,13 +87,14 @@ public class EventDetailActivity extends AppCompatActivity {
 
                             Event event = new Event(documentSnapshot.getString("name"), documentSnapshot.getString("type"),
                                     documentSnapshot.getString("date"), documentSnapshot.getString("sponsoring_org"), documentSnapshot.getString("description"),
-                                    documentSnapshot.getString("location"), 0,0, false, false);
+                                    documentSnapshot.getString("location"), (int) (long) (documentSnapshot.getLong("cost")),0, false, false);
 
                             // TODO: update display accordingly
                             dateText.setText(event.getEventDate());
                             typeText.setText(event.getEventType());
-                            descriptionText.setText(event.getEventDescription());
+                            locationText.setText(event.getEventLocation());
                             organizerText.setText(event.getEventOrganizor());
+                            descriptionText.setText(event.getEventDescription());
 
                             costText.setText("Cost: $" + String.valueOf(event.getEventCost()));
                         }

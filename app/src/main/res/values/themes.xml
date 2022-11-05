@@ -19,6 +19,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Widget.BottomNavigationView"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">serif</item>
+    </style>
+
     <style name="Theme.CSCI310_Group_Project.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.CSCI310_Group_Project.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
