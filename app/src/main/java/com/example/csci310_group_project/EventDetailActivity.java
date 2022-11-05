@@ -56,25 +56,18 @@ public class EventDetailActivity extends AppCompatActivity {
         Button favButton = findViewById(R.id.custom_event_favorite_button);
         Button regButton = findViewById(R.id.custom_event_register_button);
 
-        // check if in favorite list
-
-        // check if in already registered
-        // display text accordingly
-
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            eventIdx = (extras.getString("EVENT_INDEX"));
-            eventName = eventIdx;
+            eventName = extras.getString("event_name");
             user = extras.getString("user");
 
             // TODO: call service to get event info via index
-            titleText.setText("The event index is " + (eventIdx));
+
 
             // TODO: update display accordingly
+            titleText.setText(eventName);
             favStatus = extras.getBoolean("favorite");
             regStatus = extras.getBoolean("register");
-            Log.d("detailIntent", "here");
             if(favStatus){
                 favButton.setText("Remove from favorites");
             }
@@ -83,28 +76,23 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         }
 
-        TextView text = findViewById(R.id.custom_event_register_button);
-        text.setOnClickListener(new View.OnClickListener() {
+        regButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(),"restart", Toast.LENGTH_SHORT).show();
                 if(!regStatus) {
                     registerEvents();
-                }
-                else{
+                } else{
                     unRegisterEvents();
                 }
             }
         });
 
-        TextView text2 = findViewById(R.id.custom_event_favorite_button);
-        text2.setOnClickListener(new View.OnClickListener() {
+        favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(),"restart", Toast.LENGTH_SHORT).show();
                 if(!favStatus) {
                     favEvents();
-                }else{
+                } else{
                     unFavEvents();
                 }
             }
@@ -119,8 +107,6 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -133,10 +119,7 @@ public class EventDetailActivity extends AppCompatActivity {
                         String collection = document.getString("favorites") + ";" + eventName;
                         Log.d("FavCollection", collection);
                         addFavEvent(collection);
-                    } else {
-                        //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
-
                 } else {
                     Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
                 }
@@ -154,8 +137,6 @@ public class EventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -164,18 +145,14 @@ public class EventDetailActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        //Toast.makeText(getActivity(), "Please wait", Toast.LENGTH_LONG).show();
                         String collection = document.getString("registeredEvents") + ";" + eventName;
                         updateEvent(collection);
                     } else {
                         //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
-
                 } else {
                     Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
     }
@@ -220,8 +197,6 @@ public class EventDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
     }
@@ -234,8 +209,6 @@ public class EventDetailActivity extends AppCompatActivity {
             startActivity(i);
             return;
         }
-
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_LONG).show();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
@@ -266,8 +239,6 @@ public class EventDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
     }

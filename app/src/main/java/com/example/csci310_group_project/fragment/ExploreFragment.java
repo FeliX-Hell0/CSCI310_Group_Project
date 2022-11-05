@@ -139,7 +139,7 @@ public class ExploreFragment extends Fragment {
             public void onClick(View v, int position) {
                 Intent intent = new Intent(context.getApplicationContext(), EventDetailActivity.class);
                 Log.d("EventName", filteredEventList.get(position).getEventName());
-                intent.putExtra("EVENT_INDEX", filteredEventList.get(position).getEventName());
+                intent.putExtra("event_name", filteredEventList.get(position).getEventName());
                 intent.putExtra("user", user);
                 intent.putExtra("register", filteredEventList.get(position).getRegistered());
                 intent.putExtra("favorite", filteredEventList.get(position).getFavorite());
