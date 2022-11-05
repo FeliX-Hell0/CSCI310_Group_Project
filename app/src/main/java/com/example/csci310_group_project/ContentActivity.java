@@ -34,10 +34,10 @@ public class ContentActivity extends AppCompatActivity {
             fav = intent.getStringExtra("toFav");
         }
 
-            setContentView(binding.getRoot());
-            FavFragment fragment = new FavFragment();
-            fragment.setUser(user);
-            replaceFragment(fragment); // init
+        setContentView(binding.getRoot());
+        ExploreFragment fragment = new ExploreFragment();
+        fragment.setUser(user);
+        replaceFragment(fragment); // init
 
 
 
