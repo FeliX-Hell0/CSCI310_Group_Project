@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.csci310_group_project.fragment.ExploreFragment;
 import com.example.csci310_group_project.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -176,8 +177,11 @@ public class EventDetailActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        String collection = document.getString("registeredEvents") + ";" + eventName;
-                        updateEvent(collection);
+                        // TODO: check reg time conflict
+                        String registeredEvents = document.getString("registeredEvents");
+                        if (!hasTimeConflict(eventName, registeredEvents.split(";"))) {
+                            updateEvent(registeredEvents + ";" + eventName);
+                        }
                     } else {
                         //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
@@ -186,6 +190,39 @@ public class EventDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private Boolean hasTimeConflict(String currEventName, String[] regEventNames) {
+        Boolean hasConflict = false;
+
+
+
+
+        // get all events of current user
+
+//        for (String regEventName : regEventNames) {
+//            DocumentReference docRef = db.collection("allEvent").document(regEventName);
+//            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if(task.isSuccessful()){
+//                        DocumentSnapshot documentSnapshot = task.getResult();
+//                        if(documentSnapshot !=null){
+//
+//                            Event regEvent = null;
+//                            regEvent.setEventDate(documentSnapshot.getString("date"));
+//                            if (regEvent)
+//                        }
+//                    }
+//                }
+//            });
+//        }
+
+
+
+        // loop over events, get date, check conflict w/ current one
+
+        return hasConflict;
     }
 
     private void unRegisterEvents(){

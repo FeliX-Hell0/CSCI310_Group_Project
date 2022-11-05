@@ -358,14 +358,14 @@ public class ExploreFragment extends Fragment implements OnMapReadyCallback,
         Integer endDateMonth = Integer.valueOf(endDateParts[0]);
         Integer endDateDay = Integer.valueOf(endDateParts[1]);
 
-        Integer startDateInteger = calcDateInteger(startDateYear, startDateMonth, startDateDay);
-        Integer endDateInteger = calcDateInteger(endDateYear, endDateMonth, endDateDay);
-        Integer eventDateInteger = calcDateInteger(event.getEventYear(), event.getEventMonth(), event.getEventDay());
+        Integer startDateInteger = CalcDateInteger(startDateYear, startDateMonth, startDateDay);
+        Integer endDateInteger = CalcDateInteger(endDateYear, endDateMonth, endDateDay);
+        Integer eventDateInteger = CalcDateInteger(event.getEventYear(), event.getEventMonth(), event.getEventDay());
 
         return eventDateInteger >= startDateInteger && eventDateInteger <= endDateInteger;
     }
 
-    private Integer calcDateInteger(Integer year, Integer month, Integer day) {
+    public Integer CalcDateInteger(Integer year, Integer month, Integer day) {
         return year * 10000 + month * 100 + day;
     }
 

@@ -89,6 +89,10 @@ public class Event {
         return Integer.valueOf(timeParts[1]);
     }
 
+    public long GetEventTimeCompleteExpr() {
+        return (long) getEventYear() * 100000000 + getEventMonth() * 1000000 + getEventDay() * 10000 + getEventHour() * 100 + getEventMinute();
+    }
+
     public Boolean getRegistered(){
         return registered;
     }
@@ -168,4 +172,6 @@ public class Event {
         this.lat = lat;
         this.lng = lng;
     }
+
+    public Event() {}
 }
