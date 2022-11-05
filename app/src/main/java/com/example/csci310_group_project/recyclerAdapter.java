@@ -75,7 +75,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         String name = eventsList.get(position).getEventName();
         String date = eventsList.get(position).getEventDate();
         String location = eventsList.get(position).getEventLocation();
-//        String organizer = eventsList.get(position).getEventOrganizor();
+//        String organizer = eventsList.get(position).getEventOrganizer();
         String type = eventsList.get(position).getEventType();
         int cost = eventsList.get(position).getEventCost();
         boolean registered = eventsList.get(position).getRegistered();
@@ -86,12 +86,14 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         holder.locationText.setText(location);
         holder.typeText.setText(type);
         holder.costText.setText("$" + String.valueOf(cost));
+
         if(registered){
             holder.registerText.setText("Registered");
         }
         else{
-            holder.registerText.setText("Unregistered");
+            holder.registerText.setText("Not Registered");
         }
+
         if(favorite){
             holder.favoriteText.setText("★");
         }

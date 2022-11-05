@@ -1,8 +1,5 @@
 package com.example.csci310_group_project;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Event {
     private String eventName;
     private String eventDate;

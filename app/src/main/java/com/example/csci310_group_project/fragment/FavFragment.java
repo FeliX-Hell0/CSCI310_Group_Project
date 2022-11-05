@@ -79,6 +79,9 @@ public class FavFragment extends Fragment {
     private Button dateFromButton;
     private Button dateToButton;
 
+    // firebase db
+    FirebaseFirestore db;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,9 +96,7 @@ public class FavFragment extends Fragment {
         this.user = user;
     }
 
-    public FavFragment() {
-        // Required empty public constructor
-    }
+    public FavFragment() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -153,7 +154,7 @@ public class FavFragment extends Fragment {
             public void onClick(View v, int position) {
                 Intent intent = new Intent(context.getApplicationContext(), EventDetailActivity.class);
                 Log.d("EventName", filteredEventList.get(position).getEventName());
-                intent.putExtra("EVENT_INDEX", filteredEventList.get(position).getEventName());
+                intent.putExtra("event_name", filteredEventList.get(position).getEventName());
                 intent.putExtra("user", user);
                 intent.putExtra("register", filteredEventList.get(position).getRegistered());
                 intent.putExtra("favorite", filteredEventList.get(position).getFavorite());
@@ -170,10 +171,11 @@ public class FavFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
+        initDB();
+
         setSearchView(view);
         setSortSpinner(view);
         setTypeSpinner(view);
-
 
         recyclerView = view.findViewById(R.id.recyclerView);
         eventsList = new ArrayList<>();
@@ -187,8 +189,7 @@ public class FavFragment extends Fragment {
         return view;
     }
 
-    private void initDateFromPicker(View view)
-    {
+    private void initDateFromPicker(View view) {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -220,8 +221,7 @@ public class FavFragment extends Fragment {
         });
     }
 
-    private void initDateToPicker(View view)
-    {
+    private void initDateToPicker(View view) {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -253,8 +253,11 @@ public class FavFragment extends Fragment {
         });
     }
 
-    private String makeDateString(int day, int month, int year)
-    {
+    private void initDB() {
+        db = FirebaseFirestore.getInstance();
+    }
+
+    private String makeDateString(int day, int month, int year) {
         return month + "/" + day + "/" + year;
     }
 
@@ -321,37 +324,35 @@ public class FavFragment extends Fragment {
 
     // TODO: read from DAO
     private void setEventInfo(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         db.collection("allEvent")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            eventsList.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                            Log.d("Event", document.getId() + " => " + document.getData());
-//                            Log.d("EventName", String.valueOf(document.getLong("cost")));
-                                eventsList.add(new Event(document.getString("name"), document.getString("type"),
-                                        document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
-                                        document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false));
-                            }
-
-                            // by default sort by cost
-                            eventsList.sort(Comparator.comparing(Event::getEventCost));
-                            // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_SHORT).show();
-                            filteredEventList = eventsList;
-                            setRegisteredEvents();
-                            setFavoriteEvents();
-                            setAdapter();
-
-                        } else {
-                            Log.d("EventError", "Error getting documents: ", task.getException());
-                            Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_SHORT).show();
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        eventsList.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+    //                            Log.d("Event", document.getId() + " => " + document.getData());
+    //                            Log.d("EventName", String.valueOf(document.getLong("cost")));
+                            eventsList.add(new Event(document.getString("name"), document.getString("type"),
+                                    document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
+                                    document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false));
                         }
+
+                        // by default sort by cost
+                        eventsList.sort(Comparator.comparing(Event::getEventCost));
+                        // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_SHORT).show();
+                        filteredEventList = eventsList;
+                        setRegisteredEvents();
+                        setFavoriteEvents();
+                        setAdapter();
+
+                    } else {
+                        Log.d("EventError", "Error getting documents: ", task.getException());
+                        Toast.makeText(getActivity(), "Something is wrong...", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+            });
     }
 
     private void setRegisteredEvents(){
@@ -360,9 +361,6 @@ public class FavFragment extends Fragment {
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_SHORT).show();
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -370,7 +368,6 @@ public class FavFragment extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        //Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_SHORT).show();
                         if (!document.getString("registeredEvents").equals("")) {
                             String collection = document.getString("registeredEvents");
                             String[] registeredEvents = collection.split(";");
@@ -410,9 +407,6 @@ public class FavFragment extends Fragment {
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_SHORT).show();
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -420,7 +414,6 @@ public class FavFragment extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        //Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_SHORT).show();
                         if (document.getString("favorites") != null && !document.getString("favorites").equals("")) {
                             String collection = document.getString("favorites");
                             String[] favoriteEvents = collection.split(";");
@@ -451,8 +444,6 @@ public class FavFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
     }
@@ -487,7 +478,7 @@ public class FavFragment extends Fragment {
                 String type = "all";
                 String startDate = dateFromButton.getText().toString();
                 String endDate = dateToButton.getText().toString();
-                filterList(s, type, sorting, startDate, endDate);
+                filterList(searchText, type, sorting, startDate, endDate);
                 return true;
             }
         });
