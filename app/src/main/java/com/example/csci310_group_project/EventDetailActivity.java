@@ -86,7 +86,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
                             Event event = new Event(documentSnapshot.getString("name"), documentSnapshot.getString("type"),
                                     documentSnapshot.getString("date"), documentSnapshot.getString("sponsoring_org"), documentSnapshot.getString("description"),
-                                    documentSnapshot.getString("location"), 0,0, false, false);
+                                    documentSnapshot.getString("location"), 0,0, false, false, 0.0, 0.0);
 
                             // TODO: update display accordingly
                             dateText.setText(event.getEventDate());
