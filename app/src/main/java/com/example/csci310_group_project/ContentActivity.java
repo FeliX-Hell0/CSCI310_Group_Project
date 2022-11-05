@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+
 import com.example.csci310_group_project.databinding.ActivityContentBinding;
 import com.example.csci310_group_project.fragment.ExploreFragment;
 import com.example.csci310_group_project.fragment.FavFragment;
@@ -59,7 +60,9 @@ public class ContentActivity extends AppCompatActivity {
                     replaceFragment(favFragment);
                     break;
                 case R.id.nav_profile:
-                    replaceFragment(new ProfileFragment());
+                    ProfileFragment profileFragment = new ProfileFragment();
+                    profileFragment.setUser(user);
+                    replaceFragment(profileFragment);
                     break;
             }
             return true;

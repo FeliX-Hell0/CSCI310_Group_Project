@@ -361,10 +361,12 @@ public class ExploreFragment extends Fragment {
                             String[] registeredEvents = collection.split(";");
                             List<String> regEvents = new ArrayList<>(Arrays.asList(registeredEvents));
 
-                            for(String event: regEvents){
-                                for(Event myEvent: eventsList){
-                                    if(myEvent.getEventName().equals(event)){
-                                        myEvent.setRegistered(true);
+                            if(regEvents != null) {
+                                for (String event : regEvents) {
+                                    for (Event myEvent : eventsList) {
+                                        if (myEvent.getEventName().equals(event)) {
+                                            myEvent.setRegistered(true);
+                                        }
                                     }
                                 }
                             }
@@ -409,10 +411,12 @@ public class ExploreFragment extends Fragment {
                             String[] favoriteEvents = collection.split(";");
                             List<String> favEvents = new ArrayList<>(Arrays.asList(favoriteEvents));
 
-                            for(String event: favEvents){
-                                for(Event myEvent: eventsList){
-                                    if(myEvent.getEventName().equals(event)){
-                                        myEvent.setFavorite(true);
+                            if(favEvents != null) {
+                                for (String event : favEvents) {
+                                    for (Event myEvent : eventsList) {
+                                        if (myEvent.getEventName().equals(event)) {
+                                            myEvent.setFavorite(true);
+                                        }
                                     }
                                 }
                             }
