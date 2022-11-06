@@ -197,9 +197,18 @@ public class EventDetailActivity extends AppCompatActivity {
                         // TODO: check reg time conflict
                         String registeredEvents = document.getString("registeredEvents");
                         String timeFrame = document.getString("time");
+                        conflict(timeFrame);
+                        Log.d("startTime3", String.valueOf(eventStart));
 
-
-                        updateEvent(registeredEvents + ";" + eventName, timeFrame + ";" + String.valueOf(eventStart) + "," + String.valueOf(eventEnd));
+                        if(!conflicted) {
+                            updateEvent(registeredEvents + ";" + eventName, timeFrame + ";" + String.valueOf(eventStart) + "," + String.valueOf(eventEnd));
+                        }
+                        else{
+                            Toast.makeText(EventDetailActivity.this, "Time conflict!", Toast.LENGTH_LONG).show();
+                            Intent i = new Intent(EventDetailActivity.this, ContentActivity.class);
+                            i.putExtra("user", user);
+                            startActivity(i);
+                        }
 
                     } else {
                         //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
@@ -210,6 +219,7 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void conflict(String timeFrame){
 
@@ -228,6 +238,9 @@ public class EventDetailActivity extends AppCompatActivity {
 
         Log.d("startTime", String.valueOf(start) + " " + String.valueOf(end));
 
+        eventStart = start;
+        eventEnd = end;
+
         if(timeFrame.equals("")){
             conflicted = false;
             return;
@@ -243,7 +256,7 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         }
 
-        //conflicted
+        conflicted = false;
     }
 
     private void unRegisterEvents(){
@@ -263,7 +276,21 @@ public class EventDetailActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         String temp = document.getString("registeredEvents");
-                        if(temp.contains(eventName)){
+                        String month = startTime.split("/")[0];
+                        String day = startTime.split("/")[1];
+                        String year = startTime.split("/")[2].split(",")[0];
+                        String hrs = startTime.split("/")[2].split(",")[1].split(":")[0].replaceAll("\\s+","");
+                        String min = startTime.split("/")[2].split(",")[1].split(":")[1];
+
+                        long start = Integer.parseInt(min) + Integer.parseInt(hrs)*60 + Integer.parseInt(day)*3600 + Integer.parseInt(month)*108000 + (Integer.parseInt(year) - 2000)*1296000;
+                        long end = start + duration;
+
+                        String temp2 = String.valueOf(start) + "," + String.valueOf(end);
+                        String userTime = document.getString("time");
+
+                        Log.d("deleteTime1", temp2 + " " + userTime);
+
+                        if(temp.contains(eventName) && userTime.contains(temp2)){
                             int firstIdx = temp.indexOf(eventName) - 1;
                             int lastIdx = temp.lastIndexOf(eventName);
                             String collection1 = "";
@@ -274,8 +301,21 @@ public class EventDetailActivity extends AppCompatActivity {
                             if (lastIdx < temp.length() - 1) {
                                 collection2 = temp.substring(lastIdx + 1);
                             }
-                            //updateEvent(collection1 + collection2);
+
+                            int fir = userTime.indexOf(temp2)-1;
+                            int las = fir+1+temp2.length();
+                            String col1 = "";
+                            if(fir > 0){
+                                col1 = userTime.substring(0, fir);
+                            }
+                            String col2 = "";
+                            if(las < userTime.length()-1){
+                                col2 = userTime.substring(las+1);
+                            }
+                            Log.d("deleteTime", String.valueOf(fir) + " " + String.valueOf(las));
+                            updateEvent(collection1 + collection2, col1+col2);
                         }
+
                     } else {
                         //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
