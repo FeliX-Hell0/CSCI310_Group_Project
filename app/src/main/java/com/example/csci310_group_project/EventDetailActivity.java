@@ -41,6 +41,13 @@ public class EventDetailActivity extends AppCompatActivity {
     private boolean regStatus = false;
     private boolean favStatus = false;
 
+    private String startTime = "";
+    private int duration = 0;
+
+    private long eventStart = 0;
+    private long eventEnd = 0;
+    private boolean conflicted = false;
+
     FirebaseFirestore db;
 
     @Override
@@ -87,10 +94,13 @@ public class EventDetailActivity extends AppCompatActivity {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         if(documentSnapshot !=null){
 
+                            Log.d("MapIntent", documentSnapshot.getString("name"));
                             Event event = new Event(documentSnapshot.getString("name"), documentSnapshot.getString("type"),
                                     documentSnapshot.getString("date"), documentSnapshot.getString("sponsoring_org"), documentSnapshot.getString("description"),
                                     documentSnapshot.getString("location"), Math.toIntExact(documentSnapshot.getLong("cost")),0, false, false, 0.0, 0.0);
 
+                            startTime = documentSnapshot.getString("date");
+                            duration = Math.toIntExact(documentSnapshot.getLong("duration"));
                             // TODO: update display accordingly
                             dateText.setText(event.getEventDate());
                             typeText.setText(event.getEventType());
@@ -186,9 +196,11 @@ public class EventDetailActivity extends AppCompatActivity {
                     if (document.exists()) {
                         // TODO: check reg time conflict
                         String registeredEvents = document.getString("registeredEvents");
-                        if (!hasTimeConflict(eventName, registeredEvents.split(";"))) {
-                            updateEvent(registeredEvents + ";" + eventName);
-                        }
+                        String timeFrame = document.getString("time");
+
+
+                        updateEvent(registeredEvents + ";" + eventName, timeFrame + ";" + String.valueOf(eventStart) + "," + String.valueOf(eventEnd));
+
                     } else {
                         //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
@@ -199,37 +211,39 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
-    private Boolean hasTimeConflict(String currEventName, String[] regEventNames) {
-        Boolean hasConflict = false;
+    private void conflict(String timeFrame){
 
 
+        String[] timeCollection = timeFrame.split(";");
+        Log.d("hour", timeFrame);
 
+        String month = startTime.split("/")[0];
+        String day = startTime.split("/")[1];
+        String year = startTime.split("/")[2].split(",")[0];
+        String hrs = startTime.split("/")[2].split(",")[1].split(":")[0].replaceAll("\\s+","");
+        String min = startTime.split("/")[2].split(",")[1].split(":")[1];
 
-        // get all events of current user
+        long start = Integer.parseInt(min) + Integer.parseInt(hrs)*60 + Integer.parseInt(day)*3600 + Integer.parseInt(month)*108000 + (Integer.parseInt(year) - 2000)*1296000;
+        long end = start + duration;
 
-//        for (String regEventName : regEventNames) {
-//            DocumentReference docRef = db.collection("allEvent").document(regEventName);
-//            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if(task.isSuccessful()){
-//                        DocumentSnapshot documentSnapshot = task.getResult();
-//                        if(documentSnapshot !=null){
-//
-//                            Event regEvent = null;
-//                            regEvent.setEventDate(documentSnapshot.getString("date"));
-//                            if (regEvent)
-//                        }
-//                    }
-//                }
-//            });
-//        }
+        Log.d("startTime", String.valueOf(start) + " " + String.valueOf(end));
 
+        if(timeFrame.equals("")){
+            conflicted = false;
+            return;
+        }
 
+        for(String s : timeCollection){
+            long ss = Long.parseLong(s.split(",")[0]);
+            long ee = Long.parseLong(s.split(",")[1]);
 
-        // loop over events, get date, check conflict w/ current one
+            if((start >= ss && start <= ee)||(end >= ss && end <= ee)){
+                conflicted = true;
+                return;
+            }
+        }
 
-        return hasConflict;
+        //conflicted
     }
 
     private void unRegisterEvents(){
@@ -260,7 +274,7 @@ public class EventDetailActivity extends AppCompatActivity {
                             if (lastIdx < temp.length() - 1) {
                                 collection2 = temp.substring(lastIdx + 1);
                             }
-                            updateEvent(collection1 + collection2);
+                            //updateEvent(collection1 + collection2);
                         }
                     } else {
                         //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
@@ -314,13 +328,21 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void updateEvent(String collection){
+    private void updateEvent(String collection, String timeUpdate){
         db.collection("users").document(user).update("registeredEvents", collection).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Intent intent = new Intent(EventDetailActivity.this, ContentActivity.class);
-                intent.putExtra("user", user);
-                startActivity(intent);
+
+                db.collection("users").document(user).update("time", timeUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("startTime2", timeUpdate);
+                        Intent intent = new Intent(EventDetailActivity.this, ContentActivity.class);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
+                    }
+                });
+
             }
         });
     }

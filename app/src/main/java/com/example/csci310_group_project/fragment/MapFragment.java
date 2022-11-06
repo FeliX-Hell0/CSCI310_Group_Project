@@ -269,11 +269,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             mMap.addMarker(new MarkerOptions().position(Adaptive_Sports_Festival_2022).title("Adaptive Sports Festival 2022"));
             mMap.addMarker(new MarkerOptions().position(TOTT_DREAM_All_American_Bowl).title("2022 DREAM All American Bowl"));
             mMap.addMarker(new MarkerOptions().position(Atheon_Race).title("Atheon Race"));
-            mMap.addMarker(new MarkerOptions().position(Chocolate_Sundaes_Comedy).title("Chocolate Sundaes Comedy"));
+            mMap.addMarker(new MarkerOptions().position(Chocolate_Sundaes_Comedy).title("Chocolate Sundaes Comedy @ The Laugh Factory Hollywood"));
             mMap.addMarker(new MarkerOptions().position(Faded_Comedy_22).title("Faded Comedy"));
             mMap.addMarker(new MarkerOptions().position(Abbot_Kidding_A_Comedy_Show_in_Venice).title("Abbot Kidding: A Comedy Show in Venice"));
             mMap.addMarker(new MarkerOptions().position(Chocolate_and_Art_Show).title("Chocolate and Art Show"));
-            mMap.addMarker(new MarkerOptions().position(The_Setup_Comedy).title("The Setup Comedy"));
+            mMap.addMarker(new MarkerOptions().position(The_Setup_Comedy).title("The Setup Presents: Citizen Public Market Comedy Night"));
             mMap.addMarker(new MarkerOptions().position(Sunset_Vibes_Silent_Disco).title("Sunset Vibes Silent Disco"));
             mMap.addMarker(new MarkerOptions().position(Joachim_Horsley_Caribbean_Nocturnes_In_Concert).title("Joachim Horsley: Caribbean Nocturnes In Concert"));
             mMap.addMarker(new MarkerOptions().position(Jazz_Eclectic_Night).title("Jazz Eclectic Night"));
@@ -307,7 +307,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onInfoWindowClick(@NonNull Marker marker) {
         Intent intent = new Intent(getActivity(), EventDetailActivity.class);
         intent.putExtra("EVENT_INDEX", marker.getTitle());
-        intent.putExtra("EventName", marker.getTitle());
+        intent.putExtra("event_name", marker.getTitle());
         intent.putExtra("user", user);
         startActivity(intent);
 
