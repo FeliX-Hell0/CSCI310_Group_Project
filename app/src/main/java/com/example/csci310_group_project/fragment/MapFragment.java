@@ -290,6 +290,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 public boolean onMarkerClick(@NonNull Marker marker) {
                     BottomSheetDialog dialog = new BottomSheetDialog();
                     BottomSheetDialog.title = marker.getTitle();
+                    dialog.setUser(user);
                     dialog.show(getActivity().getSupportFragmentManager(), "Sample dialog");
 
                     return true;
