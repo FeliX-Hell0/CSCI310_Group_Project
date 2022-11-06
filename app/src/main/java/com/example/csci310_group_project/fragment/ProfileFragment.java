@@ -94,6 +94,8 @@ public class ProfileFragment extends Fragment {
     private Button dateFromButton;
     private Button dateToButton;
 
+    private Button logoutButton;
+
     Boolean initialized = false;
 
     private double currLat = 0.;
@@ -212,6 +214,7 @@ public class ProfileFragment extends Fragment {
         initDateToPicker(view);
 
         initUserInfo(view);
+        initLogoutButton(view);
 
         return view;
     }
@@ -580,4 +583,18 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    private void initLogoutButton(View view) {
+        logoutButton = view.findViewById(R.id.logout_button);
+
+        // add onclick
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("log", "logging out!");
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                i.putExtra("user", "");
+                startActivity(i);
+            }
+        });
+    }
 }
