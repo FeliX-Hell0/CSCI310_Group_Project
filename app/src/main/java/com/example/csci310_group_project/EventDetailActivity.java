@@ -321,7 +321,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
 
     private void conflict(String timeFrame){
-
+        Log.d("StartTime6", timeFrame);
 
         String[] timeCollection = timeFrame.split(";");
         Log.d("hour", timeFrame);
@@ -346,11 +346,17 @@ public class EventDetailActivity extends AppCompatActivity {
         }
 
         for(String s : timeCollection){
+            Log.d("StartTime5", s);
+            if(s.equals("")){
+                continue;
+            }
             long ss = Long.parseLong(s.split(",")[0]);
             long ee = Long.parseLong(s.split(",")[1]);
 
+
             if((start >= ss && start <= ee)||(end >= ss && end <= ee)){
                 conflicted = true;
+                Log.d("StartTim4", "Conflict!");
                 return;
             }
         }
