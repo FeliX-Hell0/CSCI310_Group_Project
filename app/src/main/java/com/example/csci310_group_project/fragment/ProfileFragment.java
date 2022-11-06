@@ -8,6 +8,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,13 +58,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -206,7 +215,7 @@ public class ProfileFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         eventsList = new ArrayList<>();
-
+        showImage(view);
         setEventInfo();
         setAdapter();
 
@@ -596,5 +605,23 @@ public class ProfileFragment extends Fragment {
                 startActivity(i);
             }
         });
+    }
+
+    //assume user is the email
+    private void showImage(View view){
+        ImageView imageView = (ImageView) view.findViewById(R.id.user_image);
+        StorageReference mSotrage = FirebaseStorage.getInstance().getReference("userImage").child(user+".png");
+        try {
+            final File local = File.createTempFile("profile","png");
+            mSotrage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());
+                    imageView.setImageBitmap(bitmap);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

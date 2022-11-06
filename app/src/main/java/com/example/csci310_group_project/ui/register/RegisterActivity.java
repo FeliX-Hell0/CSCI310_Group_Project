@@ -7,6 +7,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -32,6 +35,7 @@ import com.example.csci310_group_project.ContentActivity;
 import com.example.csci310_group_project.Event;
 import com.example.csci310_group_project.MainActivity;
 import com.example.csci310_group_project.R;
+import com.example.csci310_group_project.data.model.ImageProcessor;
 import com.example.csci310_group_project.databinding.ActivityRegisterBinding;
 import com.example.csci310_group_project.ui.login.LoginActivity;
 import com.example.csci310_group_project.ui.register.LoggedInUserView;
@@ -49,8 +53,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,7 +68,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityRegisterBinding binding;
-    private ImageView imagine;
+    private ImageView imageView;
+    private StorageReference mSotrage;
+    private static final int IMAGEID = 1;
+    private Uri selected = null;
+    private ImageProcessor imageProcessor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +85,25 @@ public class RegisterActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
+        imageView = (ImageView) findViewById(R.id.imgView);
 
-        imagine = findViewById(R.id.imgView);
-        Picasso picasso = new Picasso.Builder(RegisterActivity.this)
+        //this version will work
+        mSotrage = FirebaseStorage.getInstance().getReference("dummyImage").child("dummyProfile.png");
+        try {
+            final File local = File.createTempFile("profile","png");
+            mSotrage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());
+                    imageView.setImageBitmap(bitmap);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //this is how to use Picasso
+        /*Picasso picasso = new Picasso.Builder(RegisterActivity.this)
                 .listener(new Picasso.Listener() {
                     @Override
                     public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
@@ -83,9 +112,26 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+        picasso.load(selected).into(imageView);*/
 
-        picasso.load("http://i.imgur.com/DvpvklR.png")
-                .into(imagine);
+        //try to get uri of stored image
+        /*mSotrage = FirebaseStorage.getInstance().getReference("dummyImage").child("dummyProfile.png");
+        mSotrage.getDownloadUrl().addOnCompleteListener(
+                new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        selected = task.getResult();
+                        imageView.setImageURI(selected);
+                    }
+                });*/
+
+        imageView.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, IMAGEID);
+            }
+        });
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
@@ -170,14 +216,63 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 //String repassword = repasswordEditText.getText().toString();
+                if (selected != null){
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    DocumentReference docRef = db.collection("users").document(username);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Toast.makeText(getApplicationContext(), "Username already used!", Toast.LENGTH_LONG).show();
+                                }else {
+                                    Map<String, Object> user = new HashMap<>();
+                                    user.put("username", username);
+                                    user.put("password", password);
+                                    user.put("registeredEvents", "");
+                                    user.put("favorites", "");
+                                    user.put("time", "");
+                                    //Log.d("Register", "Hi");
+                                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                                    //Log.d("Register1", "Here");
+                                    //Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_LONG).show();
+                                    db2.collection("users").document(username)
+                                            .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(getApplicationContext(), "Registration Success! Please login", Toast.LENGTH_LONG).show();
+                                                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(i);
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getApplicationContext(), "Oops something is off...", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                }
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Oops something is off...", Toast.LENGTH_LONG).show();
+                            }
 
+                        }
+                    });
+                    mSotrage = FirebaseStorage.getInstance().getReference("userImage").child(username+".png");
+                    mSotrage.putFile(selected);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Please upload an profile image", Toast.LENGTH_LONG).show();
+                }
 
+                /*FirebaseFirestore db = FirebaseFirestore.getInstance();
                 DocumentReference docRef = db.collection("users").document(username);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -221,7 +316,13 @@ public class RegisterActivity extends AppCompatActivity {
                         }
 
                     }
-                });
+                });*/
+                /*mSotrage = FirebaseStorage.getInstance().getReference("userImage").child(username+".png");
+                if (selected == null){
+                    Toast.makeText(getApplicationContext(), "Please upload an profile image", Toast.LENGTH_LONG).show();
+                }else {
+                    mSotrage.putFile(selected);
+                }*/
             }
         });
 
@@ -236,5 +337,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void showLoginFailed(Exception errorString) {
         Toast.makeText(getApplicationContext(), errorString.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMAGEID && resultCode == RESULT_OK && data != null){
+            selected = data.getData();
+            imageView.setImageURI(selected);
+        }
     }
 }
