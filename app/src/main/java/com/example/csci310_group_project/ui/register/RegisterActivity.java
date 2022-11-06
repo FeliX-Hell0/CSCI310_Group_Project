@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -48,6 +49,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityRegisterBinding binding;
+    private ImageView imagine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,21 @@ public class RegisterActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+
+
+        imagine = findViewById(R.id.imgView);
+        Picasso picasso = new Picasso.Builder(RegisterActivity.this)
+                .listener(new Picasso.Listener() {
+                    @Override
+                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                        // check here the exception
+                        Log.d("imageError", exception.getMessage());
+                    }
+                })
+                .build();
+
+        picasso.load("http://i.imgur.com/DvpvklR.png")
+                .into(imagine);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
