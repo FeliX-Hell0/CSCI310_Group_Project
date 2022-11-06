@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragment.ProfileFragment"
-    android:background="@color/light_pink"
+    android:background="@drawable/pink_background"
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 
@@ -132,7 +132,7 @@
         <GridLayout
             android:id="@+id/custom_event_info_view"
             android:layout_width="300dp"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dateToPickerButton"
@@ -184,11 +184,25 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_below="@+id/user_birthday"
+                android:backgroundTint="@color/light_purple"
                 android:width="70dp"
                 android:height="10dp"
                 android:fontFamily="serif"
-                android:text="Register"
+                android:text="Logout"
                 android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/login_button"
+                android:height="20dp"
+                android:fontFamily="serif"
+                android:text="Registered Events:"
+                android:textColor="@color/purple_500"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </GridLayout>
 
 
@@ -201,24 +215,8 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/custom_event_info_view"
+            android:layout_marginTop="10dp"
             app:layout_constraintVertical_bias="1.0" />
-
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            tools:context=".fragment.MapFragment">
-
-            <fragment
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/google_map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"/>
-
-        </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -3,7 +3,7 @@
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 tools:context=".fragment.ExploreFragment"
-android:background="@color/light_pink"
+android:background="@drawable/pink_background"
 android:layout_width="fill_parent" android:layout_height="fill_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
