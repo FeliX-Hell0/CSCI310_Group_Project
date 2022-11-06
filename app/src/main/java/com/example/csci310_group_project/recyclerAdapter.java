@@ -1,15 +1,26 @@
 package com.example.csci310_group_project;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyViewHolder> {
@@ -38,6 +49,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         private TextView typeText;
         private TextView registerText;
         private TextView favoriteText;
+        private ImageView imageView;
 
         public MyViewHolder(final View view) {
             super(view);
@@ -52,6 +64,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             typeText = view.findViewById(R.id.custom_event_type);
             registerText = view.findViewById(R.id.custom_event_register_status);
             favoriteText = view.findViewById(R.id.custom_event_favorite_status);
+            imageView = view.findViewById(R.id.custom_event_box_img_view);
 
             view.setOnClickListener(this);
         }
@@ -80,12 +93,36 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         int cost = eventsList.get(position).getEventCost();
         boolean registered = eventsList.get(position).getRegistered();
         boolean favorite = eventsList.get(position).getFavorite();
+        String imageName = name;
+        if (name.equals("Abbot Kidding: A Comedy Show in Venice") ){
+            imageName = "Abbot Kidding";
+        }else if (name.equals("The Setup Presents: Citizen Public Market Comedy Night")){
+            imageName = "Citizen Public Market Comedy Night";
+        }else if (name.equals("Joachim Horsley: Caribbean Nocturnes In Concert")){
+            imageName = "Caribbean Nocturnes In Concert";
+        }else if (name.equals("MoreLuv: RnB")){
+            imageName = "MoreLuv & RnB";
+        }
 
         holder.nameText.setText(name);
         holder.dateText.setText(date);
         holder.locationText.setText(location);
         holder.typeText.setText(type);
         holder.costText.setText("$" + String.valueOf(cost));
+
+        StorageReference mSotrage = FirebaseStorage.getInstance().getReference("eventImage").child(imageName+".png");
+        try {
+            final File local = File.createTempFile("event","png");
+            mSotrage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());
+                    holder.imageView.setImageBitmap(bitmap);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if(registered){
             holder.registerText.setText("Registered");
