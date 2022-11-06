@@ -2,6 +2,8 @@ package com.example.csci310_group_project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -27,9 +29,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -79,7 +86,29 @@ public class EventDetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             getIntentExtras(extras);
-
+            String imageName = eventName;
+            if (eventName.equals("Abbot Kidding: A Comedy Show in Venice") ){
+                imageName = "Abbot Kidding";
+            }else if (eventName.equals("The Setup Presents: Citizen Public Market Comedy Night")){
+                imageName = "Citizen Public Market Comedy Night";
+            }else if (eventName.equals("Joachim Horsley: Caribbean Nocturnes In Concert")){
+                imageName = "Caribbean Nocturnes In Concert";
+            }else if (eventName.equals("MoreLuv: RnB")){
+                imageName = "MoreLuv & RnB";
+            }
+            StorageReference mSotrage = FirebaseStorage.getInstance().getReference("eventImage").child(imageName+".png");
+            try {
+                final File local = File.createTempFile("event","png");
+                mSotrage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());
+                        imgView.setImageBitmap(bitmap);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             titleText.setText(eventName);
             if(favStatus){
                 favButton.setText("Remove from favorites");
