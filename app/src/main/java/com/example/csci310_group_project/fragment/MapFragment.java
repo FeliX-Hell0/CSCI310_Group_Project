@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
+import com.example.csci310_group_project.BottomSheetDialog;
 import com.example.csci310_group_project.EventDetailActivity;
+import com.example.csci310_group_project.customInfoWindowAdapter;
 import com.google.android.gms.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
@@ -114,7 +116,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
 
@@ -261,28 +262,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             LatLng MoreLuv_RnB = new LatLng(34.04303, -118.25227);
             LatLng AfroVibesLA_Sunday = new LatLng(34.09960, -118.32753);
 
-            mMap.addMarker(new MarkerOptions().position(Haunt_Massive).title("Haunt Massive"));
-            mMap.addMarker(new MarkerOptions().position(Fright_Night2K22).title("Fright Night2K22"));
-            mMap.addMarker(new MarkerOptions().position(ShaneShane_Christmas_Concert_2022).title("Shane & Shane Christmas Concert 2022"));
-            mMap.addMarker(new MarkerOptions().position(The_Art_of_The_Owl_House_Exhibition).title("The Art of The Owl House Exhibition"));
-            mMap.addMarker(new MarkerOptions().position(FNth_Annual_Dia_de_los_Muertos_Exhibition).title("59th Annual Dia de los Muertos Exhibition"));
-            mMap.addMarker(new MarkerOptions().position(Adaptive_Sports_Festival_2022).title("Adaptive Sports Festival 2022"));
-            mMap.addMarker(new MarkerOptions().position(TOTT_DREAM_All_American_Bowl).title("2023 DREAM All-American Bowl"));
-            mMap.addMarker(new MarkerOptions().position(Atheon_Race).title("Atheon Race"));
-            mMap.addMarker(new MarkerOptions().position(Chocolate_Sundaes_Comedy).title("Chocolate Sundaes Comedy @ The Laugh Factory Hollywood"));
-            mMap.addMarker(new MarkerOptions().position(Faded_Comedy_22).title("Faded Comedy"));
-            mMap.addMarker(new MarkerOptions().position(Abbot_Kidding_A_Comedy_Show_in_Venice).title("Abbot Kidding: A Comedy Show in Venice"));
-            mMap.addMarker(new MarkerOptions().position(Chocolate_and_Art_Show).title("Chocolate and Art Show"));
-            mMap.addMarker(new MarkerOptions().position(The_Setup_Comedy).title("The Setup Presents: Citizen Public Market Comedy Night"));
-            mMap.addMarker(new MarkerOptions().position(Sunset_Vibes_Silent_Disco).title("Sunset Vibes Silent Disco"));
+            mMap.addMarker(new MarkerOptions().position(Haunt_Massive).title("Haunt Massive")); // done
+            mMap.addMarker(new MarkerOptions().position(Fright_Night2K22).title("Fright Night 2K22")); // done
+            mMap.addMarker(new MarkerOptions().position(ShaneShane_Christmas_Concert_2022).title("Shane & Shane Christmas Concert 2022")); // done
+            mMap.addMarker(new MarkerOptions().position(The_Art_of_The_Owl_House_Exhibition).title("The Art of The Owl House Exhibition ")); // done
+            mMap.addMarker(new MarkerOptions().position(FNth_Annual_Dia_de_los_Muertos_Exhibition).title("49th Annual Dia de los Muertos Exhibition")); // done
+            mMap.addMarker(new MarkerOptions().position(Adaptive_Sports_Festival_2022).title("Adaptive Sports Festival 2022")); // done
+            mMap.addMarker(new MarkerOptions().position(TOTT_DREAM_All_American_Bowl).title("2023 DREAM All-American Bowl")); // done
+            mMap.addMarker(new MarkerOptions().position(Atheon_Race).title("Atheon Race")); // done
+            mMap.addMarker(new MarkerOptions().position(Chocolate_Sundaes_Comedy).title("Chocolate Sundaes Comedy @ The Laugh Factory Hollywood")); // done
+            mMap.addMarker(new MarkerOptions().position(Faded_Comedy_22).title("Faded Comedy")); // done
+            mMap.addMarker(new MarkerOptions().position(Abbot_Kidding_A_Comedy_Show_in_Venice).title("Abbot Kidding: A Comedy Show in Venice")); // done
+            mMap.addMarker(new MarkerOptions().position(Chocolate_and_Art_Show).title("Chocolate and Art Show")); // done
+            mMap.addMarker(new MarkerOptions().position(The_Setup_Comedy).title("The Setup Presents: Citizen Public Market Comedy Night")); // done
+            mMap.addMarker(new MarkerOptions().position(Sunset_Vibes_Silent_Disco).title("Sunset Vibes Silent Disco")); // done
             mMap.addMarker(new MarkerOptions().position(Joachim_Horsley_Caribbean_Nocturnes_In_Concert).title("Joachim Horsley: Caribbean Nocturnes In Concert"));
-            mMap.addMarker(new MarkerOptions().position(Jazz_Eclectic_Night).title("Jazz Eclectic Night"));
-            mMap.addMarker(new MarkerOptions().position(An_Evening_of_World_Music_and_Jazz).title("An Evening of World Music and Jazz"));
-            mMap.addMarker(new MarkerOptions().position(Leslie_Baker_Ready_Now_LIVE).title("Leslie Baker & Ready Now LIVE"));
-            mMap.addMarker(new MarkerOptions().position(MoreLuv_RnB).title("MoreLuv: RnB"));
+            mMap.addMarker(new MarkerOptions().position(Jazz_Eclectic_Night).title("Jazz Eclectic Night")); // done
+            mMap.addMarker(new MarkerOptions().position(An_Evening_of_World_Music_and_Jazz).title("An Evening of World Music and Jazz")); // done
+            mMap.addMarker(new MarkerOptions().position(Leslie_Baker_Ready_Now_LIVE).title("Leslie Baker & Ready Now LIVE")); // done
+            mMap.addMarker(new MarkerOptions().position(MoreLuv_RnB).title("MoreLuv: RnB")); // done
             mMap.addMarker(new MarkerOptions().position(AfroVibesLA_Sunday).title("AfroVibesLA Sunday"));
 
             mMap.setOnInfoWindowClickListener(this);
+            mMap.setInfoWindowAdapter(new customInfoWindowAdapter(getActivity()));
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    BottomSheetDialog dialog = new BottomSheetDialog();
+                    BottomSheetDialog.title = marker.getTitle();
+                    dialog.show(getActivity().getSupportFragmentManager(), "Sample dialog");
+
+                    return true;
+                }
+            });
+            //mMap.setOnMarkerDragListener(this);
         }
 
         //move map camera

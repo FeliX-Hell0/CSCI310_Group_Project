@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -47,6 +49,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private long eventStart = 0;
     private long eventEnd = 0;
     private boolean conflicted = false;
+    private GestureDetector mDetector;
 
     FirebaseFirestore db;
 
@@ -142,7 +145,74 @@ public class EventDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        View myView = findViewById(R.id.detail_whole_view);
+        mDetector = new GestureDetector(this, new MyGestureListener());
+
+        // Add a touch listener to the view
+        // The touch listener passes all its events on to the gesture detector
+        myView.setOnTouchListener(touchListener);
     }
+
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            Log.d("TAG","onDown: ");
+
+            // don't return false here or else none of the other
+            // gestures will work
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            Log.i("TAG", "onSingleTapConfirmed: ");
+            return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            Log.i("TAG", "onLongPress: ");
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            Log.i("TAG", "onDoubleTap: ");
+            return true;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                float distanceX, float distanceY) {
+            Log.i("TAG", "onScroll: ");
+
+            Intent intent = new Intent(EventDetailActivity.this, ContentActivity.class);
+            intent.putExtra("user", user);
+            intent.putExtra("toFav", "true");
+            startActivity(intent);
+
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            Log.d("TAG", "onFling: ");
+            return true;
+        }
+    }
+    View.OnTouchListener touchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            // pass the events to the gesture detector
+            // a return value of true means the detector is handling it
+            // a return value of false means the detector didn't
+            // recognize the event
+            return mDetector.onTouchEvent(event);
+
+        }
+    };
 
     private void getIntentExtras(Bundle extras) {
         eventName = extras.getString("event_name");
