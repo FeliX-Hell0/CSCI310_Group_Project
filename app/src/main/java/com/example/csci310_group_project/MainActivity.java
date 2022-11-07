@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.csci310_group_project.ui.login.LoginActivity;
 import com.example.csci310_group_project.ui.register.RegisterActivity;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "DocSnippets";
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         */
 
         Intent intent = getIntent();
+        TextView usernameDisplay = findViewById(R.id.username);
+
         if(intent.getStringExtra("user") != null && !intent.getStringExtra("user").equals("")){
             user = intent.getStringExtra("user");
             View b = findViewById(R.id.login_button);
@@ -38,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
             c.setVisibility(View.GONE);
             Button p1_button = (Button)findViewById(R.id.explore_button);
             p1_button.setText("Explore Events!");
+
+            // display username
+            usernameDisplay.setText(user);
+
+        } else {
+            View welcomeMsg = findViewById(R.id.welcome_msg);
+            welcomeMsg.setVisibility(View.GONE);
+
+            usernameDisplay.setVisibility(View.GONE);
         }
 
         TextView text = findViewById(R.id.login_button);

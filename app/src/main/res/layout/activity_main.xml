@@ -7,6 +7,34 @@
     tools:context=".MainActivity"
     android:background="@drawable/party">
 
+    <TextView
+        android:id="@+id/welcome_msg"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="82dp"
+        android:layout_marginEnd="82dp"
+        android:fontFamily="cursive"
+        android:gravity="center"
+        android:text="Welcome!"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:textColor="@color/purple_500"/>
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="cursive"
+        android:gravity="center"
+        android:text="Tommy Trojan"
+        android:textSize="45dp"
+        android:textStyle="bold"
+        android:textColor="@color/light_purple"/>
+
     <Button
         android:id="@+id/login_button"
         android:layout_width="200dp"
