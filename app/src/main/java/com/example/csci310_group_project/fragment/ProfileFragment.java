@@ -83,47 +83,7 @@ import java.util.List;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
-    private ArrayList<Event> eventsList;
-    private ArrayList<Event> filteredEventList = eventsList;
-    private Context context;
-    private String user = "";
-
-    // for filtering
-    private RecyclerView recyclerView;
-    private recyclerAdapter.RecyclerViewClickListener listener;
-    private SearchView searchView;
-    private recyclerAdapter mAdapter;
-    private Spinner sortSpinner;
-    private Spinner typeSpinner;
-    private String searchText;
-
-    // for date picker
-    private DatePickerDialog dateFromPickerDialog;
-    private DatePickerDialog dateToPickerDialog;
-    private Button dateFromButton;
-    private Button dateToButton;
-
-    private Button logoutButton;
-
-    Boolean initialized = false;
-
-    private double currLat = 0.;
-    private double currLong = 0.;
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public void setUser(String user) {
-        this.user = user;
-    }
+public class ProfileFragment extends BasicFragment {
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -163,7 +123,8 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void setAdapter() {
+    @Override
+    public void setAdapter() {
         setOnClickListener();
         if(!user.equals("")) {
             recyclerAdapter adapter = new recyclerAdapter(eventsList, listener);
@@ -186,20 +147,6 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void setOnClickListener() {
-        listener = new recyclerAdapter.RecyclerViewClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-                Intent intent = new Intent(context.getApplicationContext(), EventDetailActivity.class);
-                Log.d("EventName", filteredEventList.get(position).getEventName());
-                intent.putExtra("event_name", filteredEventList.get(position).getEventName());
-                intent.putExtra("user", user);
-                intent.putExtra("register", filteredEventList.get(position).getRegistered());
-                intent.putExtra("favorite", filteredEventList.get(position).getFavorite());
-                startActivity(intent);
-            }
-        };
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -242,71 +189,6 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void initDateFromPicker(View view)
-    {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
-                String date = makeDateString(day, month, year);
-                dateFromButton.setText(date);
-
-                // TODO: call filter
-                String sorting = sortSpinner.getSelectedItem().toString();
-                String type = typeSpinner.getSelectedItem().toString();
-                String startDate = date;
-                String endDate = dateToButton.getText().toString();
-                filterList(searchText, type, sorting, startDate, endDate);
-            }
-        };
-
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
-
-        dateFromPickerDialog = new DatePickerDialog(context, style, dateSetListener, year, month, day);
-        dateFromButton = view.findViewById(R.id.dateFromPickerButton);
-        dateFromButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dateFromPickerDialog.show();
-            }
-        });
-    }
-
-    private void initDateToPicker(View view)
-    {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
-                String date = makeDateString(day, month, year);
-                dateToButton.setText(date);
-
-                // TODO: call filter
-                String sorting = sortSpinner.getSelectedItem().toString();
-                String type = typeSpinner.getSelectedItem().toString();
-                String startDate = dateFromButton.getText().toString();
-                String endDate = date;
-                filterList(searchText, type, sorting, startDate, endDate);
-            }
-        };
-
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
-
-        dateToPickerDialog = new DatePickerDialog(context, style, dateSetListener, year, month, day);
-        dateToButton = view.findViewById(R.id.dateToPickerButton);
-        dateToButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dateToPickerDialog.show();
-            }
-        });
-    }
 
     private void initUserInfo(View view)
     {
@@ -339,73 +221,6 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private String makeDateString(int day, int month, int year)
-    {
-        return month + "/" + day + "/" + year;
-    }
-
-    private void filterList(String text, String type, String sorting, String startDate, String endDate) {
-        ArrayList<Event> filteredEventsList = new ArrayList<>();
-        String selectedType = type.toLowerCase();
-
-        for (Event event : eventsList) {
-            String eventName = event.getEventName().toLowerCase();
-            String eventType = event.getEventType().toLowerCase();
-
-            if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase())) {
-                if (selectedType.contains("all") || eventType.contains(selectedType)) {
-                    if (isInDateRange(startDate, endDate, event)) {
-                        filteredEventsList.add(event);
-                    }
-                }
-            }
-        }
-
-        // sort via the selected value of the sort spinner
-        if (sorting.toLowerCase().contains("cost")) { // sort via cost
-            filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
-
-        } else if (sorting.toLowerCase().contains("distance")){ // sort via distance
-            // TODO: get user address
-            // TODO: longitude & latitude
-            filteredEventsList.sort(Comparator.comparing(Event::getDistanceToUser));
-
-        } else if (sorting.toLowerCase().contains("time")){ // sort via time
-            filteredEventsList.sort(Comparator.comparing(Event::getEventYear)
-                    .thenComparing((Event::getEventMonth))
-                    .thenComparing((Event::getEventDay))
-                    .thenComparing(Event::getEventHour)
-                    .thenComparing(Event::getEventMinute));
-
-        } else if (sorting.toLowerCase().contains("alphabetic")){
-            filteredEventsList.sort(Comparator.comparing(Event::getEventName));
-        }
-        filteredEventList = filteredEventsList;
-        mAdapter.SetFilteredList(filteredEventsList);
-    }
-
-    private Boolean isInDateRange(String startDate, String endDate, Event event) {
-        String[] startDateParts = startDate.split("/");
-        Integer startDateYear = Integer.valueOf(startDateParts[2]);
-        Integer startDateMonth = Integer.valueOf(startDateParts[0]);
-        Integer startDateDay = Integer.valueOf(startDateParts[1]);
-
-        String[] endDateParts = endDate.split("/");
-        Integer endDateYear = Integer.valueOf(endDateParts[2]);
-        Integer endDateMonth = Integer.valueOf(endDateParts[0]);
-        Integer endDateDay = Integer.valueOf(endDateParts[1]);
-
-        Integer startDateInteger = startDateYear * 10000 + startDateMonth * 100 + startDateDay;
-        Integer endDateInteger = endDateYear * 10000 + endDateMonth * 100 + endDateDay;
-        Integer eventDateInteger = event.getEventYear() * 10000 + event.getEventMonth() * 100 + event.getEventDay();
-
-        if (eventDateInteger >= startDateInteger && eventDateInteger <= endDateInteger) {
-            return true;
-        }
-
-        return false;
     }
 
     // TODO: read from DAO
@@ -560,76 +375,8 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void setSearchView(View view) {
-        searchView = view.findViewById(R.id.searchView);
-        searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                searchText = s;
-                String sorting = sortSpinner.getSelectedItem().toString();
-                String type = "all";
-                String startDate = dateFromButton.getText().toString();
-                String endDate = dateToButton.getText().toString();
-                filterList(s, type, sorting, startDate, endDate);
-                return true;
-            }
-        });
-    }
-
-    private void setSortSpinner(View view) {
-        sortSpinner = view.findViewById(R.id.sort_spinner);
-
-        ArrayAdapter<CharSequence> sortArrayAdapter = ArrayAdapter.createFromResource(context, R.array.Sorts, android.R.layout.simple_spinner_item);
-        sortArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sortSpinner.setAdapter(sortArrayAdapter);
-
-        // call filterList when onSelect
-        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String sorting = sortSpinner.getSelectedItem().toString();
-                String type = typeSpinner.getSelectedItem().toString();
-                String startDate = dateFromButton.getText().toString();
-                String endDate = dateToButton.getText().toString();
-                filterList(searchText, type, sorting, startDate, endDate);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {}
-        });
-    }
-
-    private void setTypeSpinner(View view) {
-        typeSpinner = view.findViewById(R.id.type_spinner);
-
-        ArrayAdapter<CharSequence> TypeArrayAdapter = ArrayAdapter.createFromResource(context, R.array.Types, android.R.layout.simple_spinner_item);
-        TypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinner.setAdapter(TypeArrayAdapter);
-
-        // call filterList when onSelect
-        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String sorting = sortSpinner.getSelectedItem().toString();
-                String type = typeSpinner.getSelectedItem().toString();
-                String startDate = dateFromButton.getText().toString();
-                String endDate = dateToButton.getText().toString();
-                filterList(searchText, type, sorting, startDate, endDate);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {}
-        });
-    }
-
     private void initLogoutButton(View view) {
-        logoutButton = view.findViewById(R.id.logout_button);
+        View logoutButton = view.findViewById(R.id.logout_button);
 
         // add onclick
         logoutButton.setOnClickListener(new View.OnClickListener() {
