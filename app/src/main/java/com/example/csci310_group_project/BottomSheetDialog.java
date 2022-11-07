@@ -37,7 +37,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         TextView text = (TextView) window.findViewById(R.id.eventTitle);
         text.setText(title);
 
-        View myView = window.findViewById(R.id.eventTitle);
+        View myView = window.findViewById(R.id.dialog_view);
         mDetector = new GestureDetector(getActivity(), new MyGestureListener());
 
         // Add a touch listener to the view
@@ -47,6 +47,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        private static final int SWIPE_THRESHOLD = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
         @Override
         public boolean onDown(MotionEvent event) {
@@ -89,9 +92,47 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            Log.d("TAG", "onFling: ");
-            return true;
+            boolean result = false;
+            try {
+                float diffY = event2.getY() - event1.getY();
+                float diffX = event2.getX() - event1.getX();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            onSwipeHorizontal();
+                        } else {
+                            onSwipeHorizontal();
+                        }
+                        result = true;
+                    }
+                }
+                else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffY > 0) {
+                        onSwipeVertical();
+                    } else {
+                        onSwipeVertical();
+                    }
+                    result = true;
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+            return result;
         }
+
+        public void onSwipeHorizontal(){
+            Intent intent = new Intent(getActivity(), ContentActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
+        }
+
+        public void onSwipeVertical(){
+            Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+            intent.putExtra("user", user);
+            intent.putExtra("event_name", title);
+            startActivity(intent);
+        }
+
     }
     View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override

@@ -5,14 +5,31 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:id="@+id/dialog_view"
+    android:background="@color/light_purple"
     android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=" "
+        android:fontFamily="serif"
+        android:textAlignment="center"
+        android:textColor="@color/white"
         android:id="@+id/eventTitle"
         android:textSize="25sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\nScroll up/down to view more details!\n\nScroll left/right to go back to list!"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:fontFamily="serif"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:id="@+id/scroll_instruct"
+         />
 
 
 
