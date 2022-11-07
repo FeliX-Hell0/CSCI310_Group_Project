@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +27,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -60,6 +63,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,6 +77,11 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int IMAGEID = 1;
     private Uri selected = null;
     private ImageProcessor imageProcessor;
+
+
+    private Button birthdayPicker;
+    private DatePickerDialog birthdayPickerDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +110,8 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        initBirthdayPicker();
 
         //this is how to use Picasso
         /*Picasso picasso = new Picasso.Builder(RegisterActivity.this)
@@ -218,6 +229,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
+                String birthday = birthdayPicker.getText().toString();
+                Log.i("bday", birthday);
                 //String repassword = repasswordEditText.getText().toString();
                 if (selected != null){
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -233,6 +246,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     Map<String, Object> user = new HashMap<>();
                                     user.put("username", username);
                                     user.put("password", password);
+                                    user.put("birthday", birthday);
                                     user.put("registeredEvents", "");
                                     user.put("favorites", "");
                                     user.put("time", "");
@@ -346,5 +360,37 @@ public class RegisterActivity extends AppCompatActivity {
             selected = data.getData();
             imageView.setImageURI(selected);
         }
+    }
+
+
+    private String makeDateString(int day, int month, int year) {
+        return month + "/" + day + "/" + year;
+    }
+
+    private void initBirthdayPicker() {
+
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = makeDateString(day, month, year);
+                birthdayPicker.setText(date);
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
+
+        birthdayPickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+        birthdayPicker = findViewById(R.id.birthdayPickerButton);
+        birthdayPicker.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                birthdayPickerDialog.show();
+            }
+        });
+
     }
 }

@@ -2,16 +2,21 @@ package com.example.csci310_group_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.csci310_group_project.ui.login.LoginActivity;
 import com.example.csci310_group_project.ui.register.RegisterActivity;
 
 import org.w3c.dom.Text;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 

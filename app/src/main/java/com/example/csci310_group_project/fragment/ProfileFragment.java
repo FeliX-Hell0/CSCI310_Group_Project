@@ -314,10 +314,26 @@ public class ProfileFragment extends Fragment {
         TextView username = view.findViewById(R.id.username);
         username.setText(user);
 
-        // TODO: get user image
 
-        // TODO: get user b-day
+        // set user b-day
+        TextView birthday = view.findViewById(R.id.user_birthday);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_SHORT).show();
+                        if (document.getString("birthday") != null) {
+                            birthday.setText("B-Day: " + document.getString("birthday"));
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private String makeDateString(int day, int month, int year)
