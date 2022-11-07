@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragment.ProfileFragment"
     android:background="@drawable/pink_background"
+    android:id="@+id/scroll_view"
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 
@@ -15,7 +16,7 @@
         <GridLayout
             android:id="@+id/custom_event_info_view"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="600dp"
             android:orientation="vertical"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +28,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="100dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginBottom="2dp"
                 android:width="300dp"
                 android:height="25dp"
@@ -80,29 +81,50 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_button"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="160dp"
                 android:height="20dp"
                 android:fontFamily="serif"
                 android:text="Registered Events:"
                 android:textColor="@color/purple_500"
                 android:textSize="16sp"
+                android:id="@+id/show_registered"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/scroll_button"
+                android:layout_width="135dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_birthday"
+                android:layout_gravity="center"
+                android:width="70dp"
+                android:height="10dp"
+                android:backgroundTint="@color/light_purple"
+                android:fontFamily="serif"
+                android:text="Scroll down"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="11sp"
+                android:layout_marginBottom="100dp"
+                />
+
+
         </GridLayout>
 
+        <!--   date picker     -->
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:layout_marginTop="92dp"
             android:background="@drawable/search_view_background"
             app:iconifiedByDefault="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.562"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/custom_event_info_view"
             app:queryHint="Search Here ..." />
 
-        <!--   date picker     -->
         <TextView
             android:id="@+id/date_from"
             android:layout_width="70dp"

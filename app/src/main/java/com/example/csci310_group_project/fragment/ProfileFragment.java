@@ -36,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -224,8 +225,21 @@ public class ProfileFragment extends Fragment {
 
         initUserInfo(view);
         initLogoutButton(view);
+        initScrollButton(view);
 
         return view;
+    }
+
+    private void initScrollButton(View view) {
+        Button scroll = view.findViewById(R.id.scroll_button);
+        ScrollView scrollView = view.findViewById(R.id.scroll_view);
+
+        scroll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scrollView.smoothScrollTo(0,1500);
+            }
+        });
     }
 
     private void initDateFromPicker(View view)
@@ -445,6 +459,7 @@ public class ProfileFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
                     }
+                    filterUnReg();
                     filteredEventList = eventsList;
                     setAdapter();
 

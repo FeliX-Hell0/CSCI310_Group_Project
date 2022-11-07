@@ -321,7 +321,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
 
     private void conflict(String timeFrame){
-        Log.d("StartTime6", timeFrame);
+        //Log.d("StartTime6", timeFrame);
 
         String[] timeCollection = timeFrame.split(";");
         Log.d("hour", timeFrame);

@@ -383,7 +383,7 @@ public class ExploreFragment extends Fragment implements OnMapReadyCallback,
                         for (QueryDocumentSnapshot document : task.getResult()) {
 //                            Log.d("Event", document.getId() + " => " + document.getData());
                             Log.d("EventName", document.getString("name"));
-                            Log.d("EventLat", String.valueOf(document.getDouble("lng")));
+                            Log.d("EventLng", String.valueOf(document.getDouble("lng")));
                             eventsList.add(new Event(document.getString("name"), document.getString("type"),
                                     document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
                                     document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false,
@@ -393,6 +393,7 @@ public class ExploreFragment extends Fragment implements OnMapReadyCallback,
                         // by default sort by cost
 
                         for(Event e : eventsList){
+                            Log.d("EventLng1", String.valueOf(e.getLng()));
                             e.setDistanceToUser(distance(currLat, e.getLat(), currLong, e.getLng(), 'K'));
                             Log.d("distanceCurr2", String.valueOf(e.getLng()));
                         }
@@ -696,6 +697,7 @@ public class ExploreFragment extends Fragment implements OnMapReadyCallback,
             });
 
     private double distance(double lat1, double lat2, double lon1, double lon2, char unit) {
+        Log.d("Calculated", String.valueOf(lat1) + " " + String.valueOf(lat2) + " " + String.valueOf(lon1) + " " + String.valueOf(lon2));
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);

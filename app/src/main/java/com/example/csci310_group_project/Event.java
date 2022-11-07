@@ -24,7 +24,7 @@ public class Event {
     }
 
     public double getLng(){
-        return lat;
+        return lng;
     }
 
     public void setLng(double lat){
