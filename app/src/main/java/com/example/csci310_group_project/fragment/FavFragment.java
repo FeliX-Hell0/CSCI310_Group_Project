@@ -415,7 +415,7 @@ public class FavFragment extends Fragment implements OnMapReadyCallback,
                         filteredEventList = eventsList;
                         setRegisteredEvents();
                         setFavoriteEvents();
-                        setAdapter();
+                        //setAdapter();
 
                     } else {
                         Log.d("EventError", "Error getting documents: ", task.getException());
@@ -452,6 +452,8 @@ public class FavFragment extends Fragment implements OnMapReadyCallback,
                                     }
                                 }
                             }
+
+                            filterUnfav();
                             //Toast.makeText(getActivity(), "Registered events loading success", Toast.LENGTH_SHORT).show();
                         } else {
                             //Toast.makeText(getActivity(), "No registered events", Toast.LENGTH_SHORT).show();
@@ -460,7 +462,7 @@ public class FavFragment extends Fragment implements OnMapReadyCallback,
                         Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
                     }
                     filteredEventList = eventsList;
-                    setAdapter();
+                    //setAdapter();
 
                 } else {
                     Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_SHORT).show();
@@ -500,7 +502,7 @@ public class FavFragment extends Fragment implements OnMapReadyCallback,
                                 }
                             }
 
-                            filterUnfav();
+
                             //Toast.makeText(getActivity(), "Favorite events loading success", Toast.LENGTH_SHORT).show();
                         } else {
                             //Toast.makeText(getActivity(), "No favorite events", Toast.LENGTH_SHORT).show();
@@ -508,6 +510,7 @@ public class FavFragment extends Fragment implements OnMapReadyCallback,
                     } else {
                         Toast.makeText(getActivity(), "No user favorites info", Toast.LENGTH_SHORT).show();
                     }
+                    filterUnfav();
                     filteredEventList = eventsList;
                     setAdapter();
 
