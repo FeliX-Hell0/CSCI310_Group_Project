@@ -241,7 +241,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             mCurrLocationMarker.remove();
         }
         if(!initialized) {
-            LatLng Haunt_Massive = new LatLng(34.09960, -118.32753);
+            LatLng Haunt_Massive = new LatLng(34.09960, -118.32703);
             LatLng Fright_Night2K22 = new LatLng(34.00791, -118.10745);
             LatLng ShaneShane_Christmas_Concert_2022 = new LatLng(33.92312, -118.13908);
             LatLng The_Art_of_The_Owl_House_Exhibition = new LatLng(34.09053, -118.13460);
@@ -255,12 +255,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             LatLng Chocolate_and_Art_Show = new LatLng(34.02984, -118.24034);
             LatLng The_Setup_Comedy = new LatLng(34.01932, -118.39349);
             LatLng Sunset_Vibes_Silent_Disco = new LatLng(33.86479, -118.39719);
-            LatLng Joachim_Horsley_Caribbean_Nocturnes_In_Concert = new LatLng(34.09960, -118.32753);
+            LatLng Joachim_Horsley_Caribbean_Nocturnes_In_Concert = new LatLng(34.08960, -118.33753);
             LatLng Jazz_Eclectic_Night = new LatLng(34.07100, -118.37618);
             LatLng An_Evening_of_World_Music_and_Jazz = new LatLng(33.95507, -118.40200);
             LatLng Leslie_Baker_Ready_Now_LIVE = new LatLng(34.13410, -118.20533);
             LatLng MoreLuv_RnB = new LatLng(34.04303, -118.25227);
-            LatLng AfroVibesLA_Sunday = new LatLng(34.09960, -118.32753);
+            LatLng AfroVibesLA_Sunday = new LatLng(34.07960, -118.30853);
 
             mMap.addMarker(new MarkerOptions().position(Haunt_Massive).title("Haunt Massive")); // done
             mMap.addMarker(new MarkerOptions().position(Fright_Night2K22).title("Fright Night 2K22")); // done
