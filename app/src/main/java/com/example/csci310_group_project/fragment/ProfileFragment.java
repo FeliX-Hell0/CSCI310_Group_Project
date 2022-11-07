@@ -312,7 +312,7 @@ public class ProfileFragment extends Fragment {
     {
         // set username
         TextView username = view.findViewById(R.id.username);
-        username.setText(user);
+//        username.setText(user);
 
 
         // set user b-day
@@ -327,6 +327,11 @@ public class ProfileFragment extends Fragment {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists() && document.getString("birthday") != null) {
                             birthday.setText("B-Day: " + document.getString("birthday"));
+                        }
+                        if (document.exists() && document.getString("nickname") != null) {
+                            username.setText(document.getString("nickname"));
+                        } else {
+                            username.setText(user);
                         }
                     }
                 }

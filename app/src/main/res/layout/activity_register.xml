@@ -53,6 +53,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
+    <EditText
+        android:id="@+id/nickname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Nickname"
+        android:imeActionLabel="@string/action_sign_in_short"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:selectAllOnFocus="true"
+        android:fontFamily="serif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repassword" />
+
     <TextView
         android:id="@+id/selectBirthday"
         android:layout_width="0dp"
@@ -65,7 +80,8 @@
         android:fontFamily="serif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repassword" />
+        app:layout_constraintTop_toBottomOf="@+id/nickname" />
+
 
     <Button
         android:id="@+id/birthdayPickerButton"
@@ -86,7 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="126dp"
         android:layout_marginBottom="64dp"
         android:enabled="false"
         android:text="REGISTER"

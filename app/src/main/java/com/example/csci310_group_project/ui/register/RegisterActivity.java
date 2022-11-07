@@ -147,6 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final EditText repasswordEditText = binding.repassword;
+        final EditText nicknameEditText = binding.nickname;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
 
@@ -203,7 +204,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString(), repasswordEditText.getText().toString());
+                        passwordEditText.getText().toString(), repasswordEditText.getText().toString(), nicknameEditText.getText().toString());
             }
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
@@ -221,7 +222,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
+        nicknameEditText.addTextChangedListener(afterTextChangedListener);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,6 +231,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String birthday = birthdayPicker.getText().toString();
+                String nickname = nicknameEditText.getText().toString();
                 Log.i("bday", birthday);
                 //String repassword = repasswordEditText.getText().toString();
                 if (selected != null){
@@ -247,6 +249,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     user.put("username", username);
                                     user.put("password", password);
                                     user.put("birthday", birthday);
+                                    user.put("nickname", nickname);
                                     user.put("registeredEvents", "");
                                     user.put("favorites", "");
                                     user.put("time", "");

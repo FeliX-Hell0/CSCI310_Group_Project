@@ -43,17 +43,20 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
-    public void loginDataChanged(String username, String password, String repassword) {
+    public void loginDataChanged(String username, String password, String repassword, String nickname) {
         if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null,null));
+            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null,null, null));
         }
         if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password,null));
+            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password,null, null));
         }
         if (!isRepasswordValid(password, repassword)){
-            loginFormState.setValue(new LoginFormState(null, null ,R.string.invalid_repassword));
+            loginFormState.setValue(new LoginFormState(null, null ,R.string.invalid_repassword, null));
         }
-        if(isUserNameValid(username) && isPasswordValid(password) && isRepasswordValid(password, repassword)) {
+        if (isNicknameValid(nickname)) {
+            loginFormState.setValue(new LoginFormState(null, null ,null, R.string.invalid_nickname));
+        }
+        if(isUserNameValid(username) && isPasswordValid(password) && isRepasswordValid(password, repassword) && isNicknameValid(nickname)) {
             loginFormState.setValue(new LoginFormState(true));
         }
     }
@@ -86,5 +89,9 @@ public class LoginViewModel extends ViewModel {
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
+    }
+
+    private boolean isNicknameValid(String nn) {
+        return nn != null && nn.length() > 0;
     }
 }
