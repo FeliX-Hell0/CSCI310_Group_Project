@@ -1,6 +1,7 @@
 package com.example.csci310_group_project;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.csci310_group_project.fragment.ExploreFragment;
@@ -303,10 +305,31 @@ public class EventDetailActivity extends AppCompatActivity {
                             updateEvent(registeredEvents + ";" + eventName, timeFrame + ";" + String.valueOf(eventStart) + "," + String.valueOf(eventEnd));
                         }
                         else{
-                            Toast.makeText(EventDetailActivity.this, "Time conflict!", Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(EventDetailActivity.this, ContentActivity.class);
-                            i.putExtra("user", user);
-                            startActivity(i);
+
+                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which){
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            //Yes button clicked
+                                            updateEvent(registeredEvents + ";" + eventName, timeFrame + ";" + String.valueOf(eventStart) + "," + String.valueOf(eventEnd));
+                                            break;
+
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            //No button clicked
+                                            Intent i = new Intent(EventDetailActivity.this, ContentActivity.class);
+                                            i.putExtra("user", user);
+                                            startActivity(i);
+                                            break;
+                                    }
+                                }
+                            };
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setMessage("Time conflict! Continue registration?").setPositiveButton("Yes", dialogClickListener)
+                                    .setNegativeButton("No", dialogClickListener).show();
+
+                            //Toast.makeText(EventDetailActivity.this, "Time conflict!", Toast.LENGTH_LONG).show();
                         }
 
                     } else {
@@ -397,7 +420,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
                         if(temp.contains(eventName) && userTime.contains(temp2)){
                             int firstIdx = temp.indexOf(eventName) - 1;
-                            int lastIdx = temp.lastIndexOf(eventName);
+                            int lastIdx = firstIdx+eventName.length();
                             String collection1 = "";
                             if (firstIdx > 0){
                                 collection1 = temp.substring(0,firstIdx);
@@ -408,7 +431,7 @@ public class EventDetailActivity extends AppCompatActivity {
                             }
 
                             int fir = userTime.indexOf(temp2)-1;
-                            int las = fir+1+temp2.length();
+                            int las = fir+temp2.length();
                             String col1 = "";
                             if(fir > 0){
                                 col1 = userTime.substring(0, fir);
@@ -451,7 +474,7 @@ public class EventDetailActivity extends AppCompatActivity {
                         String temp = document.getString("favorites");
                         if(temp.contains(eventName)){
                             int firstIdx = temp.indexOf(eventName) - 1;
-                            int lastIdx = temp.lastIndexOf(eventName);
+                            int lastIdx = firstIdx + eventName.length();
                             String collection1 = "";
                             if (firstIdx > 0){
                                 collection1 = temp.substring(0,firstIdx);
@@ -481,7 +504,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 db.collection("users").document(user).update("time", timeUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.d("startTime2", timeUpdate);
+                        Log.d("startTime2", collection);
                         Intent intent = new Intent(EventDetailActivity.this, ContentActivity.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
