@@ -1,5 +1,6 @@
 package com.example.csci310_group_project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -13,6 +14,11 @@ import android.widget.TextView;
 
 import com.example.csci310_group_project.ui.login.LoginActivity;
 import com.example.csci310_group_project.ui.register.RegisterActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
@@ -37,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         */
 
         Intent intent = getIntent();
-        TextView usernameDisplay = findViewById(R.id.username);
+        TextView nicknameText = findViewById(R.id.username);
 
         if(intent.getStringExtra("user") != null && !intent.getStringExtra("user").equals("")){
             user = intent.getStringExtra("user");
@@ -48,14 +54,14 @@ public class MainActivity extends AppCompatActivity {
             Button p1_button = (Button)findViewById(R.id.explore_button);
             p1_button.setText("Explore Events!");
 
-            // display username
-            usernameDisplay.setText(user);
+            // display nickname
+            displayNickname(user, nicknameText);
 
         } else {
             View welcomeMsg = findViewById(R.id.welcome_msg);
             welcomeMsg.setVisibility(View.GONE);
 
-            usernameDisplay.setVisibility(View.GONE);
+            nicknameText.setVisibility(View.GONE);
         }
 
         TextView text = findViewById(R.id.login_button);
@@ -95,5 +101,29 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ContentActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
+    }
+
+    private void displayNickname(String user, TextView nicknameText) {
+        try {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(user);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists() && document.getString("nickname") != null) {
+                            nicknameText.setText(document.getString("nickname"));
+                        } else {
+                            nicknameText.setText(user);
+                        }
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

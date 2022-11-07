@@ -329,7 +329,7 @@ public class ProfileFragment extends Fragment {
                             birthday.setText("B-Day: " + document.getString("birthday"));
                         }
                         if (document.exists() && document.getString("nickname") != null) {
-                            username.setText(document.getString("nickname"));
+                            username.setText("Nickname: " + document.getString("nickname"));
                         } else {
                             username.setText(user);
                         }
