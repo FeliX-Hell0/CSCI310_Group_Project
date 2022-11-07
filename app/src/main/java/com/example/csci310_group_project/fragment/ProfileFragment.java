@@ -154,7 +154,7 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        if(user.equals("")){
+        if(user == null || user.equals("")){
             Toast.makeText(getActivity(), "Please login or register to access profile",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getActivity(), MainActivity.class);
@@ -317,23 +317,23 @@ public class ProfileFragment extends Fragment {
 
         // set user b-day
         TextView birthday = view.findViewById(R.id.user_birthday);
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("users").document(user);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        //Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_SHORT).show();
-                        if (document.getString("birthday") != null) {
+        try {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(user);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists() && document.getString("birthday") != null) {
                             birthday.setText("B-Day: " + document.getString("birthday"));
                         }
                     }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String makeDateString(int day, int month, int year)
