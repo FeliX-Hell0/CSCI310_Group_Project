@@ -86,6 +86,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         String date = eventsList.get(position).getEventDate();
         String location = eventsList.get(position).getEventLocation();
         String type = eventsList.get(position).getEventType();
+        String org = eventsList.get(position).getEventOrganizor();
         int cost = eventsList.get(position).getEventCost();
         boolean registered = eventsList.get(position).getRegistered();
         boolean favorite = eventsList.get(position).getFavorite();
@@ -102,9 +103,15 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
 
         holder.nameText.setText(name);
         holder.dateText.setText(date);
+
+        if (location.length() > 45) {
+            location = location.substring(0, 45) + "...";
+            Log.i("location", location);
+        }
         holder.locationText.setText(location);
         holder.typeText.setText(type);
         holder.costText.setText("$" + String.valueOf(cost));
+        holder.organizorText.setText(org);
 
         StorageReference mStorage = FirebaseStorage.getInstance().getReference("eventImage").child(imageName+".png");
         try {
