@@ -370,17 +370,10 @@ public class ProfileFragment extends BasicFragment {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (user == null || user == "") {
-
-
-
-                } else {
-                    Log.i("log", "logging out!");
-                    Intent i = new Intent(getActivity(), MainActivity.class);
-                    i.putExtra("user", "");
-                    startActivity(i);
-                }
+                Log.i("log", "logging out!");
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                i.putExtra("user", "");
+                startActivity(i);
             }
         });
     }
