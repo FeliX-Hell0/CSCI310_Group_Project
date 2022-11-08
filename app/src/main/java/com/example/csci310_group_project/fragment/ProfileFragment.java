@@ -364,16 +364,23 @@ public class ProfileFragment extends BasicFragment {
     }
 
     private void initLogoutButton(View view) {
-        View logoutButton = view.findViewById(R.id.logout_button);
+        Button logoutButton = view.findViewById(R.id.logout_button);
 
         // add onclick
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("log", "logging out!");
-                Intent i = new Intent(getActivity(), MainActivity.class);
-                i.putExtra("user", "");
-                startActivity(i);
+
+                if (user == null || user == "") {
+
+
+
+                } else {
+                    Log.i("log", "logging out!");
+                    Intent i = new Intent(getActivity(), MainActivity.class);
+                    i.putExtra("user", "");
+                    startActivity(i);
+                }
             }
         });
     }

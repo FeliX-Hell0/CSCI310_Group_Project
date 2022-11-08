@@ -15,6 +15,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -303,6 +304,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         intent.putExtra("user", user);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {} // disable onBackPressed()
+        };
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 }
 
