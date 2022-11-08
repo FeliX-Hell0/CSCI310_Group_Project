@@ -372,6 +372,7 @@ public class ProfileFragment extends BasicFragment {
             public void onClick(View view) {
                 Log.i("log", "logging out!");
                 Intent i = new Intent(getActivity(), MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("user", "");
                 startActivity(i);
             }
