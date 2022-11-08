@@ -34,14 +34,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> user = new HashMap<>();
-        user.put("username", "test");
-        user.put("password", "123456");
-        db.collection("test3").add(user);
-        */
-
         Intent intent = getIntent();
         TextView nicknameText = findViewById(R.id.username);
 

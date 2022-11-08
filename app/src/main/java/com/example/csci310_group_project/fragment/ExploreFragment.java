@@ -93,7 +93,6 @@ public class ExploreFragment extends BasicFragment{
      * @param param2 Parameter 2.
      * @return A new instance of fragment ExploreFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ExploreFragment newInstance(String param1, String param2) {
         ExploreFragment fragment = new ExploreFragment();
         Bundle args = new Bundle();
@@ -146,7 +145,7 @@ public class ExploreFragment extends BasicFragment{
     }
 
 
-    // TODO: read from DAO
+    // read from DAO
     private void setEventInfo() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -158,7 +157,6 @@ public class ExploreFragment extends BasicFragment{
                     if (task.isSuccessful()) {
                         eventsList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-//                            Log.d("Event", document.getId() + " => " + document.getData());
                             Log.d("EventName", document.getString("name"));
                             Log.d("EventLng", String.valueOf(document.getDouble("lng")));
                             eventsList.add(new Event(document.getString("name"), document.getString("type"),
@@ -170,9 +168,7 @@ public class ExploreFragment extends BasicFragment{
                         // by default sort by cost
 
                         for(Event e : eventsList){
-                            Log.d("EventLng1", String.valueOf(e.getLng()));
                             e.setDistanceToUser(distance(currLat, e.getLat(), currLong, e.getLng(), 'K'));
-                            Log.d("distanceCurr2", String.valueOf(e.getLng()));
                         }
 
                         for(Event e : eventsList){
@@ -181,11 +177,9 @@ public class ExploreFragment extends BasicFragment{
                         setAdapter();
 
                         eventsList.sort(Comparator.comparing(Event::getEventCost));
-                        // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_SHORT).show();
                         filteredEventList = eventsList;
                         setRegisteredEvents();
                         setFavoriteEvents();
-                        //Log.d("EventLat", String.valueOf(eventsList.get(0).getLat()));
 
 
                         } else {
@@ -203,8 +197,6 @@ public class ExploreFragment extends BasicFragment{
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_SHORT).show();
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -213,7 +205,6 @@ public class ExploreFragment extends BasicFragment{
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        //Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_SHORT).show();
                         if (!document.getString("registeredEvents").equals("")) {
                             String collection = document.getString("registeredEvents");
                             String[] registeredEvents = collection.split(";");
@@ -228,9 +219,6 @@ public class ExploreFragment extends BasicFragment{
                                     }
                                 }
                             }
-                            //Toast.makeText(getActivity(), "Registered events loading success", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Toast.makeText(getActivity(), "No registered events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
@@ -253,8 +241,6 @@ public class ExploreFragment extends BasicFragment{
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_SHORT).show();
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -263,7 +249,6 @@ public class ExploreFragment extends BasicFragment{
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        //Toast.makeText(getActivity(), "Fetching...", Toast.LENGTH_SHORT).show();
                         if (document.getString("favorites") != null && !document.getString("favorites").equals("")) {
                             String collection = document.getString("favorites");
                             String[] favoriteEvents = collection.split(";");
@@ -278,9 +263,6 @@ public class ExploreFragment extends BasicFragment{
                                     }
                                 }
                             }
-                            //Toast.makeText(getActivity(), "Favorite events loading success", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Toast.makeText(getActivity(), "No favorite events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(getActivity(), "No user favorites info", Toast.LENGTH_SHORT).show();
@@ -291,7 +273,6 @@ public class ExploreFragment extends BasicFragment{
                 } else {
                     Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }

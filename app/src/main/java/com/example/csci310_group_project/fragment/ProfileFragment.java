@@ -194,8 +194,6 @@ public class ProfileFragment extends BasicFragment {
     {
         // set username
         TextView username = view.findViewById(R.id.username);
-//        username.setText(user);
-
 
         // set user b-day
         TextView birthday = view.findViewById(R.id.user_birthday);
@@ -223,7 +221,6 @@ public class ProfileFragment extends BasicFragment {
         }
     }
 
-    // TODO: read from DAO
     private void setEventInfo(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -263,8 +260,6 @@ public class ProfileFragment extends BasicFragment {
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_SHORT).show();
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -288,9 +283,6 @@ public class ProfileFragment extends BasicFragment {
                                     }
                                 }
                             }
-                            //Toast.makeText(getActivity(), "Registered events loading success", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Toast.makeText(getActivity(), "No registered events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
@@ -314,7 +306,6 @@ public class ProfileFragment extends BasicFragment {
             return;
         }
 
-        //Toast.makeText(getActivity(), user, Toast.LENGTH_SHORT).show();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);
@@ -342,9 +333,6 @@ public class ProfileFragment extends BasicFragment {
                             }
 
                             filterUnReg();
-                            //Toast.makeText(getActivity(), "Favorite events loading success", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Toast.makeText(getActivity(), "No favorite events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(getActivity(), "No user favorites info", Toast.LENGTH_SHORT).show();
@@ -393,10 +381,10 @@ public class ProfileFragment extends BasicFragment {
     //assume user is the email
     private void showImage(View view){
         ImageView imageView = (ImageView) view.findViewById(R.id.user_image);
-        StorageReference mSotrage = FirebaseStorage.getInstance().getReference("userImage").child(user+".png");
+        StorageReference mStorage = FirebaseStorage.getInstance().getReference("userImage").child(user+".png");
         try {
             final File local = File.createTempFile("profile","png");
-            mSotrage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            mStorage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());

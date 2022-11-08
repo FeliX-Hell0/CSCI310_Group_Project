@@ -39,7 +39,6 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        private ImageView img;
 
         private TextView dateText;
         private TextView nameText;
@@ -53,8 +52,6 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
 
         public MyViewHolder(final View view) {
             super(view);
-
-//            img = view.findViewById(R.id.custom_event_box_img_view);
 
             dateText = view.findViewById(R.id.custom_event_date);
             nameText = view.findViewById(R.id.custom_event_title);
@@ -84,11 +81,10 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull recyclerAdapter.MyViewHolder holder, int position) {
-        // TODO: deal with images
+
         String name = eventsList.get(position).getEventName();
         String date = eventsList.get(position).getEventDate();
         String location = eventsList.get(position).getEventLocation();
-//        String organizer = eventsList.get(position).getEventOrganizer();
         String type = eventsList.get(position).getEventType();
         int cost = eventsList.get(position).getEventCost();
         boolean registered = eventsList.get(position).getRegistered();
@@ -110,10 +106,10 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         holder.typeText.setText(type);
         holder.costText.setText("$" + String.valueOf(cost));
 
-        StorageReference mSotrage = FirebaseStorage.getInstance().getReference("eventImage").child(imageName+".png");
+        StorageReference mStorage = FirebaseStorage.getInstance().getReference("eventImage").child(imageName+".png");
         try {
             final File local = File.createTempFile("event","png");
-            mSotrage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            mStorage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());

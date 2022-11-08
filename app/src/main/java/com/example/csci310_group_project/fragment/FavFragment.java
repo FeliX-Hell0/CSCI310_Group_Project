@@ -173,7 +173,6 @@ public class FavFragment extends BasicFragment{
         db = FirebaseFirestore.getInstance();
     }
 
-    // TODO: read from DAO
     private void setEventInfo(){
         db.collection("allEvent")
             .get()
@@ -183,8 +182,6 @@ public class FavFragment extends BasicFragment{
                     if (task.isSuccessful()) {
                         eventsList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-    //                            Log.d("Event", document.getId() + " => " + document.getData());
-    //                            Log.d("EventName", String.valueOf(document.getLong("cost")));
                             eventsList.add(new Event(document.getString("name"), document.getString("type"),
                                     document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
                                     document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false,
@@ -202,11 +199,9 @@ public class FavFragment extends BasicFragment{
 
                         // by default sort by cost
                         eventsList.sort(Comparator.comparing(Event::getEventCost));
-                        // Toast.makeText(getActivity(), "Load Events Success", Toast.LENGTH_SHORT).show();
                         filteredEventList = eventsList;
                         setRegisteredEvents();
                         setFavoriteEvents();
-                        //setAdapter();
 
                     } else {
                         Log.d("EventError", "Error getting documents: ", task.getException());
@@ -244,16 +239,11 @@ public class FavFragment extends BasicFragment{
                                 }
                             }
 
-                            //filterUnfav();
-                            //Toast.makeText(getActivity(), "Registered events loading success", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Toast.makeText(getActivity(), "No registered events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(getActivity(), "No user registration info", Toast.LENGTH_SHORT).show();
                     }
                     filteredEventList = eventsList;
-                    //setAdapter();
 
                 } else {
                     Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_SHORT).show();
@@ -295,8 +285,6 @@ public class FavFragment extends BasicFragment{
 
 
                             //Toast.makeText(getActivity(), "Favorite events loading success", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Toast.makeText(getActivity(), "No favorite events", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(getActivity(), "No user favorites info", Toast.LENGTH_SHORT).show();

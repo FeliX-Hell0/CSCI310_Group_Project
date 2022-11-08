@@ -189,7 +189,7 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
                 String date = makeDateString(day, month, year);
                 dateFromButton.setText(date);
 
-                // TODO: call filter
+                // call filter
                 String sorting = sortSpinner.getSelectedItem().toString();
                 String type = typeSpinner.getSelectedItem().toString();
                 String startDate = date;
@@ -222,7 +222,7 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
                 String date = makeDateString(day, month, year);
                 dateToButton.setText(date);
 
-                // TODO: call filter
+                // call filter
                 String sorting = sortSpinner.getSelectedItem().toString();
                 String type = typeSpinner.getSelectedItem().toString();
                 String startDate = dateFromButton.getText().toString();
@@ -273,8 +273,6 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
             filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
 
         } else if (sorting.toLowerCase().contains("distance")){ // sort via distance
-            // TODO: get user address
-            // TODO: longitude & latitude
             filteredEventsList.sort(Comparator.comparing(Event::getDistanceToUser));
 
         } else if (sorting.toLowerCase().contains("time")){ // sort via time

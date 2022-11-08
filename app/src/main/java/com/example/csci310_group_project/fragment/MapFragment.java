@@ -181,29 +181,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     Log.d("MapPermission4", "Here");
                     buildGoogleApiClient();
                     mMap.setMyLocationEnabled(true);
-                } else {
-                    // Explain to the user that the feature is unavailable because the
-                    // features requires a permission that the user has denied. At the
-                    // same time, respect the user's decision. Don't link to system
-                    // settings in an effort to convince the user to change their
-                    // decision.
                 }
             });
- /*
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d("MapPermission3", "Here");
-        if(requestCode == 44){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Log.d("MapPermission4", "Here");
-                buildGoogleApiClient();
-                mMap.setMyLocationEnabled(true);
-            }
-        }
-    }
-
-  */
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -296,7 +275,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     return true;
                 }
             });
-            //mMap.setOnMarkerDragListener(this);
         }
 
         //move map camera

@@ -119,7 +119,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 regButton.setText("Unregister");
             }
 
-            // TODO: call db to get event info event name
+            // call db to get event info event name
             DocumentReference docRef = db.collection("allEvent").document(eventName);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -332,8 +332,6 @@ public class EventDetailActivity extends AppCompatActivity {
                             //Toast.makeText(EventDetailActivity.this, "Time conflict!", Toast.LENGTH_LONG).show();
                         }
 
-                    } else {
-                        //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
@@ -344,7 +342,6 @@ public class EventDetailActivity extends AppCompatActivity {
 
 
     private void conflict(String timeFrame){
-        //Log.d("StartTime6", timeFrame);
 
         String[] timeCollection = timeFrame.split(";");
         Log.d("hour", timeFrame);
@@ -444,10 +441,7 @@ public class EventDetailActivity extends AppCompatActivity {
                             updateEvent(collection1 + collection2, col1+col2);
                         }
 
-                    } else {
-                        //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
-
                 } else {
                     Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
                 }
@@ -485,10 +479,7 @@ public class EventDetailActivity extends AppCompatActivity {
                             }
                             addFavEvent(collection1 + collection2);
                         }
-                    } else {
-                        //Toast.makeText(EventDetailActivity.this, "No user registration info", Toast.LENGTH_LONG).show();
                     }
-
                 } else {
                     Toast.makeText(EventDetailActivity.this, "Connection error", Toast.LENGTH_LONG).show();
                 }
