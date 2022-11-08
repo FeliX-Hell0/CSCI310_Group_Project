@@ -259,7 +259,7 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
             String eventName = event.getEventName().toLowerCase();
             String eventType = event.getEventType().toLowerCase();
 
-            if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase())) {
+            if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase()) || event.getEventLocation().contains(text.toLowerCase()) || event.getEventOrganizor().contains(text.toLowerCase())) {
                 if (selectedType.contains("all") || eventType.contains(selectedType)) {
                     if (isInDateRange(startDate, endDate, event)) {
                         filteredEventsList.add(event);
