@@ -11,3 +11,4 @@ If the user chooses not to log in, they will be able to use the app in geust mod
 Side Notes:
 1. When first starting the emulator, make sure to change the current location to somewhere in LA, so that you won't need to drag all the way from a random spot to LA to view the markers.
 2. If the images cannot be loaded (with extremely low probability, since we have tested it thoroughly), wipe the data of your emulator and try again.
+3. The events "49th Annual Dia de los Muertos Exhibition", "Adaptive Sports Festival 2022", and "An Evening of World Music and Jazz" have time conflicts. In case you want to test this feature :)
