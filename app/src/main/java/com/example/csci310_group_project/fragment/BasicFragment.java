@@ -247,7 +247,7 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
         });
     }
 
-    protected String makeDateString(int day, int month, int year)
+    public String makeDateString(int day, int month, int year)
     {
         return month + "/" + day + "/" + year;
     }
@@ -256,20 +256,8 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
         ArrayList<Event> filteredEventsList = new ArrayList<>();
         String selectedType = type.toLowerCase();
 
-        for (Event event : eventsList) {
-            String eventName = event.getEventName().toLowerCase();
-            String eventType = event.getEventType().toLowerCase();
-            String eventLocation = event.getEventLocation().toLowerCase();
-            String eventOrg = event.getEventOrganizor().toLowerCase();
-
-            if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase()) || eventLocation.contains(text.toLowerCase()) || eventOrg.contains(text.toLowerCase())) {
-                if (selectedType.contains("all") || eventType.contains(selectedType)) {
-                    if (isInDateRange(startDate, endDate, event)) {
-                        filteredEventsList.add(event);
-                    }
-                }
-            }
-        }
+        // TODO: NEW: get searched events
+        filteredEventsList = GetSearchedEvents(eventsList, text, selectedType, startDate, endDate);
 
         // sort via the selected value of the sort spinner
         if (sorting.toLowerCase().contains("cost")) { // sort via cost
@@ -526,5 +514,26 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
         };
 
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    public ArrayList<Event> GetSearchedEvents(ArrayList<Event> eventsList, String text, String selectedType, String startDate, String endDate) {
+        ArrayList<Event> filteredEventsList = new ArrayList<>();
+
+        for (Event event : eventsList) {
+            String eventName = event.getEventName().toLowerCase();
+            String eventType = event.getEventType().toLowerCase();
+            String eventLocation = event.getEventLocation().toLowerCase();
+            String eventOrg = event.getEventOrganizor().toLowerCase();
+
+            if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase()) || eventLocation.contains(text.toLowerCase()) || eventOrg.contains(text.toLowerCase())) {
+                if (selectedType.contains("all") || eventType.contains(selectedType)) {
+                    if (isInDateRange(startDate, endDate, event)) {
+                        filteredEventsList.add(event);
+                    }
+                }
+            }
+        }
+
+        return filteredEventsList;
     }
 }

@@ -18,8 +18,13 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
-    LoginViewModel(LoginRepository loginRepository) {
+    public LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
+    }
+
+    // NEW: added constructor so that it can be tested
+    public LoginViewModel() {
+
     }
 
     LiveData<LoginFormState> getLoginFormState() {
@@ -61,7 +66,7 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
-    private boolean isRepasswordValid(String password, String repassword) {
+    public boolean isRepasswordValid(String password, String repassword) {
         if (password == null){
             return false;
         }
