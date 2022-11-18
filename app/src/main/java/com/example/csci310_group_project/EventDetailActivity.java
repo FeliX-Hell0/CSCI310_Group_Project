@@ -340,9 +340,41 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
+    public static boolean conflictTestHelper(String timeFrame, String startTime, int duration){
+        String[] timeCollection = timeFrame.split(";");
 
-    private void conflict(String timeFrame){
+        String month = startTime.split("/")[0];
+        String day = startTime.split("/")[1];
+        String year = startTime.split("/")[2].split(",")[0];
+        String hrs = startTime.split("/")[2].split(",")[1].split(":")[0].replaceAll("\\s+","");
+        String min = startTime.split("/")[2].split(",")[1].split(":")[1];
 
+        long start = Integer.parseInt(min) + Integer.parseInt(hrs)*60 + Integer.parseInt(day)*3600 + Integer.parseInt(month)*108000 + (Integer.parseInt(year) - 2000)*1296000;
+        long end = start + duration;
+
+
+        if(timeFrame.equals("")){
+            return false;
+        }
+
+        for(String s : timeCollection){
+            if(s.equals("")){
+                continue;
+            }
+            long ss = Long.parseLong(s.split(",")[0]);
+            long ee = Long.parseLong(s.split(",")[1]);
+
+
+            if((start >= ss && start <= ee)||(end >= ss && end <= ee)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public ArrayList<Long> timeframe2Number(String timeFrame, String startTime, int duration){
+        ArrayList<Long> result = new ArrayList<>();
         String[] timeCollection = timeFrame.split(";");
         Log.d("hour", timeFrame);
 
@@ -355,6 +387,18 @@ public class EventDetailActivity extends AppCompatActivity {
         long start = Integer.parseInt(min) + Integer.parseInt(hrs)*60 + Integer.parseInt(day)*3600 + Integer.parseInt(month)*108000 + (Integer.parseInt(year) - 2000)*1296000;
         long end = start + duration;
 
+        result.add(start);
+        result.add(end);
+        return result;
+    }
+
+    private boolean conflict(String timeFrame){
+
+        ArrayList<Long> timeRange = timeframe2Number(timeFrame, this.startTime, this.duration);
+
+        long start = timeRange.get(0);
+        long end = timeRange.get(1);
+
         Log.d("startTime", String.valueOf(start) + " " + String.valueOf(end));
 
         eventStart = start;
@@ -362,9 +406,10 @@ public class EventDetailActivity extends AppCompatActivity {
 
         if(timeFrame.equals("")){
             conflicted = false;
-            return;
+            return conflicted;
         }
 
+        String[] timeCollection = timeFrame.split(";");
         for(String s : timeCollection){
             Log.d("StartTime5", s);
             if(s.equals("")){
@@ -377,11 +422,12 @@ public class EventDetailActivity extends AppCompatActivity {
             if((start >= ss && start <= ee)||(end >= ss && end <= ee)){
                 conflicted = true;
                 Log.d("StartTim4", "Conflict!");
-                return;
+                return conflicted;
             }
         }
 
         conflicted = false;
+        return false;
     }
 
     private void unRegisterEvents(){

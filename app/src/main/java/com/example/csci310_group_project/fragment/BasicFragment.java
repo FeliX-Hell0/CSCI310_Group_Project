@@ -493,14 +493,14 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
         return (dist);
     }
 
-    protected double deg2rad(double deg) {
+    public static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
 
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     /*::  This function converts radians to decimal degrees             :*/
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    protected double rad2deg(double rad) {
+    public static double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
 
