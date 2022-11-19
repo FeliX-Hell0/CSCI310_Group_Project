@@ -30,15 +30,15 @@ public class GetSearchedEventsUnitTest {
         // set 5 hard-coded events
         // String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, Integer eventCost, int img, boolean registered,
         //                 Boolean favorite, double lat, double lng
-        Event e0 = new Event("ThriftCon LA", "Party", "1/1/2023", "ThriftCon", "The #1 Vintage Clothing and Collectible Convention",
+        Event e0 = new Event("ThriftCon LA", "Party", "1/1/2023, 12:00:00", "ThriftCon", "The #1 Vintage Clothing and Collectible Convention",
                 "Los Angeles Convention Center, 1201 S Figueroa St, Los Angeles, CA 90015", 5, 0, false, false, 34.040569, -118.268761);
-        Event e1 = new Event("Sunset Vibes Silent Disco", "Concert", "12/4/2022", "Vista", "A silent disco festival",
+        Event e1 = new Event("Sunset Vibes Silent Disco", "Concert", "12/4/2022, 10:30:00", "Vista", "A silent disco festival",
                 "Vista, 11 Pier Ave, Harmosa Beach, CA 90254", 10, 0, false, false, 33.862350, -118.401650);
-        Event e2 = new Event("Anime Pasadena", "Concert", "1/1/2023", "ThriftCon", "The #1 Vintage Clothing and Collectible Convention",
+        Event e2 = new Event("Anime Pasadena", "Concert", "1/1/2023, 15:30:00", "ThriftCon", "The #1 Vintage Clothing and Collectible Convention",
                 "Los Angeles Convention Center, 1201 S Figueroa St, Los Angeles, CA 90015", 5, 0, false, false, 34.040569, -118.268761);
-        Event e3 = new Event("Beat the Bruins", "Party", "1/1/2023", "USC", "Pre-game Festival",
+        Event e3 = new Event("Beat the Bruins", "Party", "1/1/2023, 11:30:00", "USC", "Pre-game Festival",
                 "University of Southern California, 3620 S Vermont Ave, Los Angeles, CA", 0, 0, false, false, 34.022260, -118.291420);
-        Event e4 = new Event("USC vs UCLA Football Game", "Sport", "1/3/2023", "NCAA", "Must-seen game between famous USC-UCLA rivalry",
+        Event e4 = new Event("USC vs UCLA Football Game", "Sport", "1/3/2023, 10:30:00", "NCAA", "Must-seen game between famous USC-UCLA rivalry",
                 "Los Angeles Convention Center, 1201 S Figueroa St, Los Angeles, CA 90015", 100, 0, false, false, 34.040569, -118.268761);
 
         eventList.add(e0);
