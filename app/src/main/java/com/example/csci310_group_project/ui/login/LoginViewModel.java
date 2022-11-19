@@ -1,5 +1,6 @@
 package com.example.csci310_group_project.ui.login;
 
+import androidx.core.util.PatternsCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -54,12 +55,12 @@ public class LoginViewModel extends ViewModel {
     }
 
     // A placeholder username validation check
-    private boolean isUserNameValid(String username) {
+    public static boolean isUserNameValid(String username) {
         if (username == null) {
             return false;
         }
         if (username.contains("@")) {
-            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+            return PatternsCompat.EMAIL_ADDRESS.matcher(username).matches();
         } else {
             return false;
         }

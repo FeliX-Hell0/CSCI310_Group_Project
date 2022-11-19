@@ -343,15 +343,10 @@ public class EventDetailActivity extends AppCompatActivity {
     public static boolean conflictTestHelper(String timeFrame, String startTime, int duration){
         String[] timeCollection = timeFrame.split(";");
 
-        String month = startTime.split("/")[0];
-        String day = startTime.split("/")[1];
-        String year = startTime.split("/")[2].split(",")[0];
-        String hrs = startTime.split("/")[2].split(",")[1].split(":")[0].replaceAll("\\s+","");
-        String min = startTime.split("/")[2].split(",")[1].split(":")[1];
+        ArrayList<Long> timeRange = timeframe2Number(startTime, duration);
 
-        long start = Integer.parseInt(min) + Integer.parseInt(hrs)*60 + Integer.parseInt(day)*3600 + Integer.parseInt(month)*108000 + (Integer.parseInt(year) - 2000)*1296000;
-        long end = start + duration;
-
+        long start = timeRange.get(0);
+        long end = timeRange.get(1);
 
         if(timeFrame.equals("")){
             return false;
@@ -373,10 +368,8 @@ public class EventDetailActivity extends AppCompatActivity {
         return false;
     }
 
-    public ArrayList<Long> timeframe2Number(String timeFrame, String startTime, int duration){
+    public static ArrayList<Long> timeframe2Number(String startTime, int duration){
         ArrayList<Long> result = new ArrayList<>();
-        String[] timeCollection = timeFrame.split(";");
-        Log.d("hour", timeFrame);
 
         String month = startTime.split("/")[0];
         String day = startTime.split("/")[1];
@@ -394,7 +387,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
     private boolean conflict(String timeFrame){
 
-        ArrayList<Long> timeRange = timeframe2Number(timeFrame, this.startTime, this.duration);
+        ArrayList<Long> timeRange = timeframe2Number(this.startTime, this.duration);
 
         long start = timeRange.get(0);
         long end = timeRange.get(1);
@@ -447,14 +440,10 @@ public class EventDetailActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         String temp = document.getString("registeredEvents");
-                        String month = startTime.split("/")[0];
-                        String day = startTime.split("/")[1];
-                        String year = startTime.split("/")[2].split(",")[0];
-                        String hrs = startTime.split("/")[2].split(",")[1].split(":")[0].replaceAll("\\s+","");
-                        String min = startTime.split("/")[2].split(",")[1].split(":")[1];
+                        ArrayList<Long> timeRange = timeframe2Number(startTime, duration);
 
-                        long start = Integer.parseInt(min) + Integer.parseInt(hrs)*60 + Integer.parseInt(day)*3600 + Integer.parseInt(month)*108000 + (Integer.parseInt(year) - 2000)*1296000;
-                        long end = start + duration;
+                        long start = timeRange.get(0);
+                        long end = timeRange.get(1);
 
                         String temp2 = String.valueOf(start) + "," + String.valueOf(end);
                         String userTime = document.getString("time");
@@ -462,29 +451,11 @@ public class EventDetailActivity extends AppCompatActivity {
                         Log.d("deleteTime1", temp2 + " " + userTime);
 
                         if(temp.contains(eventName) && userTime.contains(temp2)){
-                            int firstIdx = temp.indexOf(eventName) - 1;
-                            int lastIdx = firstIdx+eventName.length();
-                            String collection1 = "";
-                            if (firstIdx > 0){
-                                collection1 = temp.substring(0,firstIdx);
-                            }
-                            String collection2 = "";
-                            if (lastIdx < temp.length() - 1) {
-                                collection2 = temp.substring(lastIdx + 1);
-                            }
+                            String newCollection = generateNewEventString(temp, eventName);
 
-                            int fir = userTime.indexOf(temp2)-1;
-                            int las = fir+temp2.length();
-                            String col1 = "";
-                            if(fir > 0){
-                                col1 = userTime.substring(0, fir);
-                            }
-                            String col2 = "";
-                            if(las < userTime.length()-1){
-                                col2 = userTime.substring(las+1);
-                            }
-                            Log.d("deleteTime", String.valueOf(fir) + " " + String.valueOf(las));
-                            updateEvent(collection1 + collection2, col1+col2);
+                            String newTimeframe = generateNewTimeframe(userTime, temp2);
+
+                            updateEvent(newCollection, newTimeframe);
                         }
 
                     }
@@ -513,17 +484,8 @@ public class EventDetailActivity extends AppCompatActivity {
                     if (document.exists()) {
                         String temp = document.getString("favorites");
                         if(temp.contains(eventName)){
-                            int firstIdx = temp.indexOf(eventName) - 1;
-                            int lastIdx = firstIdx + eventName.length();
-                            String collection1 = "";
-                            if (firstIdx > 0){
-                                collection1 = temp.substring(0,firstIdx);
-                            }
-                            String collection2 = "";
-                            if (lastIdx < temp.length() - 1) {
-                                collection2 = temp.substring(lastIdx + 1);
-                            }
-                            addFavEvent(collection1 + collection2);
+                            String newCollection = generateNewEventString(temp, eventName);
+                            addFavEvent(newCollection);
                         }
                     }
                 } else {
@@ -562,5 +524,33 @@ public class EventDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    public static String generateNewTimeframe(String userTime, String temp2){
+        int fir = userTime.indexOf(temp2)-1;
+        int las = fir+temp2.length();
+        String col1 = "";
+        if(fir > 0){
+            col1 = userTime.substring(0, fir);
+        }
+        String col2 = "";
+        if(las < userTime.length()-1){
+            col2 = userTime.substring(las+1);
+        }
+        return col1+col2;
+    }
+
+    public static String generateNewEventString(String temp, String eventName){
+        int firstIdx = temp.indexOf(eventName) - 1;
+        int lastIdx = firstIdx + eventName.length();
+        String collection1 = "";
+        if (firstIdx > 0){
+            collection1 = temp.substring(0,firstIdx);
+        }
+        String collection2 = "";
+        if (lastIdx < temp.length() - 1) {
+            collection2 = temp.substring(lastIdx + 1);
+        }
+        return collection1+collection2;
     }
 }
