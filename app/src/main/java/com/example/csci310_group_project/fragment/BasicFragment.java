@@ -253,31 +253,14 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
     }
 
     protected void filterList(String text, String type, String sorting, String startDate, String endDate) {
-        ArrayList<Event> filteredEventsList = new ArrayList<>();
+        ArrayList<Event> filteredEventsList = new ArrayList<>(), sortedEventsList;
         String selectedType = type.toLowerCase();
 
         // TODO: NEW: get searched events
         filteredEventsList = GetSearchedEvents(eventsList, text, selectedType, startDate, endDate);
+        sortedEventsList = SortEvents(filteredEventsList, sorting.toLowerCase());
 
-        // sort via the selected value of the sort spinner
-        if (sorting.toLowerCase().contains("cost")) { // sort via cost
-            filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
-
-        } else if (sorting.toLowerCase().contains("distance")){ // sort via distance
-            filteredEventsList.sort(Comparator.comparing(Event::getDistanceToUser));
-
-        } else if (sorting.toLowerCase().contains("time")){ // sort via time
-            filteredEventsList.sort(Comparator.comparing(Event::getEventYear)
-                    .thenComparing((Event::getEventMonth))
-                    .thenComparing((Event::getEventDay))
-                    .thenComparing(Event::getEventHour)
-                    .thenComparing(Event::getEventMinute));
-
-        } else if (sorting.toLowerCase().contains("alphabetic")){
-            filteredEventsList.sort(Comparator.comparing(Event::getEventName));
-        }
-        filteredEventList = filteredEventsList;
-        mAdapter.SetFilteredList(filteredEventsList);
+        mAdapter.SetFilteredList(sortedEventsList);
     }
 
     protected Boolean isInDateRange(String startDate, String endDate, Event event) {
@@ -532,6 +515,29 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
                     }
                 }
             }
+        }
+
+        return filteredEventsList;
+    }
+
+    public ArrayList<Event> SortEvents(ArrayList<Event> filteredEventsList, String sorting){
+
+        // sort via the selected value of the sort spinner
+        if (sorting.toLowerCase().contains("cost")) { // sort via cost
+            filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
+
+        } else if (sorting.toLowerCase().contains("distance")){ // sort via distance
+            filteredEventsList.sort(Comparator.comparing(Event::getDistanceToUser));
+
+        } else if (sorting.toLowerCase().contains("time")){ // sort via time
+            filteredEventsList.sort(Comparator.comparing(Event::getEventYear)
+                    .thenComparing((Event::getEventMonth))
+                    .thenComparing((Event::getEventDay))
+                    .thenComparing(Event::getEventHour)
+                    .thenComparing(Event::getEventMinute));
+
+        } else if (sorting.toLowerCase().contains("alphabetic")){
+            filteredEventsList.sort(Comparator.comparing(Event::getEventName));
         }
 
         return filteredEventsList;
