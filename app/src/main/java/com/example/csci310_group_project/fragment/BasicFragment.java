@@ -478,7 +478,7 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
                 }
             });
 
-    protected double distance(double lat1, double lat2, double lon1, double lon2, char unit) {
+    public static double distance(double lat1, double lat2, double lon1, double lon2, char unit) {
         Log.d("Calculated", String.valueOf(lat1) + " " + String.valueOf(lat2) + " " + String.valueOf(lon1) + " " + String.valueOf(lon2));
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
