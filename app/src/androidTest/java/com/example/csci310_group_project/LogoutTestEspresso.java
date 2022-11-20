@@ -21,12 +21,13 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class LogoutTestEspresso {
-    public static final String loginEmail = "usc@usc.edu";
+    public static final String loginEmail = "final2@usc.edu";
     public static final String loginPassword = "123456";
     @Rule
     public ActivityScenarioRule<MainActivity> rule= new ActivityScenarioRule<>(MainActivity.class);
     @Test
     public void testCorrect() {
+
         onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
                 .perform(click());
         try {
@@ -49,8 +50,20 @@ public class LogoutTestEspresso {
         } catch (Exception e) {}
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.nav_profile)).perform(click());
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {}
+
+        Intents.init();
         onView(withId(R.id.logout_button)).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {}
         // check if successfully redirected to main welcome page
+
         intended(hasComponent(MainActivity.class.getName()));
+
+
+        Intents.release();
     }
 }
