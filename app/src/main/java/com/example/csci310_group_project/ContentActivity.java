@@ -77,4 +77,8 @@ public class ContentActivity extends AppCompatActivity {
         transaction.addToBackStack("");
         transaction.commit();
     }
+
+    public void SetUserForTestingPurpose(String u) {
+        user = u;
+    }
 }

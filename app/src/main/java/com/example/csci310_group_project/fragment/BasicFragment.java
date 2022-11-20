@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -305,6 +307,22 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
                 return true;
             }
         });
+
+        // TODO:
+//        searchView.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+//
+//                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+//                    Log.i("SearchView", "key enter");
+//                    return true;
+//                } else {
+//                    Log.i("SearchView", "failed");
+//                }
+//
+//                return false;
+//            }
+//        });
     }
 
     protected void setSortSpinner(View view) {
@@ -541,5 +559,9 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
         }
 
         return filteredEventsList;
+    }
+
+    public void SetUserForTestingPurpose(String u) {
+        user = u;
     }
 }
