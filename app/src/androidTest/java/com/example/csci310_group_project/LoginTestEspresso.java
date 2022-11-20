@@ -44,33 +44,38 @@ public class LoginTestEspresso {
     public static final String loginEmailWrong = "usc@usc.com";
     public static final String loginPasswordWrong = "111111";
 
+
     private View decorView;
     @Rule
     public ActivityScenarioRule<LoginActivity> rule= new ActivityScenarioRule<>(LoginActivity.class);
-    @Before
-    public void loadDecorView() {
+
+    @Test
+    public void testCorrect() {
         Intents.init();
-        rule.getScenario().onActivity(
-                activity -> decorView = activity.getWindow().getDecorView()
-        );
-    }
-    @After
-    public void release(){
+        onView(withId(R.id.username)).perform(typeText(loginEmail));
+        onView(withId(R.id.password)).perform(typeText(loginPassword));
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.login)).perform(click());
+        intended(hasComponent(MainActivity.class.getName()));
         Intents.release();
     }
 
-    /*@Test
-    public void testCorrect() {
-        onView(withId(R.id.username)).perform(typeText(loginEmail));
-        onView(withId(R.id.password)).perform(typeText(loginPassword));
-        onView(withId(R.id.login)).perform(click());
-        intended(hasComponent(MainActivity.class.getName()));
-    }*/
-
     @Test
     public void testEmailWrong() {
+        rule.getScenario().onActivity(
+                activity -> decorView = activity.getWindow().getDecorView()
+        );
         onView(withId(R.id.username)).perform(typeText(loginEmailWrong));
         onView(withId(R.id.password)).perform(typeText(loginPassword));
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.login)).perform(click());
         onView(withText("No such user")).
                 inRoot(RootMatchers.withDecorView(not(decorView)))
@@ -79,21 +84,20 @@ public class LoginTestEspresso {
 
     @Test
     public void testPasswordWrong() {
+        rule.getScenario().onActivity(
+                activity -> decorView = activity.getWindow().getDecorView()
+        );
         onView(withId(R.id.username)).perform(typeText(loginEmail));
         onView(withId(R.id.password)).perform(typeText(loginPasswordWrong));
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.login)).perform(click());
         onView(withText("Password error")).
                 inRoot(RootMatchers.withDecorView(not(decorView)))
                 .check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testBothWrong() {
-        onView(withId(R.id.username)).perform(typeText(loginEmailWrong));
-        onView(withId(R.id.password)).perform(typeText(loginPasswordWrong));
-        onView(withId(R.id.login)).perform(click());
-        onView(withText("No such user")).
-                inRoot(RootMatchers.withDecorView(not(decorView)))
-                .check(matches(isDisplayed()));
-    }
 }
