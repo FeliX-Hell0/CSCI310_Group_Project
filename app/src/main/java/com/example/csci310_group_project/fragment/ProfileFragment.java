@@ -114,7 +114,9 @@ public class ProfileFragment extends BasicFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Log.d("userName", user);
         if(user == null || user.equals("")){
+            Log.d("userName1", user);
             Toast.makeText(getActivity(), "Please login or register to access profile",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getActivity(), MainActivity.class);
@@ -163,13 +165,13 @@ public class ProfileFragment extends BasicFragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         eventsList = new ArrayList<>();
-        showImage(view);
+
         setEventInfo();
         setAdapter();
 
         initDateFromPicker(view);
         initDateToPicker(view);
-
+        showImage(view);
         initUserInfo(view);
         initLogoutButton(view);
         initScrollButton(view);
@@ -379,6 +381,9 @@ public class ProfileFragment extends BasicFragment {
     }
 
     private void showImage(View view){
+        if(user.equals("")){
+            return;
+        }
         ImageView imageView = (ImageView) view.findViewById(R.id.user_image);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(user);

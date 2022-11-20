@@ -2,6 +2,7 @@ package com.example.csci310_group_project;
 
 import android.content.Context;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
@@ -45,23 +46,12 @@ public class ProfileRedirectUserTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
-
-    @Before
-    public void init() {
-        Intents.init();
-    }
-
-    @After
-    public void release(){
-        Intents.release();
-    }
-
     @Test
     public void testGuestRedirection(){
         onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
                 .perform(click());
         onView(withId(R.id.explore_button)).perform(click());
-
+        Intents.init();
         try {
             Thread.sleep(2000);
         } catch (Exception e) {
@@ -69,17 +59,10 @@ public class ProfileRedirectUserTest {
         }
 
         // go to the profile fragment (page)
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.nav_profile)).perform(click());
-
-        try {
-            // check if successfully redirected to main welcome page
-            intended(hasComponent(MainActivity.class.getName()));
-            Thread.sleep(2000);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        onView(withId(R.id.explore_button)).check(matches(isDisplayed()));
+        intended(hasComponent(MainActivity.class.getName()));
+        Intents.release();
     }
 }

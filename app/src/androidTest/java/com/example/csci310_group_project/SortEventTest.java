@@ -3,6 +3,8 @@ package com.example.csci310_group_project;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -21,11 +23,19 @@ import org.junit.runner.RunWith;
 public class SortEventTest {
 
     @Rule
-    public ActivityScenarioRule<ContentActivity> activityScenarioRule = new ActivityScenarioRule<ContentActivity>(ContentActivity.class);
+    public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
 
     @Before
     public void init() {
+        onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withId(R.id.explore_button)).perform(click());
+
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {}
         onView(withId(R.id.nav_explore)).perform(click());
 
         try {
@@ -35,7 +45,7 @@ public class SortEventTest {
         }
     }
 
-
+    /*
     @Test
     public void testSortByDistance(){
 
@@ -63,7 +73,7 @@ public class SortEventTest {
         onView(new RecyclerViewMatcher(R.id.recyclerView)
                 .atPositionOnView(4, R.id.custom_event_title))
                 .check(matches(withText("Joachim Horsley: Caribbean Nocturnes In Concert")));
-    }
+    }*/
 
     @Test
     public void testSortByCost(){

@@ -33,13 +33,22 @@ import org.junit.runner.RunWith;
 public class FilterEventByTypeTest {
 
     @Rule
-    public ActivityScenarioRule<ContentActivity> activityScenarioRule = new ActivityScenarioRule<ContentActivity>(ContentActivity.class);
+    public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
     @Before
     public void init() {
+        onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withId(R.id.explore_button)).perform(click());
+
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {}
+
         onView(withId(R.id.nav_explore)).perform(click());
         try {
-            Thread.sleep(2500);
+            Thread.sleep(1000);
         } catch (Exception e) {
 
         }
