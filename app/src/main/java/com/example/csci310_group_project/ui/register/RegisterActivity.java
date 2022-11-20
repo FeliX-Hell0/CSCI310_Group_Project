@@ -233,63 +233,9 @@ public class RegisterActivity extends AppCompatActivity {
                 String birthday = birthdayPicker.getText().toString();
                 String nickname = nicknameEditText.getText().toString();
                 Log.i("bday", birthday);
-                //String repassword = repasswordEditText.getText().toString();
-                if (selected != null){
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    DocumentReference docRef = db.collection("users").document(username);
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Toast.makeText(getApplicationContext(), "Username already used!", Toast.LENGTH_LONG).show();
-                                }else {
-                                    Map<String, Object> user = new HashMap<>();
-                                    user.put("username", username);
-                                    user.put("password", password);
-                                    user.put("birthday", birthday);
-                                    user.put("nickname", nickname);
-                                    user.put("registeredEvents", "");
-                                    user.put("favorites", "");
-                                    user.put("time", "");
-                                    //Log.d("Register", "Hi");
-                                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                    //Log.d("Register1", "Here");
-                                    //Toast.makeText(getApplicationContext(), "Please wait", Toast.LENGTH_LONG).show();
-                                    db2.collection("users").document(username)
-                                            .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Toast.makeText(getApplicationContext(), "Registration Success! Please login", Toast.LENGTH_LONG).show();
-                                                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                    startActivity(i);
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getApplicationContext(), "Oops something is off...", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
 
-                                }
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(), "Oops something is off...", Toast.LENGTH_LONG).show();
-                            }
 
-                        }
-                    });
-                    mSotrage = FirebaseStorage.getInstance().getReference("userImage").child(username+".png");
-                    mSotrage.putFile(selected);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Please upload an profile image", Toast.LENGTH_LONG).show();
-                }
-
-                /*FirebaseFirestore db = FirebaseFirestore.getInstance();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
                 DocumentReference docRef = db.collection("users").document(username);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -298,13 +244,21 @@ public class RegisterActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Toast.makeText(getApplicationContext(), "Username already used!", Toast.LENGTH_LONG).show();
-                            }else {
+                            } else {
                                 Map<String, Object> user = new HashMap<>();
                                 user.put("username", username);
                                 user.put("password", password);
+                                user.put("birthday", birthday);
+                                user.put("nickname", nickname);
                                 user.put("registeredEvents", "");
                                 user.put("favorites", "");
                                 user.put("time", "");
+                                if (selected != null){
+                                    user.put("image", "yes");
+                                }
+                                else{
+                                    user.put("image", "no");
+                                }
                                 //Log.d("Register", "Hi");
                                 FirebaseFirestore db2 = FirebaseFirestore.getInstance();
                                 //Log.d("Register1", "Here");
@@ -315,7 +269,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(getApplicationContext(), "Registration Success! Please login", Toast.LENGTH_LONG).show();
                                                 Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(i);
                                             }
                                         })
@@ -327,19 +281,16 @@ public class RegisterActivity extends AppCompatActivity {
                                         });
 
                             }
-                        }
-                        else{
+                        } else {
                             Toast.makeText(getApplicationContext(), "Oops something is off...", Toast.LENGTH_LONG).show();
                         }
 
                     }
-                });*/
-                /*mSotrage = FirebaseStorage.getInstance().getReference("userImage").child(username+".png");
-                if (selected == null){
-                    Toast.makeText(getApplicationContext(), "Please upload an profile image", Toast.LENGTH_LONG).show();
-                }else {
+                });
+                if (selected != null){
+                    mSotrage = FirebaseStorage.getInstance().getReference("userImage").child(username + ".png");
                     mSotrage.putFile(selected);
-                }*/
+                }
             }
         });
 

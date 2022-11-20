@@ -378,21 +378,46 @@ public class ProfileFragment extends BasicFragment {
         });
     }
 
-    //assume user is the email
     private void showImage(View view){
         ImageView imageView = (ImageView) view.findViewById(R.id.user_image);
-        StorageReference mStorage = FirebaseStorage.getInstance().getReference("userImage").child(user+".png");
-        try {
-            final File local = File.createTempFile("profile","png");
-            mStorage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());
-                    imageView.setImageBitmap(bitmap);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(user);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.getString("image").equals("yes")) {
+                        StorageReference mStorage = FirebaseStorage.getInstance().getReference("userImage").child(user+".png");
+                        try {
+                            final File local = File.createTempFile("profile","png");
+                            mStorage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());
+                                    imageView.setImageBitmap(bitmap);
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        StorageReference mStorage = FirebaseStorage.getInstance().getReference("dummyImage").child("dummyProfile.png");
+                        try {
+                            final File local = File.createTempFile("profile","png");
+                            mStorage.getFile(local).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(local.getAbsolutePath());
+                                    imageView.setImageBitmap(bitmap);
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 }
