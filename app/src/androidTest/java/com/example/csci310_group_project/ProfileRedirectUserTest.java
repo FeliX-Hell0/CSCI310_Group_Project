@@ -76,9 +76,9 @@ public class ProfileRedirectUserTest {
             intended(hasComponent(MainActivity.class.getName()));
             Thread.sleep(2000);
         } catch (NullPointerException e) {
-
-        } catch (Exception e) {
-
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }
