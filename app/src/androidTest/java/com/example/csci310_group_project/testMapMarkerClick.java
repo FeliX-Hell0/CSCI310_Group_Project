@@ -29,6 +29,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -42,10 +43,18 @@ import static org.junit.Assert.*;
 @LargeTest
 public class testMapMarkerClick {
     @Rule
-    public ActivityScenarioRule<ContentActivity> activityScenarioRule = new ActivityScenarioRule<ContentActivity>(ContentActivity.class);
+    public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
     @Test
     public void test1() throws UiObjectNotFoundException {
+        onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
+                .perform(click());
+        onView(withId(R.id.explore_button)).perform(click());
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.nav_map)).perform(click());
         //onView(withContentDescription("Google Map")).check(matches(isClickable()));
         UiDevice device = UiDevice.getInstance(getInstrumentation());
@@ -57,6 +66,6 @@ public class testMapMarkerClick {
             e.printStackTrace();
         }
         onView(withId(R.id.eventTitle)).check(matches(withText("Fright Night 2K22")));
-
     }
+
 }
