@@ -41,11 +41,14 @@ public class testMapMarkerClick {
     @Test
     public void test1(){
         onView(withId(R.id.nav_map)).perform(click());
-        onView(withContentDescription("Google Map")).perform(click()).check(matches(isDisplayed()));
+        //onView(withContentDescription("Google Map")).check(matches(isClickable()));
+        onView(withContentDescription("Google Map")).perform(click());
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        onView(withId(R.id.eventTitle)).check(matches(withText("Fright Night 2K22")));
+
     }
 }
