@@ -8,7 +8,7 @@ import com.example.csci310_group_project.ui.register.LoginViewModel;
 import org.junit.Before;
 import org.junit.Test;
 
-public class IsPasswordValidTest {
+public class IsPasswordValidUnitTest {
     private LoginViewModel tester;
     @Before
     public void setup() {

@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class GetEventDatePartsTest {
+public class GetEventDatePartsUnitTest {
     private Event event;
     @Before
     public void setup(){

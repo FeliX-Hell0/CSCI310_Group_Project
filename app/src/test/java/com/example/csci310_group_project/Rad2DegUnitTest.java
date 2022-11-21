@@ -12,7 +12,7 @@ import com.example.csci310_group_project.fragment.BasicFragment;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class Rad2DegTest {
+public class Rad2DegUnitTest {
     @Test
     public void result1() {
         assertEquals( 57295, (int)(BasicFragment.rad2deg(1) * 1000));

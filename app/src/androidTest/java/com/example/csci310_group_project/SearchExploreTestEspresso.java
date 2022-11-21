@@ -54,7 +54,7 @@ import com.example.csci310_group_project.ui.login.LoginActivity;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class SearchExploreEspresso {
+public class SearchExploreTestEspresso {
     public static final String loginEmail = "final2@usc.edu";
     public static final String loginPassword = "123456";
 

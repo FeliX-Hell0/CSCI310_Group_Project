@@ -35,7 +35,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class AddFavEventEspresso {
+public class AddFavEventTestEspresso {
     public static final String loginEmail = "fighton@usc.edu";
     public static final String loginPassword = "123456";
 

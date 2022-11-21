@@ -2,6 +2,8 @@ package com.example.csci310_group_project;
 
 import android.content.Context;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -27,8 +29,14 @@ import androidx.test.uiautomator.UiSelector;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.swipeDown;
+import static androidx.test.espresso.action.ViewActions.swipeLeft;
+import static androidx.test.espresso.action.ViewActions.swipeRight;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -39,33 +47,48 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 
 import static org.junit.Assert.*;
 
+import com.example.csci310_group_project.fragment.MapFragment;
+import com.example.csci310_group_project.ui.login.LoginActivity;
+
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class MapMarkerClickEspresso {
+public class ScrollButtonTestEspresso {
+    public static final String loginEmail = "final2@usc.edu";
+    public static final String loginPassword = "123456";
+
     @Rule
-    public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> rule= new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void test1() throws UiObjectNotFoundException {
+    public void test() {
         onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
                 .perform(click());
+        onView(withId(R.id.login_button)).perform(click());
+        onView(withId(R.id.username)).perform(typeText(loginEmail));
+        onView(withId(R.id.password)).perform(typeText(loginPassword));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.login)).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.explore_button)).perform(click());
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.nav_map)).perform(click());
-        //onView(withContentDescription("Google Map")).check(matches(isClickable()));
-        UiDevice device = UiDevice.getInstance(getInstrumentation());
-        UiObject marker = device.findObject(new UiSelector().descriptionContains("Fright Night 2K22"));
-        marker.click();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.eventTitle)).check(matches(withText("Fright Night 2K22")));
-    }
 
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {}
+
+        onView(withId(R.id.nav_profile)).perform(click());
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {}
+
+        onView(withId(R.id.scroll_button)).perform(click());
+        onView(withId(R.id.searchView)).check(matches(isDisplayed()));
+    }
 }

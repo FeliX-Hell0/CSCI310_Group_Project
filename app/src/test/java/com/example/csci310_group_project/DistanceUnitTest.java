@@ -12,7 +12,7 @@ import com.example.csci310_group_project.fragment.BasicFragment;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class DistanceTest {
+public class DistanceUnitTest {
     private static final double DELTA = 1e-15;
     @Test
     public void result1() {

@@ -46,7 +46,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class InitialLaunchPromptEspresso {
+public class InitialLaunchPromptTestEspresso {
 
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
