@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ProfileRedirectUserTest {
+public class ProfileRedirectTestEspresso {
 //    @Rule
 //    public ActivityScenarioRule<ContentActivity> activityScenarioRule = new ActivityScenarioRule<ContentActivity>(ContentActivity.class);
 
