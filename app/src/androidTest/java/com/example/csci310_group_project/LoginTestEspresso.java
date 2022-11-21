@@ -69,6 +69,11 @@ public class LoginTestEspresso {
             e.printStackTrace();
         }
         onView(withId(R.id.login)).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         intended(hasComponent(MainActivity.class.getName()));
         Intents.release();
     }
