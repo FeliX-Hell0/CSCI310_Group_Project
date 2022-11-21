@@ -40,10 +40,6 @@
             android:value="AIzaSyDluvpWYT588d_u-Hzfy-r082cEah-4XBo" />
 
         <activity
-            android:name=".MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
-        <activity
             android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />

@@ -11,12 +11,10 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.MediaStore;
@@ -34,32 +32,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.csci310_group_project.ContentActivity;
-import com.example.csci310_group_project.Event;
 import com.example.csci310_group_project.MainActivity;
 import com.example.csci310_group_project.R;
-import com.example.csci310_group_project.data.model.ImageProcessor;
 import com.example.csci310_group_project.databinding.ActivityRegisterBinding;
-import com.example.csci310_group_project.ui.login.LoginActivity;
-import com.example.csci310_group_project.ui.register.LoggedInUserView;
-import com.example.csci310_group_project.ui.register.RegisterActivity;
-import com.example.csci310_group_project.ui.register.LoginFormState;
-import com.example.csci310_group_project.ui.register.LoginResult;
-import com.example.csci310_group_project.ui.register.LoginViewModel;
-import com.example.csci310_group_project.ui.register.LoginViewModelFactory;
-import com.example.csci310_group_project.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +61,6 @@ public class RegisterActivity extends AppCompatActivity {
     private StorageReference mSotrage;
     private static final int IMAGEID = 1;
     private Uri selected = null;
-    private ImageProcessor imageProcessor;
 
 
     private Button birthdayPicker;
