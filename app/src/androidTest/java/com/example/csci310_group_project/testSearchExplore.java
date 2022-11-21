@@ -34,10 +34,12 @@ import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -91,6 +93,7 @@ public class testSearchExplore {
         }
 
         onView(withText("49th Annual Dia de los Muertos Exhibition")).check(matches(isDisplayed()));
+        onView(withId(R.id.recyclerView)).check(matches(hasChildCount(1)));
     }
 
     @Test
@@ -125,5 +128,6 @@ public class testSearchExplore {
         }
 
         onView(withText("49th Annual Dia de los Muertos Exhibition")).check(matches(isDisplayed()));
+        onView(withId(R.id.recyclerView)).check(matches(hasChildCount(1)));
     }
 }
