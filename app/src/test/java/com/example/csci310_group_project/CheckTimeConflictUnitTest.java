@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class CheckTimeConflictTest {
+public class CheckTimeConflictUnitTest {
     @Test
     public void testCheckTimeConflict1(){
         assertEquals(false, EventDetailActivity.conflictTestHelper("", "1/1/2021, 15:00",120));

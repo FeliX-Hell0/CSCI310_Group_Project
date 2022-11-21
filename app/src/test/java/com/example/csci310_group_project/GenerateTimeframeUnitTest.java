@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class testGenerateTimeframe {
+public class GenerateTimeframeUnitTest {
     @Test
     public void test1(){
         assertEquals(";30006600,30006780", EventDetailActivity.generateNewTimeframe(";30006600,30006780;29905710,29905890", "29905710,29905890"));

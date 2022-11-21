@@ -34,12 +34,10 @@ import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
-import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -54,7 +52,7 @@ import com.example.csci310_group_project.ui.login.LoginActivity;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class testSearchExplore {
+public class ScrollButtonEspresso {
     public static final String loginEmail = "final2@usc.edu";
     public static final String loginPassword = "123456";
 
@@ -62,7 +60,7 @@ public class testSearchExplore {
     public ActivityScenarioRule<MainActivity> rule= new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void test1() {
+    public void test() {
         onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
                 .perform(click());
         onView(withId(R.id.login_button)).perform(click());
@@ -80,54 +78,17 @@ public class testSearchExplore {
             e.printStackTrace();
         }
         onView(withId(R.id.explore_button)).perform(click());
+
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (Exception e) {}
 
-        Espresso.closeSoftKeyboard();
-        onView(withId(androidx.appcompat.R.id.search_src_text)).perform(typeText("49th"));
+        onView(withId(R.id.nav_profile)).perform(click());
         try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        onView(withText("49th Annual Dia de los Muertos Exhibition")).check(matches(isDisplayed()));
-        onView(withId(R.id.recyclerView)).check(matches(hasChildCount(1)));
-    }
-
-    @Test
-    public void test2() {
-        onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
-                .perform(click());
-        onView(withId(R.id.login_button)).perform(click());
-        onView(withId(R.id.username)).perform(typeText(loginEmail));
-        onView(withId(R.id.password)).perform(typeText(loginPassword));
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.login)).perform(click());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.explore_button)).perform(click());
-        try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (Exception e) {}
 
-        Espresso.closeSoftKeyboard();
-        onView(withId(androidx.appcompat.R.id.search_src_text)).perform(typeText("1300"));
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        onView(withText("49th Annual Dia de los Muertos Exhibition")).check(matches(isDisplayed()));
-        onView(withId(R.id.recyclerView)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.scroll_button)).perform(click());
+        onView(withId(R.id.searchView)).check(matches(isDisplayed()));
     }
 }

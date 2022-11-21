@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class testGenerateEventCollection {
+public class GenerateEventCollectionUnitTest {
     @Test
     public void test1(){
         assertEquals(";Event A", EventDetailActivity.generateNewEventString(";Event A;Event B", "Event B"));

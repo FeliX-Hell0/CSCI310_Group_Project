@@ -51,7 +51,7 @@ import com.example.csci310_group_project.fragment.MapFragment;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class testMapGesture {
+public class MapGestureEspresso {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 

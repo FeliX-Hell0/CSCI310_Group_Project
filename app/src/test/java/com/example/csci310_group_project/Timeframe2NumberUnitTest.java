@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class Timeframe2NumberTest {
+public class Timeframe2NumberUnitTest {
     Long testnum = Long.valueOf(30006600);
     Long testnum1 = Long.valueOf(30006720);
     @Test

@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import android.util.Patterns;
 
-public class testIsUsernameValid {
+public class IsUsernameValidUnitTest {
     @Test
     public void test1(){
         assertEquals(true, LoginViewModel.isUserNameValid("usc@usc.edu"));
