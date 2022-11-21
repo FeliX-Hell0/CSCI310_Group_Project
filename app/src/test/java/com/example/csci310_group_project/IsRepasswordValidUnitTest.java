@@ -50,4 +50,14 @@ public class IsRepasswordValidUnitTest {
     public void testIsPepasswordValid5() {
         assertFalse(tester.isRepasswordValid("98765231", "98665231"));
     }
+
+    @Test
+    public void testIsPepasswordValid6() {
+        assertFalse(tester.isRepasswordValid("", "98665231"));
+    }
+
+    @Test
+    public void testIsPepasswordValid7() {
+        assertFalse(tester.isRepasswordValid("98765231", ""));
+    }
 }
