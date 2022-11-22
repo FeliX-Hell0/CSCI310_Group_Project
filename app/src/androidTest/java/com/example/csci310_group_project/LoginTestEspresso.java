@@ -60,7 +60,9 @@ public class LoginTestEspresso {
 
     @Test
     public void testCorrect() {
-        Intents.init();
+        rule.getScenario().onActivity(
+                activity -> decorView = activity.getWindow().getDecorView()
+        );
         onView(withId(R.id.username)).perform(typeText(loginEmail));
         onView(withId(R.id.password)).perform(typeText(loginPassword));
         try {
@@ -74,8 +76,9 @@ public class LoginTestEspresso {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        intended(hasComponent(MainActivity.class.getName()));
-        Intents.release();
+        onView(withText("Login Success!")).
+                inRoot(RootMatchers.withDecorView(not(decorView)))
+                .check(matches(isDisplayed()));
     }
 
     @Test

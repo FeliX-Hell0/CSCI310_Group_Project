@@ -11,8 +11,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.hamcrest.Matchers.not;
+
+import android.view.View;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.csci310_group_project.ui.login.LoginActivity;
@@ -23,11 +28,14 @@ import org.junit.Test;
 public class LogoutTestEspresso {
     public static final String loginEmail = "final2@usc.edu";
     public static final String loginPassword = "123456";
+    private View decorView;
     @Rule
     public ActivityScenarioRule<MainActivity> rule= new ActivityScenarioRule<>(MainActivity.class);
     @Test
     public void testCorrect() {
-
+        rule.getScenario().onActivity(
+                activity -> decorView = activity.getWindow().getDecorView()
+        );
         onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed()))
                 .perform(click());
         try {
@@ -63,6 +71,9 @@ public class LogoutTestEspresso {
 
         intended(hasComponent(MainActivity.class.getName()));
 
+        onView(withText("CONTINUE AS GUEST")).
+                inRoot(RootMatchers.withDecorView(not(decorView)))
+                .check(matches(isDisplayed()));
 
         Intents.release();
     }
