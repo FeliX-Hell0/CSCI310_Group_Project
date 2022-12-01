@@ -108,9 +108,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 }
                 else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffY > 0) {
-                        onSwipeVertical();
+                        onSwipeDown();
                     } else {
-                        onSwipeVertical();
+                        onSwipeUp();
                     }
                     result = true;
                 }
@@ -126,11 +126,15 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             startActivity(intent);
         }
 
-        public void onSwipeVertical(){
+        public void onSwipeUp(){
             Intent intent = new Intent(getActivity(), EventDetailActivity.class);
             intent.putExtra("user", user);
             intent.putExtra("event_name", title);
             startActivity(intent);
+        }
+
+        public void onSwipeDown(){
+            dismiss();
         }
 
     }

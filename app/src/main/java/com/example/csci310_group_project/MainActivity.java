@@ -109,8 +109,7 @@ public class MainActivity extends AppCompatActivity {
             };
 
             androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Welcome! Please login/register to access full functionalities!").setPositiveButton("Yes", dialogClickListener)
-                    .setNegativeButton("No", dialogClickListener).show();
+            builder.setMessage("Welcome! Please login/register to access full functionalities!").setPositiveButton("Yes", dialogClickListener).show();
         }
     }
 

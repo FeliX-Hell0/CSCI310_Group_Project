@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -247,52 +249,20 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
         });
     }
 
-    protected String makeDateString(int day, int month, int year)
+    public String makeDateString(int day, int month, int year)
     {
         return month + "/" + day + "/" + year;
     }
 
     protected void filterList(String text, String type, String sorting, String startDate, String endDate) {
-        ArrayList<Event> filteredEventsList = new ArrayList<>();
+        ArrayList<Event> filteredEventsList = new ArrayList<>(), sortedEventsList;
         String selectedType = type.toLowerCase();
 
-        for (Event event : eventsList) {
-            String eventName = event.getEventName().toLowerCase();
-            String eventType = event.getEventType().toLowerCase();
-            String eventLocation = event.getEventLocation().toLowerCase();
-            String eventOrg = event.getEventOrganizor().toLowerCase();
+        // TODO: NEW: get searched events
+        filteredEventsList = GetSearchedEvents(eventsList, text, selectedType, startDate, endDate);
+        sortedEventsList = SortEvents(filteredEventsList, sorting.toLowerCase());
 
-            if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase()) || eventLocation.contains(text.toLowerCase()) || eventOrg.contains(text.toLowerCase())) {
-                if (selectedType.contains("all") || eventType.contains(selectedType)) {
-                    if (isInDateRange(startDate, endDate, event)) {
-                        filteredEventsList.add(event);
-                    }
-                }
-            }
-        }
-
-        // sort via the selected value of the sort spinner
-        if (sorting.toLowerCase().contains("cost")) { // sort via cost
-            filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
-
-        } else if (sorting.toLowerCase().contains("distance")){ // sort via distance
-            filteredEventsList.sort(Comparator.comparing(Event::getDistanceToUser));
-
-        } else if (sorting.toLowerCase().contains("time")){ // sort via time
-            filteredEventsList.sort(Comparator.comparing(Event::getEventYear)
-                    .thenComparing((Event::getEventMonth))
-                    .thenComparing((Event::getEventDay))
-                    .thenComparing(Event::getEventHour)
-                    .thenComparing(Event::getEventMinute));
-
-        } else if (sorting.toLowerCase().contains("alphabetic")){
-            filteredEventsList.sort(Comparator.comparing(Event::getEventName));
-
-        } else if (sorting.toLowerCase().contains("popularity")) {
-            filteredEventsList.sort(Comparator.comparing(Event::getEventPopularity).reversed());
-        }
-
-        mAdapter.SetFilteredList(filteredEventsList);
+        mAdapter.SetFilteredList(sortedEventsList);
     }
 
     protected Boolean isInDateRange(String startDate, String endDate, Event event) {
@@ -508,14 +478,14 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
         return (dist);
     }
 
-    protected double deg2rad(double deg) {
+    public static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
 
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     /*::  This function converts radians to decimal degrees             :*/
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    protected double rad2deg(double rad) {
+    public static double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
 
@@ -529,5 +499,55 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
         };
 
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    public ArrayList<Event> GetSearchedEvents(ArrayList<Event> eventsList, String text, String selectedType, String startDate, String endDate) {
+        ArrayList<Event> filteredEventsList = new ArrayList<>();
+
+        for (Event event : eventsList) {
+            String eventName = event.getEventName().toLowerCase();
+            String eventType = event.getEventType().toLowerCase();
+            String eventLocation = event.getEventLocation().toLowerCase();
+            String eventOrg = event.getEventOrganizor().toLowerCase();
+
+            if (text == null || text.isEmpty() || eventName.contains(text.toLowerCase()) || eventLocation.contains(text.toLowerCase()) || eventOrg.contains(text.toLowerCase())) {
+                if (selectedType.contains("all") || eventType.contains(selectedType)) {
+                    if (isInDateRange(startDate, endDate, event)) {
+                        filteredEventsList.add(event);
+                    }
+                }
+            }
+        }
+
+        return filteredEventsList;
+    }
+
+    public ArrayList<Event> SortEvents(ArrayList<Event> filteredEventsList, String sorting){
+
+        // sort via the selected value of the sort spinner
+        if (sorting.toLowerCase().contains("cost")) { // sort via cost
+            filteredEventsList.sort(Comparator.comparing(Event::getEventCost));
+
+        } else if (sorting.toLowerCase().contains("distance")){ // sort via distance
+            filteredEventsList.sort(Comparator.comparing(Event::getDistanceToUser));
+
+        } else if (sorting.toLowerCase().contains("time")){ // sort via time
+            filteredEventsList.sort(Comparator.comparing(Event::getEventYear)
+                    .thenComparing((Event::getEventMonth))
+                    .thenComparing((Event::getEventDay))
+                    .thenComparing(Event::getEventHour)
+                    .thenComparing(Event::getEventMinute));
+
+        } else if (sorting.toLowerCase().contains("alphabetic")){
+            filteredEventsList.sort(Comparator.comparing(Event::getEventName));
+        } else if (sorting.toLowerCase().contains("popularity")) {
+            filteredEventsList.sort(Comparator.comparing(Event::getEventPopularity).reversed());
+        }
+
+        return filteredEventsList;
+    }
+
+    public void SetUserForTestingPurpose(String u) {
+        user = u;
     }
 }
