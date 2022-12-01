@@ -8,6 +8,7 @@ public class Event {
     private String eventLocation;
     private String eventType;
     private Integer eventCost;
+    private Integer eventPopularity;
     private int img;
     private boolean registered;
     private boolean favorite;
@@ -157,8 +158,15 @@ public class Event {
         this.img = img;
     }
 
+    public void setEventPopularity(Integer popularity) {
+        eventPopularity = popularity;
+    }
+    public Integer getEventPopularity() {
+        return eventPopularity;
+    }
+
     public Event(String eventName, String eventType, String eventDate, String eventOrganizor, String eventDescription, String eventLocation, Integer eventCost, int img, boolean registered,
-                 Boolean favorite, double lat, double lng) {
+                 Boolean favorite, double lat, double lng, Integer popularity) {
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDate = eventDate;
@@ -171,6 +179,7 @@ public class Event {
         this.favorite = favorite;
         this.lat = lat;
         this.lng = lng;
+        this.eventPopularity = popularity;
     }
 
     public Event() {}

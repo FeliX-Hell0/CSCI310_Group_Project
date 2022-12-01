@@ -34,6 +34,7 @@
         <item>Distance</item>
         <item>Time</item>
         <item>Alphabetic</item>
+        <item>Popularity</item>
     </string-array>
 
     <!-- type spinner values  -->

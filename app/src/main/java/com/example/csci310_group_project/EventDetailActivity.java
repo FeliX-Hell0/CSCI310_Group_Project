@@ -79,6 +79,7 @@ public class EventDetailActivity extends AppCompatActivity {
         TextView descriptionText = findViewById(R.id.custom_event_description);
         TextView typeText = findViewById(R.id.custom_event_type);
         TextView costText = findViewById(R.id.custom_event_cost);
+        TextView popularityText = findViewById(R.id.custom_event_popularity);
         Button favButton = findViewById(R.id.custom_event_favorite_button);
         Button regButton = findViewById(R.id.custom_event_register_button);
 
@@ -131,11 +132,11 @@ public class EventDetailActivity extends AppCompatActivity {
                             Log.d("MapIntent", documentSnapshot.getString("name"));
                             Event event = new Event(documentSnapshot.getString("name"), documentSnapshot.getString("type"),
                                     documentSnapshot.getString("date"), documentSnapshot.getString("sponsoring_org"), documentSnapshot.getString("description"),
-                                    documentSnapshot.getString("location"), Math.toIntExact(documentSnapshot.getLong("cost")),0, false, false, 0.0, 0.0);
+                                    documentSnapshot.getString("location"), Math.toIntExact(documentSnapshot.getLong("cost")),0, false, false, 0.0, 0.0, (int) (long) (documentSnapshot.getLong("registered")));
 
                             startTime = documentSnapshot.getString("date");
                             duration = Math.toIntExact(documentSnapshot.getLong("duration"));
-                            // TODO: update display accordingly
+
                             dateText.setText(event.getEventDate());
                             typeText.setText(event.getEventType());
                             locationText.setText(event.getEventLocation());
@@ -149,6 +150,7 @@ public class EventDetailActivity extends AppCompatActivity {
                             durationText.setText("Duration: " + String.valueOf(numHours) + " hr " + String.valueOf(numMins) + " min");
 
                             costText.setText("Cost: $" + String.valueOf(event.getEventCost()));
+                            popularityText.setText(String.valueOf(event.getEventPopularity()) + " registered");
                         }
                     }
                 }

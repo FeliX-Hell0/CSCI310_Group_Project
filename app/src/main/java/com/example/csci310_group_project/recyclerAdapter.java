@@ -49,6 +49,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         private TextView registerText;
         private TextView favoriteText;
         private ImageView imageView;
+        private TextView popularityText;
 
         public MyViewHolder(final View view) {
             super(view);
@@ -62,6 +63,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             registerText = view.findViewById(R.id.custom_event_register_status);
             favoriteText = view.findViewById(R.id.custom_event_favorite_status);
             imageView = view.findViewById(R.id.custom_event_box_img_view);
+            popularityText = view.findViewById(R.id.custom_event_popularity);
 
             view.setOnClickListener(this);
         }
@@ -88,6 +90,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         String type = eventsList.get(position).getEventType();
         String org = eventsList.get(position).getEventOrganizor();
         int cost = eventsList.get(position).getEventCost();
+        int popularity = eventsList.get(position).getEventPopularity();
         boolean registered = eventsList.get(position).getRegistered();
         boolean favorite = eventsList.get(position).getFavorite();
         String imageName = name;
@@ -112,6 +115,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         holder.typeText.setText(type);
         holder.costText.setText("$" + String.valueOf(cost));
         holder.organizorText.setText(org);
+        holder.popularityText.setText(String.valueOf(popularity) + " registered");
 
         StorageReference mStorage = FirebaseStorage.getInstance().getReference("eventImage").child(imageName+".png");
         try {

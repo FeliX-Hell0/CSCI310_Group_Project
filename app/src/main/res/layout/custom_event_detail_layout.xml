@@ -137,6 +137,18 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/custom_event_popularity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/custom_event_cost"
+            android:layout_gravity="center"
+            android:fontFamily="serif"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/custom_event_favorite_button"
             android:layout_width="135dp"

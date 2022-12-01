@@ -185,7 +185,7 @@ public class FavFragment extends BasicFragment{
                             eventsList.add(new Event(document.getString("name"), document.getString("type"),
                                     document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
                                     document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false,
-                                    document.getDouble("lat"), document.getDouble("lng")));
+                                    document.getDouble("lat"), document.getDouble("lng"), (int) (long) (document.getLong("registered"))));
                         }
 
                         for(Event e : eventsList){
