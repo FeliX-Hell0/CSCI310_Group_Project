@@ -8,28 +8,39 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.csci310_group_project.ui.login.LoginActivity;
 import com.example.csci310_group_project.ui.register.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "DocSnippets";
     public String user = "";
     private static boolean initial = true;
+    
+    private String popularEvents = "Loading popular events...";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +122,51 @@ public class MainActivity extends AppCompatActivity {
             androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Welcome! Please login/register to access full functionalities!").setPositiveButton("Yes", dialogClickListener).show();
         }
+
+        setPopularEvents();
+
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, popularEvents, Snackbar.LENGTH_LONG).setTextMaxLines(10)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
+    public void setPopularEvents(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("allEvent")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            ArrayList<Event> eventsList = new ArrayList<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("EventName", document.getString("name"));
+                                Log.d("EventLng", String.valueOf(document.getDouble("lng")));
+                                eventsList.add(new Event(document.getString("name"), document.getString("type"),
+                                        document.getString("date"), document.getString("sponsoring_org"), document.getString("description"),
+                                        document.getString("location"), (int) (long) (document.getLong("cost")),0, false, false,
+                                        document.getDouble("lat"), document.getDouble("lng"), (int)(long)(document.getLong("registered"))));
+                            }
+
+                            eventsList.sort(Comparator.comparing(Event::getEventPopularity).reversed());
+                            popularEvents = "Top Three Most Popular Events: \n\n1. " + eventsList.get(0).getEventName() + ";\n2. " +
+                                    eventsList.get(1).getEventName() + ";\n3. " + eventsList.get(2).getEventName() + ";";
+
+                        } else {
+                            Log.d("EventError", "Error getting documents: ", task.getException());
+                            Toast.makeText(MainActivity.this, "Something is wrong...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     public void onRedirectToExplore(){
