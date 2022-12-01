@@ -540,6 +540,7 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
 
         } else if (sorting.toLowerCase().contains("alphabetic")){
             filteredEventsList.sort(Comparator.comparing(Event::getEventName));
+
         } else if (sorting.toLowerCase().contains("popularity")) {
             filteredEventsList.sort(Comparator.comparing(Event::getEventPopularity).reversed());
         }
