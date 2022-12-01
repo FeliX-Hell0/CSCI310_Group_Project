@@ -260,9 +260,8 @@ public class BasicFragment extends Fragment  implements OnMapReadyCallback,
 
         // TODO: NEW: get searched events
         filteredEventsList = GetSearchedEvents(eventsList, text, selectedType, startDate, endDate);
-        sortedEventsList = SortEvents(filteredEventsList, sorting.toLowerCase());
-
-        mAdapter.SetFilteredList(sortedEventsList);
+        filteredEventList = SortEvents(filteredEventsList, sorting.toLowerCase());
+        mAdapter.SetFilteredList(filteredEventList);
     }
 
     protected Boolean isInDateRange(String startDate, String endDate, Event event) {
