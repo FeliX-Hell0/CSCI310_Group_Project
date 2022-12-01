@@ -302,7 +302,9 @@ public class EventDetailActivity extends AppCompatActivity {
                         Log.d("startTime3", String.valueOf(eventStart));
 
                         if(!conflicted) {
+                            updatePopularity(true);
                             updateEvent(registeredEvents + ";" + eventName, timeFrame + ";" + String.valueOf(eventStart) + "," + String.valueOf(eventEnd));
+
                         }
                         else{
 
@@ -312,6 +314,7 @@ public class EventDetailActivity extends AppCompatActivity {
                                     switch (which){
                                         case DialogInterface.BUTTON_POSITIVE:
                                             //Yes button clicked
+                                            updatePopularity(true);
                                             updateEvent(registeredEvents + ";" + eventName, timeFrame + ";" + String.valueOf(eventStart) + "," + String.valueOf(eventEnd));
                                             break;
 
@@ -455,6 +458,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
                             String newTimeframe = generateNewTimeframe(userTime, temp2);
 
+                            updatePopularity(false);
                             updateEvent(newCollection, newTimeframe);
                         }
 
@@ -552,5 +556,29 @@ public class EventDetailActivity extends AppCompatActivity {
             collection2 = temp.substring(lastIdx + 1);
         }
         return collection1+collection2;
+    }
+
+    public void updatePopularity(boolean flag){
+        db.collection("allEvent").document(eventName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    long curr = document.get("registered", long.class);
+                    if(flag) {
+                        curr++;
+                    }
+                    else{
+                        curr--;
+                    }
+                    db.collection("allEvent").document(eventName).update("registered", curr).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+
+                        }
+                    });
+                }
+            }
+        });
     }
 }
