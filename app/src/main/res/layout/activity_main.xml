@@ -86,14 +86,14 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="end"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
         android:src="@drawable/ic_baseline_local_fire_department_24"
+        app:backgroundTint="@color/orange"
         app:fabSize="normal"
-        app:backgroundTint="@color/milky"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
